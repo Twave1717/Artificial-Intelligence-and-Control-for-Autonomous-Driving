@@ -1,0 +1,29 @@
+{
+  "schema_version": 2,
+  "description": "도로 좌표·차로·허용 진행 방향은 그대로 두고 두 가지만 고친다. (1) 신호 규칙은 도로 범위 밖이므로 모든 교차로를 무신호로 만든다. 실제 신호 위치는 signal_locations에 기록만 한다. (2) 실제 교차로와 겹쳐 역행 내부 차선을 만드는 옆길 없는 분할점 6곳을 도로 중간점으로 합친다.",
+  "applies_to": "source/network.full.net.xml",
+  "signal_locations": [
+    {"name": "정조로·중부대로·향교로 교차로", "center_node": "414688141",
+     "osm_signal_nodes": ["11115329444", "11107500678", "11115329425", "11355484930", "11115329435"],
+     "evidence": "네 방향 진입부와 남→동 우회전 연결로에 OSM crossing=traffic_signals 노드가 중심에서 19~43m 떨어져 있다."},
+    {"name": "정조로·매산로 교차로", "center_node": "4710539097",
+     "osm_signal_nodes": ["11115329421", "11107500665", "11111279557", "11115214394"],
+     "dissolved_nodes": {"11111279557": "교차로 남측 정조로 위의 횡단보도 신호 노드. geometry_nodes의 분할점으로 합쳐져 실행망에 교차로가 없다. 그 횡단보도 신호는 이 교차로(4710539097) 신호의 일부로 둔다."},
+     "evidence": "네 방향 진입부에 OSM 신호 노드가 중심에서 17~22m 떨어져 있다."},
+    {"name": "정조로 중간 횡단보도 (팔달문 남쪽 약 120m, 골목 합류 구간)", "center_node": "11115329449",
+     "osm_signal_nodes": ["11115329449"], "evidence": "OSM highway=crossing, crossing=traffic_signals."},
+    {"name": "정조로 중간 횡단보도 (팔달문 북쪽 약 80m)", "center_node": "11115329461",
+     "osm_signal_nodes": ["11115329461"], "evidence": "OSM highway=crossing, crossing=traffic_signals."},
+    {"name": "정조로 중간 횡단보도 (팔달문.이안과 정류장 부근)", "center_node": "11115329468",
+     "osm_signal_nodes": ["11115329468"], "evidence": "OSM highway=crossing, crossing=traffic_signals."}
+  ],
+  "geometry_nodes": [
+    {"node": "11115329454", "road": "서쪽 골목(40197651)", "evidence": "골목 끝 0.2m 구간에서 내부 차선이 0.58m 뒤로 갔다가 다시 앞으로 간다(접선 179.7°)."},
+    {"node": "11107500673", "road": "정조로764번길", "evidence": "골목 끝 0.2m 구간에서 역행 접합(179.9°)."},
+    {"node": "11111279557", "road": "정조로 남쪽(매산로 교차로 남측)", "evidence": "0.9m 구간에서 역행 접합(175.1°)."},
+    {"node": "6286182947", "road": "중부대로(수원천로 서쪽 둑 교차로 동측)", "evidence": "0.2m 구간에서 내부 차선이 1.7m 뒤로 간다(접선 179.9°)."},
+    {"node": "6286222035", "road": "팔달문로(수원천 다리 서단)", "evidence": "0.2m 구간 역행 접합(179.6°)."},
+    {"node": "6286222034", "road": "팔달문로(수원천 다리 동단)", "evidence": "0.2m 구간 역행 접합(179.9°)."}
+  ],
+  "geometry_nodes_rule": "옆길 없는 양방향 분할점(진입 2, 진출 2, 이웃 2)만 합친다. 신호 규칙은 도로 범위 밖이므로 분할점이 OSM 신호 노드(crossing=traffic_signals)여도 합친다. 11111279557이 그 경우이고, 그 횡단보도 신호는 매산로 교차로 항목의 dissolved_nodes에 기록한다. 분할점의 원래 좌표와 원래 중심선 점은 합친 도로가 1cm 안에서 지난다."
+}

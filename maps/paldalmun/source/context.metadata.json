@@ -1,0 +1,17 @@
+{
+  "source": "area.osm.xml",
+  "projection": {
+    "netOffset": "833.538,765.605",
+    "convBoundary": "0.000,0.000,2055.519,1864.094",
+    "origBoundary": "127.007600600,37.224264100,127.030778700,37.287713600",
+    "projParameter": "+proj=tmerc +lat_0=37.277750000 +lon_0=127.017000000 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"
+  },
+  "counts": {
+    "water": 5,
+    "building": 525,
+    "waterway": 3,
+    "green": 33
+  },
+  "coordinates": "원본 WGS84 → native CRS + netOffset",
+  "physics": "시각적 배경이며 차량 충돌 대상이 아님"
+}

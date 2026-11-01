@@ -1,11 +1,13 @@
-"""POMDP trajectory data collector for the SUMO highway environment.
+"""팔달문 도로에서 POMDP transition 데이터를 수집한다.
 
 저장 단위는 POMDP transition 하나다:
     (o_t, a_t, r_t, o_{t+1}, terminated, truncated, s_t, s_{t+1})
 
-- o_t / o_{t+1}: agent가 실제로 보는 부분관측 (19차원)
+- t: 에피소드 안의 RL 스텝 번호. 한 스텝은 metadata의 simulation.decision_interval초다.
+- o_t / o_{t+1}: agent가 실제로 보는 31차원 부분관측 (env/mdp_config.py)
 - a_t: [가감속 raw, 차선변경 raw]
-- lane_change: 실제 환경에 적용된 {-1, 0, +1}
+- lane_change: 정책이 요청한 {-1, 0, +1}. lane_change_applied는 그 명령의 실행 여부
+  (수업 원본과 같은 뜻), lane_change_actual은 같은 edge에서 확인된 실제 이동이다.
 - s_t / s_{t+1}: SUMO 내부의 privileged simulator state.
   정책 입력에는 쓰지 않고 데이터 검증/representation/belief 학습용으로만 저장한다.
 
@@ -18,20 +20,25 @@
 - NPZ의 감지 차량 좌표는 object 배열(pickle) 대신 flat (M, 2) + offsets로 저장한다.
 
 속도:
-- headless면 sumo_env가 libsumo(in-process SUMO)를 써서 TraCI 소켓 왕복이 사라진다
-  (pip install libsumo). --workers N으로 SUMO 인스턴스 N개를 병렬로 돌려 더 줄인다.
+- --workers N으로 별도의 TraCI/SUMO 프로세스 N개를 실행한다.
 
 예시:
     python collect_pomdp_data.py --episodes 100
     python collect_pomdp_data.py --episodes 10 --gui
     python collect_pomdp_data.py --policy keep-lane --episodes 20
+    python collect_pomdp_data.py --policy route-follow --episodes 20   # 규칙으로 경로 완주
     python collect_pomdp_data.py --model results/run_xxx/model.pt --episodes 100   # 학습한 PPO로 수집
     python collect_pomdp_data.py --model results/run_xxx/model.pt --stochastic    # 샘플링 행동
     python collect_pomdp_data.py --episodes 200 --workers 8   # SUMO 8개 병렬 수집
 
-출력:
+출력 (끝까지 수집했을 때만 이 이름으로 생긴다):
     data/pomdp_YYYYMMDD_HHMMSS.jsonl.gz
     data/pomdp_YYYYMMDD_HHMMSS.npz
+    data/pomdp_YYYYMMDD_HHMMSS.metadata.json   지도 버전·도로망 해시·설정·정책
+    data/pomdp_YYYYMMDD_HHMMSS.assets/sumo/    이 수집에 쓴 SUMO 실행 파일
+수집 중에는 실행마다 새로 만든 data/.<name>.partial-*/ 폴더에 쓰고, 끝나면 위 이름으로 옮긴다.
+metadata.json을 마지막에 옮기므로 그 파일이 있으면 나머지 셋도 있다. 중단된 수집은 그 폴더만
+남기므로(JSONL은 iter_transitions로 읽을 수 있다) 같은 --name으로 다시 실행할 수 있다.
 
 읽기:
     from collect_pomdp_data import iter_transitions
@@ -48,6 +55,7 @@ import json
 import multiprocessing
 import os
 import shutil
+import tempfile
 import time
 from datetime import datetime
 
@@ -56,7 +64,9 @@ import numpy as np
 from env.road_config import ROAD, EGO, TRAFFIC
 from env.mdp_config import SIMULATION, OBSERVATION, ACTION
 from env import road_builder
+from env.route_policy import route_following_action
 from env.sumo_env import SumoHighwayEnv
+from env.experiment import add_run_arguments, configure_execution, read_run_config, write_run_config
 from train import HPARAMS, REWARD  # 학습과 같은 보상 조건 + PPO 네트워크 구조
 
 BASE = os.path.dirname(os.path.abspath(__file__))
@@ -71,6 +81,18 @@ def detect_algorithm(model_path: str) -> str:
     import torch
     ck = torch.load(model_path, map_location="cpu", weights_only=True)
     return "bc" if isinstance(ck, dict) and ck.get("algorithm") == "bc" else "ppo"
+
+
+def prepare(args):
+    """도로·교통·에피소드 길이와 모델의 네트워크 구조를 적용한다.
+
+    spawn 워커는 모듈을 다시 import해 빈 설정으로 시작하므로 부모와 같은 함수를 부른다.
+    """
+    configure_execution(args)
+    saved = read_run_config(args.model) if args.model else None
+    # BC run의 hparams는 BC 학습 설정이라 PPO 구조와 데이터셋 metadata에 섞지 않는다.
+    if saved and saved["kind"] != "bc_training":
+        HPARAMS.update(saved.get("hparams") or {})
 
 
 def make_policy(args, env, worker_seed: int):
@@ -103,8 +125,11 @@ def make_policy(args, env, worker_seed: int):
         return act
 
     if args.policy == "keep-lane":
-        # 완만한 가속 + 차선 유지. GUI/파이프라인 점검용.
+        # 완만한 가속 + 차선 유지. GUI/파이프라인 점검용. 차선이 끊기는 경로는 완주하지 못한다.
         return lambda obs: np.asarray([0.25, 0.0], dtype=np.float32)
+
+    if args.policy == "route-follow":
+        return route_following_action
 
     # random: 가감속은 연속 uniform[-1,1], 차선변경은 {-1,0,+1} 직접 샘플링 (유지를 더 자주)
     rng = np.random.default_rng(worker_seed)
@@ -141,23 +166,32 @@ def iter_transitions(jsonl_path: str):
     """저장된 JSONL(.gz 또는 평문)을 읽어, 생략된 next_observation / next_state를
     다음 레코드에서 채운 완전한 transition dict를 순서대로 yield한다.
 
-    (수집이 중간에 끊긴 파일이면 마지막 레코드에만 next_*가 없을 수 있다.)
+    수집이 중간에 끊긴 파일(gzip 끝 표시가 없거나 마지막 줄이 줄바꿈 없이 끝남)은
+    끊긴 지점 앞의 완전한 줄까지만 읽고 멈춘다. 잃는 것은 세 가지다.
+    끊긴 지점 이후의 레코드(죽기 전 압축 버퍼에만 있던 레코드 포함), 잘린 마지막 줄,
+    그리고 마지막으로 돌려준 레코드의 next_observation / next_state다. 그 레코드가
+    에피소드의 종료 스텝이 아니면 두 키가 없다.
     """
     opener = gzip.open if jsonl_path.endswith(".gz") else open
+    prev = None
     with opener(jsonl_path, "rt", encoding="utf-8") as f:
-        prev = None
-        for line in f:
-            if not line.strip():
-                continue
-            rec = json.loads(line)
-            if prev is not None:
-                # done 레코드는 next_*를 이미 갖고 있으므로 setdefault가 건드리지 않는다.
-                prev.setdefault("next_observation", rec["observation"])
-                prev.setdefault("next_state", rec["state"])
-                yield prev
-            prev = rec
-        if prev is not None:
-            yield prev
+        try:
+            for line in f:
+                if not line.endswith("\n"):
+                    break
+                if not line.strip():
+                    continue
+                rec = json.loads(line)
+                if prev is not None:
+                    # done 레코드는 next_*를 이미 갖고 있으므로 setdefault가 건드리지 않는다.
+                    prev.setdefault("next_observation", rec["observation"])
+                    prev.setdefault("next_state", rec["state"])
+                    yield prev
+                prev = rec
+        except EOFError:
+            pass
+    if prev is not None:
+        yield prev
 
 
 def collect(args, sumocfg, episodes, worker_id, jsonl_path, npz_path, tag=""):
@@ -166,6 +200,7 @@ def collect(args, sumocfg, episodes, worker_id, jsonl_path, npz_path, tag=""):
     --workers > 1이면 이 함수가 프로세스마다 하나씩 돌고, main()이 결과를 합친다.
     반환값: 수집한 transition 수.
     """
+    prepare(args)
     worker_seed = (args.seed * 1000 + worker_id) % 2**32
     if args.workers > 1:
         # 프로세스마다 torch가 코어 수만큼 스레드를 띄우면 서로 뺏는다. 관측 1개씩
@@ -181,14 +216,11 @@ def collect(args, sumocfg, episodes, worker_id, jsonl_path, npz_path, tag=""):
         road=ROAD, ego=EGO,
         mdp_sim=SIMULATION, mdp_obs=OBSERVATION,
         action=ACTION, reward=REWARD,
-        traffic=TRAFFIC,
         gui=args.gui,
         gui_autostart=True,
     )
     act = make_policy(args, env, worker_seed)
-    # sumo_env가 SUMO --seed를 np.random(전역)에서 뽑는다. PPO 생성자가 전역 시드를
-    # HPARAMS["seed"]로 되돌려 놓으므로 정책을 만든 "뒤에" 워커별로 다시 시드해야
-    # 워커들이 같은 교통 패턴을 반복하지 않는다.
+    # 정책의 샘플링과 환경 seed는 분리한다. 환경은 reset(seed=...)에서 고정된다.
     np.random.seed(worker_seed)
 
     # NPZ는 학습에서 바로 쓰기 좋은 고정 크기 값만 모은다.
@@ -201,11 +233,9 @@ def collect(args, sumocfg, episodes, worker_id, jsonl_path, npz_path, tag=""):
     total = 0
     try:
         # compresslevel 6: 9와 크기 차이는 거의 없고 훨씬 빠르다.
-        # 더 줄이고 싶으면 gzip.open 대신 lzma.open(..., "wt") (.jsonl.xz) —
-        # 느린 대신 보통 20~30% 추가 절감.
         with gzip.open(jsonl_path, "wt", encoding="utf-8", compresslevel=6) as jf:
             for ep in episodes:
-                obs, _ = env.reset(seed=args.seed + ep)
+                obs, reset_info = env.reset(seed=args.seed + ep)
                 state_t = env.get_privileged_state()
                 done = False
                 t = 0
@@ -223,6 +253,7 @@ def collect(args, sumocfg, episodes, worker_id, jsonl_path, npz_path, tag=""):
                     record = {
                         "episode": int(ep),
                         "t": t,
+                        "sumo_seed": int(reset_info["sumo_seed"]),
                         "observation": compact(obs, args.ndigits),
                         # 스칼라 몇 개는 용량에 영향이 없으니 반올림하지 않는다.
                         "action_raw": np.asarray(action, dtype=float).tolist(),
@@ -230,7 +261,12 @@ def collect(args, sumocfg, episodes, worker_id, jsonl_path, npz_path, tag=""):
                             "accel_raw": float(info["accel_raw"]),
                             "lane_change_raw": float(info["lane_change_raw"]),
                             "lane_change": int(info["lane_change"]),
+                            # 안전 게이트를 통과한 명령과 같은 edge에서 확인된 실제 이동을 구분한다.
                             "lane_change_applied": bool(info["lane_change_applied"]),
+                            "lane_change_actual": int(info["lane_change_actual"]),
+                            "lane_change_observable": bool(info["lane_change_observable"]),
+                            "requested_speed": info["requested_speed"],
+                            "speed_intervened": bool(info["speed_intervened"]),
                         },
                         "reward": float(reward),
                         "terminated": bool(terminated),
@@ -241,6 +277,9 @@ def collect(args, sumocfg, episodes, worker_id, jsonl_path, npz_path, tag=""):
                         "event": {
                             "collided": bool(info["collided"]),
                             "arrived": bool(info["arrived"]),
+                            "simulation_collided": bool(info["simulation_collided"]),
+                            "termination_reason": info["termination_reason"],
+                            "teleporting_ids": list(info["teleporting_ids"]),
                             "lane_before": info["lane_before"],
                             "lane_after": info["lane_after"],
                         },
@@ -325,9 +364,10 @@ def merge_parts(parts, jsonl_path, npz_path):
 def main():
     parser = argparse.ArgumentParser(description="SUMO POMDP trajectory collector")
     parser.add_argument("--episodes", type=int, default=50)
-    parser.add_argument("--policy", choices=["random", "keep-lane", "ppo", "bc"], default=None,
-                        help="행동 정책. 생략 시 --model이 있으면 파일을 보고 ppo/bc 자동 판별, "
-                             "없으면 random")
+    parser.add_argument("--policy", choices=["random", "keep-lane", "route-follow", "ppo", "bc"],
+                        default=None,
+                        help="행동 정책. route-follow는 학습 없이 경로를 완주하는 규칙. 생략 시 "
+                             "--model이 있으면 파일을 보고 ppo/bc 자동 판별, 없으면 random")
     parser.add_argument("--model", default=None,
                         help="train.py(PPO) 또는 train_bc.py(BC)가 저장한 model.pt. "
                              "주면 그 학습된 정책으로 수집한다")
@@ -336,7 +376,7 @@ def main():
                              "상태 다양성이 필요할 때")
     parser.add_argument("--device", default="cpu",
                         help="정책 추론 장치 (cpu/cuda). 관측 1개씩 추론이라 cpu로 충분")
-    parser.add_argument("--seed", type=int, default=0)
+    add_run_arguments(parser)
     parser.add_argument("--gui", action="store_true",
                         help="SUMO GUI로 수집. 기본은 headless")
     parser.add_argument("--workers", type=int, default=1,
@@ -349,6 +389,10 @@ def main():
                         help="JSONL의 observation/state/detected float 소수 자릿수 "
                              "(NPZ에는 영향 없음)")
     args = parser.parse_args()
+    if args.episodes < 1 or args.workers < 1 or args.ndigits < 0:
+        parser.error("episodes/workers는 양수, ndigits는 0 이상이어야 합니다.")
+    if args.name and (os.path.basename(args.name) != args.name or args.name in (".", "..")):
+        parser.error("--name에는 경로가 아닌 파일 이름만 입력하세요.")
     if args.policy in ("ppo", "bc") and args.model is None:
         parser.error(f"--policy {args.policy}에는 --model이 필요합니다.")
     if args.model is not None and not os.path.exists(args.model):
@@ -358,33 +402,62 @@ def main():
     if args.model:
         print(f"정책: {args.policy} ({args.model})"
               + (" [stochastic]" if args.stochastic and args.policy == "ppo" else ""))
+    try:
+        prepare(args)
+    except ValueError as exc:
+        parser.error(str(exc))
     workers = 1 if args.gui else max(1, min(args.workers, args.episodes))
+    args.workers = workers
 
     os.makedirs(args.out_dir, exist_ok=True)
-    name = args.name or datetime.now().strftime("pomdp_%Y%m%d_%H%M%S")
-    jsonl_path = os.path.join(args.out_dir, name + ".jsonl.gz")
-    npz_path = os.path.join(args.out_dir, name + ".npz")
-
-    # 도로 파일은 부모에서 한 번만 생성한다 (워커들이 동시에 쓰면 파일이 깨진다).
-    sumocfg = road_builder.build(ROAD, EGO, TRAFFIC,
-                                 os.path.join(BASE, "env", "sumo"))
+    name = args.name or ("pomdp_" + datetime.now().strftime("%Y%m%d_%H%M%S_%f"))
+    # 데이터와 실행 파일을 함께 보존한다. 다른 수집/학습과 공유 파일을 쓰지 않는다.
+    final = {suffix: os.path.join(args.out_dir, name + suffix)
+             for suffix in (".jsonl.gz", ".npz", ".assets", ".metadata.json")}
+    if any(os.path.exists(p) for p in final.values()):
+        parser.error("같은 이름의 결과가 있습니다. --name을 바꿔 기존 데이터를 보존하세요.")
+    staging = tempfile.mkdtemp(prefix=f".{name}.partial-", dir=args.out_dir)
+    jsonl_path, npz_path, assets_dir, metadata_path = (
+        os.path.join(staging, name + suffix) for suffix in (".jsonl.gz", ".npz", ".assets", ".metadata.json"))
+    run_config = write_run_config(
+        assets_dir, hparams=HPARAMS, reward=REWARD, kind="dataset",
+        policy=args.policy, episodes=args.episodes, workers=workers,
+        episode_seeds=list(range(args.seed, args.seed + args.episodes)),
+        source_model=os.path.abspath(args.model) if args.model else None,
+    )
+    # 부모가 한 번 빌드한 읽기 전용 자산을 모든 워커가 공유한다.
+    sumocfg = road_builder.build(ROAD, EGO, TRAFFIC, os.path.join(assets_dir, "sumo"))
 
     t0 = time.time()
-    if workers == 1:
-        total = collect(args, sumocfg, list(range(args.episodes)), 0,
-                        jsonl_path, npz_path)
-    else:
-        chunks = [c.tolist() for c in np.array_split(np.arange(args.episodes), workers)]
-        parts = [(os.path.join(args.out_dir, f".{name}.w{w}.jsonl.gz"),
-                  os.path.join(args.out_dir, f".{name}.w{w}.npz"))
-                 for w in range(workers)]
-        jobs = [(args, sumocfg, chunks[w], w, parts[w][0], parts[w][1], f"[w{w}] ")
-                for w in range(workers)]
-        # spawn: 워커마다 깨끗한 프로세스에서 SUMO(libsumo)를 하나씩 띄운다.
-        with multiprocessing.get_context("spawn").Pool(workers) as pool:
-            total = sum(pool.starmap(collect, jobs))
-        merge_parts(parts, jsonl_path, npz_path)
+    try:
+        if workers == 1:
+            total = collect(args, sumocfg, list(range(args.episodes)), 0,
+                            jsonl_path, npz_path)
+        else:
+            chunks = [c.tolist() for c in np.array_split(np.arange(args.episodes), workers)]
+            parts = [(os.path.join(staging, f"{name}.w{w}.jsonl.gz"),
+                      os.path.join(staging, f"{name}.w{w}.npz"))
+                     for w in range(workers)]
+            jobs = [(args, sumocfg, chunks[w], w, parts[w][0], parts[w][1], f"[w{w}] ")
+                    for w in range(workers)]
+            # spawn: 워커마다 깨끗한 프로세스에서 SUMO를 하나씩 띄운다.
+            with multiprocessing.get_context("spawn").Pool(workers) as pool:
+                total = sum(pool.starmap(collect, jobs))
+            merge_parts(parts, jsonl_path, npz_path)
+        with open(metadata_path, "w", encoding="utf-8") as f:
+            json.dump({**run_config, "transitions": total,
+                       "jsonl": os.path.basename(jsonl_path), "npz": os.path.basename(npz_path)},
+                      f, ensure_ascii=False, indent=2)
+    except BaseException:
+        print(f"\n수집 중단: 지금까지의 기록은 {staging}에 남아 있습니다.", flush=True)
+        raise
     elapsed = time.time() - t0
+    # metadata.json을 마지막에 옮긴다. 이 이름이 있으면 나머지 셋도 이미 옮겨져 있다.
+    for suffix, path in ((".jsonl.gz", jsonl_path), (".npz", npz_path), (".assets", assets_dir),
+                         (".metadata.json", metadata_path)):
+        os.rename(path, final[suffix])
+    os.rmdir(staging)
+    jsonl_path, npz_path = final[".jsonl.gz"], final[".npz"]
 
     mb = lambda p: os.path.getsize(p) / 2**20  # noqa: E731
     print("\n수집 완료")

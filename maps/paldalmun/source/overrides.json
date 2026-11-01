@@ -1,0 +1,192 @@
+{
+  "original_coordinates_unchanged": true,
+  "lane_patches": [
+    {
+      "edge": "-1151407004#0",
+      "numLanes": 2,
+      "evidence": "수원시정연구원 정조로 구간 왕복4차로 + 항공사진",
+      "verification": "document_and_imagery"
+    },
+    {
+      "edge": "-1151407004#1",
+      "numLanes": 2,
+      "evidence": "수원시정연구원 정조로 구간 왕복4차로 + 항공사진",
+      "verification": "document_and_imagery"
+    },
+    {
+      "edge": "-1151407004#2",
+      "numLanes": 2,
+      "evidence": "수원시정연구원 정조로 구간 왕복4차로 + 항공사진",
+      "verification": "document_and_imagery"
+    },
+    {
+      "edge": "-1151407004#3",
+      "numLanes": 2,
+      "evidence": "수원시정연구원 정조로 구간 왕복4차로 + 항공사진",
+      "verification": "document_and_imagery"
+    },
+    {
+      "edge": "-37394478#0",
+      "numLanes": 2,
+      "evidence": "수원시정연구원 정조로 구간 왕복4차로 + 항공사진",
+      "verification": "document_and_imagery"
+    },
+    {
+      "edge": "-37394478#1",
+      "numLanes": 2,
+      "evidence": "수원시정연구원 정조로 구간 왕복4차로 + 항공사진",
+      "verification": "document_and_imagery"
+    },
+    {
+      "edge": "-37394478#2",
+      "numLanes": 2,
+      "evidence": "수원시정연구원 정조로 구간 왕복4차로 + 항공사진",
+      "verification": "document_and_imagery"
+    },
+    {
+      "edge": "-37394478#3",
+      "numLanes": 2,
+      "evidence": "수원시정연구원 정조로 구간 왕복4차로 + 항공사진",
+      "verification": "document_and_imagery"
+    },
+    {
+      "edge": "-37394478#4",
+      "numLanes": 2,
+      "evidence": "수원시정연구원 정조로 구간 왕복4차로 + 항공사진",
+      "verification": "document_and_imagery"
+    },
+    {
+      "edge": "-37394478#5",
+      "numLanes": 2,
+      "evidence": "수원시정연구원 정조로 구간 왕복4차로 + 항공사진",
+      "verification": "document_and_imagery"
+    },
+    {
+      "edge": "-37394478#6",
+      "numLanes": 2,
+      "evidence": "수원시정연구원 정조로 구간 왕복4차로 + 항공사진",
+      "verification": "document_and_imagery"
+    },
+    {
+      "edge": "-37394478#7",
+      "numLanes": 2,
+      "evidence": "수원시정연구원 정조로 구간 왕복4차로 + 항공사진",
+      "verification": "document_and_imagery"
+    },
+    {
+      "edge": "1151407004#0",
+      "numLanes": 2,
+      "evidence": "수원시정연구원 정조로 구간 왕복4차로 + 항공사진",
+      "verification": "document_and_imagery"
+    },
+    {
+      "edge": "1151407004#1",
+      "numLanes": 2,
+      "evidence": "수원시정연구원 정조로 구간 왕복4차로 + 항공사진",
+      "verification": "document_and_imagery"
+    },
+    {
+      "edge": "1151407004#2",
+      "numLanes": 2,
+      "evidence": "수원시정연구원 정조로 구간 왕복4차로 + 항공사진",
+      "verification": "document_and_imagery"
+    },
+    {
+      "edge": "1151407004#3",
+      "numLanes": 2,
+      "evidence": "수원시정연구원 정조로 구간 왕복4차로 + 항공사진",
+      "verification": "document_and_imagery"
+    },
+    {
+      "edge": "1197050172#0",
+      "numLanes": 4,
+      "evidence": "항공영상에서 순환부 차선 경계 확인; references/focal/comparison.jpg",
+      "verification": "visual_interpretation"
+    },
+    {
+      "edge": "1197050172#1",
+      "numLanes": 4,
+      "evidence": "항공영상에서 순환부 차선 경계 확인; references/focal/comparison.jpg",
+      "verification": "visual_interpretation"
+    },
+    {
+      "edge": "1197050172#2",
+      "numLanes": 4,
+      "evidence": "항공영상에서 순환부 차선 경계 확인; references/focal/comparison.jpg",
+      "verification": "visual_interpretation"
+    },
+    {
+      "edge": "37394478#0",
+      "numLanes": 2,
+      "evidence": "수원시정연구원 정조로 구간 왕복4차로 + 항공사진",
+      "verification": "document_and_imagery"
+    },
+    {
+      "edge": "37394478#1",
+      "numLanes": 2,
+      "evidence": "수원시정연구원 정조로 구간 왕복4차로 + 항공사진",
+      "verification": "document_and_imagery"
+    },
+    {
+      "edge": "37394478#2",
+      "numLanes": 2,
+      "evidence": "수원시정연구원 정조로 구간 왕복4차로 + 항공사진",
+      "verification": "document_and_imagery"
+    },
+    {
+      "edge": "37394478#3",
+      "numLanes": 2,
+      "evidence": "수원시정연구원 정조로 구간 왕복4차로 + 항공사진",
+      "verification": "document_and_imagery"
+    },
+    {
+      "edge": "37394478#4",
+      "numLanes": 2,
+      "evidence": "수원시정연구원 정조로 구간 왕복4차로 + 항공사진",
+      "verification": "document_and_imagery"
+    },
+    {
+      "edge": "37394478#5",
+      "numLanes": 2,
+      "evidence": "수원시정연구원 정조로 구간 왕복4차로 + 항공사진",
+      "verification": "document_and_imagery"
+    },
+    {
+      "edge": "37394478#6",
+      "numLanes": 2,
+      "evidence": "수원시정연구원 정조로 구간 왕복4차로 + 항공사진",
+      "verification": "document_and_imagery"
+    },
+    {
+      "edge": "37394478#7",
+      "numLanes": 2,
+      "evidence": "수원시정연구원 정조로 구간 왕복4차로 + 항공사진",
+      "verification": "document_and_imagery"
+    },
+    {
+      "edge": "38315385#0",
+      "numLanes": 4,
+      "evidence": "항공영상에서 순환부 차선 경계 확인; references/focal/comparison.jpg",
+      "verification": "visual_interpretation"
+    },
+    {
+      "edge": "38315385#1",
+      "numLanes": 4,
+      "evidence": "항공영상에서 순환부 차선 경계 확인; references/focal/comparison.jpg",
+      "verification": "visual_interpretation"
+    },
+    {
+      "edge": "38315385#2",
+      "numLanes": 4,
+      "evidence": "항공영상에서 순환부 차선 경계 확인; references/focal/comparison.jpg",
+      "verification": "visual_interpretation"
+    }
+  ],
+  "references": [
+    "../references/focal/comparison.jpg",
+    "https://www.suwon.re.kr/data/file/research_reports/3535263116_CjEOAdiz_8c4c9f1ef27d4de72ec9f1aa42409c545b18d13d.pdf"
+  ],
+  "limitations": [
+    "정류장 부가 폭·상세 차선별 회전 유도선·현재 교통 신호 현시는 미확정"
+  ]
+}

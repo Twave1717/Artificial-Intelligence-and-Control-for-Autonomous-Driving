@@ -1,0 +1,12 @@
+__pycache__/
+.DS_Store
+*.pyc
+.pytest_cache/
+.tools/assignment4_capture/
+data/
+results/
+.audit/
+
+# Esri World Imagery 대조 그림. 약관상 공개 저장소에 올리지 않고 로컬에만 둔다.
+maps/paldalmun/references/comparison.jpg
+maps/paldalmun/references/focal/comparison.jpg

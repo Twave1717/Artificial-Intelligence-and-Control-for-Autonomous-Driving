@@ -1,0 +1,823 @@
+{
+  "command": "python scripts/validate_road.py --seeds 0 7 42 --scenarios quiet baseline busy --seconds 1800 --out maps/paldalmun/references/stability_validation.json",
+  "map_version": "6.0.0",
+  "network_sha256": "8a4c014d224098946d2e76e73fd01aaa67ef45968be40d0173fb59279b93cfbd",
+  "sumo_version": "Eclipse SUMO sumo 1.27.1",
+  "step_length": 0.1,
+  "seconds": 1800.0,
+  "warmup_seconds": 180.0,
+  "max_episode_seconds": 500.0,
+  "lane_data_from_seconds": 300,
+  "scenario_lanes": [
+    "37394478#4_0",
+    "37394478#4_1",
+    "-37394478#5_0",
+    "-37394478#5_1",
+    "-37394478#0_0",
+    "-37394478#0_1"
+  ],
+  "pass_condition": "배경: 충돌 0, 순간이동 0(300초 기준), 모든 경계 진입로에서 도착. ego: 충돌·투입 실패 없음. r0는 모든 실행에서 도착. s_*는 도착, 시간 초과, 300초 정지 뒤 순간이동을 시나리오 결과로 기록만 한다.",
+  "structure": {
+    "edges": 1249,
+    "routes": 4,
+    "checked_connections": 70,
+    "bus_stops": 2
+  },
+  "ok": true,
+  "background": [
+    {
+      "scenario": "quiet",
+      "seed": 0,
+      "ok": true,
+      "collisions": 0,
+      "teleports": 0,
+      "emergency_braking": 5,
+      "mean_running": 12.366,
+      "max_trip_waiting_s": 22.1,
+      "arrived": 302,
+      "entries_without_arrival": [],
+      "lanes": {
+        "37394478#4_0": {
+          "speed": 12.92,
+          "occupancy": 0.1,
+          "waitingTime": 0.0
+        },
+        "37394478#4_1": {
+          "speed": 13.05,
+          "occupancy": 1.69,
+          "waitingTime": 0.0
+        },
+        "-37394478#5_0": {
+          "speed": 11.66,
+          "occupancy": 0.8,
+          "waitingTime": 0.0
+        },
+        "-37394478#5_1": {
+          "speed": 13.17,
+          "occupancy": 0.46,
+          "waitingTime": 0.0
+        },
+        "-37394478#0_0": {
+          "speed": 4.89,
+          "occupancy": 1.95,
+          "waitingTime": 1.8
+        },
+        "-37394478#0_1": {
+          "speed": 4.84,
+          "occupancy": 1.57,
+          "waitingTime": 9.4
+        }
+      }
+    },
+    {
+      "scenario": "quiet",
+      "seed": 7,
+      "ok": true,
+      "collisions": 0,
+      "teleports": 0,
+      "emergency_braking": 2,
+      "mean_running": 12.346,
+      "max_trip_waiting_s": 21.9,
+      "arrived": 302,
+      "entries_without_arrival": [],
+      "lanes": {
+        "37394478#4_0": {
+          "speed": 13.53,
+          "occupancy": 0.1,
+          "waitingTime": 0.0
+        },
+        "37394478#4_1": {
+          "speed": 13.1,
+          "occupancy": 1.65,
+          "waitingTime": 0.0
+        },
+        "-37394478#5_0": {
+          "speed": 11.63,
+          "occupancy": 0.8,
+          "waitingTime": 0.0
+        },
+        "-37394478#5_1": {
+          "speed": 13.3,
+          "occupancy": 0.45,
+          "waitingTime": 0.0
+        },
+        "-37394478#0_0": {
+          "speed": 5.4,
+          "occupancy": 1.8,
+          "waitingTime": 3.1
+        },
+        "-37394478#0_1": {
+          "speed": 4.04,
+          "occupancy": 1.9,
+          "waitingTime": 10.1
+        }
+      }
+    },
+    {
+      "scenario": "quiet",
+      "seed": 42,
+      "ok": true,
+      "collisions": 0,
+      "teleports": 0,
+      "emergency_braking": 1,
+      "mean_running": 12.282,
+      "max_trip_waiting_s": 7.8,
+      "arrived": 302,
+      "entries_without_arrival": [],
+      "lanes": {
+        "37394478#4_0": {
+          "speed": 13.18,
+          "occupancy": 0.1,
+          "waitingTime": 0.0
+        },
+        "37394478#4_1": {
+          "speed": 12.97,
+          "occupancy": 1.67,
+          "waitingTime": 0.0
+        },
+        "-37394478#5_0": {
+          "speed": 12.09,
+          "occupancy": 0.77,
+          "waitingTime": 0.0
+        },
+        "-37394478#5_1": {
+          "speed": 12.99,
+          "occupancy": 0.48,
+          "waitingTime": 0.0
+        },
+        "-37394478#0_0": {
+          "speed": 5.93,
+          "occupancy": 1.57,
+          "waitingTime": 0.0
+        },
+        "-37394478#0_1": {
+          "speed": 4.22,
+          "occupancy": 1.72,
+          "waitingTime": 6.3
+        }
+      }
+    },
+    {
+      "scenario": "baseline",
+      "seed": 0,
+      "ok": true,
+      "collisions": 0,
+      "teleports": 0,
+      "emergency_braking": 12,
+      "mean_running": 25.726,
+      "max_trip_waiting_s": 46.9,
+      "arrived": 596,
+      "entries_without_arrival": [],
+      "lanes": {
+        "37394478#4_0": {
+          "speed": 13.12,
+          "occupancy": 0.62,
+          "waitingTime": 0.0
+        },
+        "37394478#4_1": {
+          "speed": 12.85,
+          "occupancy": 3.07,
+          "waitingTime": 0.0
+        },
+        "-37394478#5_0": {
+          "speed": 12.04,
+          "occupancy": 1.55,
+          "waitingTime": 0.0
+        },
+        "-37394478#5_1": {
+          "speed": 13.04,
+          "occupancy": 0.89,
+          "waitingTime": 0.0
+        },
+        "-37394478#0_0": {
+          "speed": 4.74,
+          "occupancy": 3.84,
+          "waitingTime": 2.3
+        },
+        "-37394478#0_1": {
+          "speed": 2.79,
+          "occupancy": 6.02,
+          "waitingTime": 70.3
+        }
+      }
+    },
+    {
+      "scenario": "baseline",
+      "seed": 7,
+      "ok": true,
+      "collisions": 0,
+      "teleports": 0,
+      "emergency_braking": 13,
+      "mean_running": 25.09,
+      "max_trip_waiting_s": 23.4,
+      "arrived": 599,
+      "entries_without_arrival": [],
+      "lanes": {
+        "37394478#4_0": {
+          "speed": 13.26,
+          "occupancy": 0.62,
+          "waitingTime": 0.0
+        },
+        "37394478#4_1": {
+          "speed": 12.74,
+          "occupancy": 3.05,
+          "waitingTime": 0.0
+        },
+        "-37394478#5_0": {
+          "speed": 11.9,
+          "occupancy": 1.57,
+          "waitingTime": 0.0
+        },
+        "-37394478#5_1": {
+          "speed": 13.19,
+          "occupancy": 0.93,
+          "waitingTime": 0.0
+        },
+        "-37394478#0_0": {
+          "speed": 5.36,
+          "occupancy": 3.55,
+          "waitingTime": 1.4
+        },
+        "-37394478#0_1": {
+          "speed": 3.07,
+          "occupancy": 5.23,
+          "waitingTime": 58.4
+        }
+      }
+    },
+    {
+      "scenario": "baseline",
+      "seed": 42,
+      "ok": true,
+      "collisions": 0,
+      "teleports": 0,
+      "emergency_braking": 6,
+      "mean_running": 25.465,
+      "max_trip_waiting_s": 34.2,
+      "arrived": 597,
+      "entries_without_arrival": [],
+      "lanes": {
+        "37394478#4_0": {
+          "speed": 13.04,
+          "occupancy": 0.55,
+          "waitingTime": 0.0
+        },
+        "37394478#4_1": {
+          "speed": 12.56,
+          "occupancy": 3.19,
+          "waitingTime": 0.0
+        },
+        "-37394478#5_0": {
+          "speed": 11.97,
+          "occupancy": 1.56,
+          "waitingTime": 0.0
+        },
+        "-37394478#5_1": {
+          "speed": 13.13,
+          "occupancy": 0.91,
+          "waitingTime": 0.0
+        },
+        "-37394478#0_0": {
+          "speed": 5.25,
+          "occupancy": 3.77,
+          "waitingTime": 1.0
+        },
+        "-37394478#0_1": {
+          "speed": 2.74,
+          "occupancy": 5.78,
+          "waitingTime": 70.0
+        }
+      }
+    },
+    {
+      "scenario": "busy",
+      "seed": 0,
+      "ok": true,
+      "collisions": 0,
+      "teleports": 0,
+      "emergency_braking": 26,
+      "mean_running": 32.279,
+      "max_trip_waiting_s": 38.4,
+      "arrived": 746,
+      "entries_without_arrival": [],
+      "lanes": {
+        "37394478#4_0": {
+          "speed": 12.87,
+          "occupancy": 0.93,
+          "waitingTime": 0.0
+        },
+        "37394478#4_1": {
+          "speed": 12.33,
+          "occupancy": 3.81,
+          "waitingTime": 0.0
+        },
+        "-37394478#5_0": {
+          "speed": 11.98,
+          "occupancy": 1.92,
+          "waitingTime": 0.0
+        },
+        "-37394478#5_1": {
+          "speed": 13.21,
+          "occupancy": 1.16,
+          "waitingTime": 0.0
+        },
+        "-37394478#0_0": {
+          "speed": 5.24,
+          "occupancy": 4.5,
+          "waitingTime": 5.7
+        },
+        "-37394478#0_1": {
+          "speed": 1.21,
+          "occupancy": 18.01,
+          "waitingTime": 449.2
+        }
+      }
+    },
+    {
+      "scenario": "busy",
+      "seed": 7,
+      "ok": true,
+      "collisions": 0,
+      "teleports": 0,
+      "emergency_braking": 27,
+      "mean_running": 31.948,
+      "max_trip_waiting_s": 35.3,
+      "arrived": 748,
+      "entries_without_arrival": [],
+      "lanes": {
+        "37394478#4_0": {
+          "speed": 13.25,
+          "occupancy": 0.85,
+          "waitingTime": 0.0
+        },
+        "37394478#4_1": {
+          "speed": 12.16,
+          "occupancy": 3.95,
+          "waitingTime": 0.0
+        },
+        "-37394478#5_0": {
+          "speed": 11.84,
+          "occupancy": 1.97,
+          "waitingTime": 0.0
+        },
+        "-37394478#5_1": {
+          "speed": 13.22,
+          "occupancy": 1.16,
+          "waitingTime": 0.0
+        },
+        "-37394478#0_0": {
+          "speed": 5.08,
+          "occupancy": 4.67,
+          "waitingTime": 0.8
+        },
+        "-37394478#0_1": {
+          "speed": 1.37,
+          "occupancy": 15.31,
+          "waitingTime": 352.4
+        }
+      }
+    },
+    {
+      "scenario": "busy",
+      "seed": 42,
+      "ok": true,
+      "collisions": 0,
+      "teleports": 0,
+      "emergency_braking": 12,
+      "mean_running": 32.26,
+      "max_trip_waiting_s": 45.3,
+      "arrived": 746,
+      "entries_without_arrival": [],
+      "lanes": {
+        "37394478#4_0": {
+          "speed": 13.11,
+          "occupancy": 0.95,
+          "waitingTime": 0.0
+        },
+        "37394478#4_1": {
+          "speed": 12.51,
+          "occupancy": 3.75,
+          "waitingTime": 0.0
+        },
+        "-37394478#5_0": {
+          "speed": 11.93,
+          "occupancy": 1.95,
+          "waitingTime": 0.0
+        },
+        "-37394478#5_1": {
+          "speed": 13.2,
+          "occupancy": 1.19,
+          "waitingTime": 0.0
+        },
+        "-37394478#0_0": {
+          "speed": 5.16,
+          "occupancy": 4.68,
+          "waitingTime": 4.3
+        },
+        "-37394478#0_1": {
+          "speed": 1.11,
+          "occupancy": 19.41,
+          "waitingTime": 484.0
+        }
+      }
+    }
+  ],
+  "ego": [
+    {
+      "route": "r0",
+      "scenario": "quiet",
+      "seed": 0,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 69.5,
+      "longest_stop_s": 0.0,
+      "total_reward": 13.57
+    },
+    {
+      "route": "r0",
+      "scenario": "quiet",
+      "seed": 7,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 69.5,
+      "longest_stop_s": 0.0,
+      "total_reward": 13.57
+    },
+    {
+      "route": "r0",
+      "scenario": "quiet",
+      "seed": 42,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 69.5,
+      "longest_stop_s": 0.0,
+      "total_reward": 13.57
+    },
+    {
+      "route": "r0",
+      "scenario": "baseline",
+      "seed": 0,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 77.5,
+      "longest_stop_s": 3.0,
+      "total_reward": 13.59
+    },
+    {
+      "route": "r0",
+      "scenario": "baseline",
+      "seed": 7,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 72.0,
+      "longest_stop_s": 0.0,
+      "total_reward": 13.652
+    },
+    {
+      "route": "r0",
+      "scenario": "baseline",
+      "seed": 42,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 76.5,
+      "longest_stop_s": 2.0,
+      "total_reward": 13.488
+    },
+    {
+      "route": "r0",
+      "scenario": "busy",
+      "seed": 0,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 69.5,
+      "longest_stop_s": 0.0,
+      "total_reward": 13.57
+    },
+    {
+      "route": "r0",
+      "scenario": "busy",
+      "seed": 7,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 77.0,
+      "longest_stop_s": 0.0,
+      "total_reward": 13.624
+    },
+    {
+      "route": "r0",
+      "scenario": "busy",
+      "seed": 42,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 70.0,
+      "longest_stop_s": 0.0,
+      "total_reward": 13.571
+    },
+    {
+      "route": "s_alley_left",
+      "scenario": "quiet",
+      "seed": 0,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 47.0,
+      "longest_stop_s": 0.0,
+      "total_reward": 8.892
+    },
+    {
+      "route": "s_alley_left",
+      "scenario": "quiet",
+      "seed": 7,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 47.0,
+      "longest_stop_s": 0.0,
+      "total_reward": 8.892
+    },
+    {
+      "route": "s_alley_left",
+      "scenario": "quiet",
+      "seed": 42,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 49.0,
+      "longest_stop_s": 0.0,
+      "total_reward": 8.871
+    },
+    {
+      "route": "s_alley_left",
+      "scenario": "baseline",
+      "seed": 0,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 47.0,
+      "longest_stop_s": 0.0,
+      "total_reward": 8.904
+    },
+    {
+      "route": "s_alley_left",
+      "scenario": "baseline",
+      "seed": 7,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 47.0,
+      "longest_stop_s": 0.0,
+      "total_reward": 8.892
+    },
+    {
+      "route": "s_alley_left",
+      "scenario": "baseline",
+      "seed": 42,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 47.0,
+      "longest_stop_s": 0.0,
+      "total_reward": 8.921
+    },
+    {
+      "route": "s_alley_left",
+      "scenario": "busy",
+      "seed": 0,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 66.5,
+      "longest_stop_s": 12.0,
+      "total_reward": 4.626
+    },
+    {
+      "route": "s_alley_left",
+      "scenario": "busy",
+      "seed": 7,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 122.0,
+      "longest_stop_s": 71.0,
+      "total_reward": 8.852
+    },
+    {
+      "route": "s_alley_left",
+      "scenario": "busy",
+      "seed": 42,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 72.0,
+      "longest_stop_s": 12.0,
+      "total_reward": 4.431
+    },
+    {
+      "route": "s_alley_merge_north",
+      "scenario": "quiet",
+      "seed": 0,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 62.0,
+      "longest_stop_s": 1.0,
+      "total_reward": 10.538
+    },
+    {
+      "route": "s_alley_merge_north",
+      "scenario": "quiet",
+      "seed": 7,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 58.5,
+      "longest_stop_s": 0.0,
+      "total_reward": 10.54
+    },
+    {
+      "route": "s_alley_merge_north",
+      "scenario": "quiet",
+      "seed": 42,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 56.5,
+      "longest_stop_s": 0.0,
+      "total_reward": 10.547
+    },
+    {
+      "route": "s_alley_merge_north",
+      "scenario": "baseline",
+      "seed": 0,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 56.0,
+      "longest_stop_s": 0.0,
+      "total_reward": 10.55
+    },
+    {
+      "route": "s_alley_merge_north",
+      "scenario": "baseline",
+      "seed": 7,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 56.0,
+      "longest_stop_s": 0.0,
+      "total_reward": 10.555
+    },
+    {
+      "route": "s_alley_merge_north",
+      "scenario": "baseline",
+      "seed": 42,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 55.0,
+      "longest_stop_s": 0.0,
+      "total_reward": 10.527
+    },
+    {
+      "route": "s_alley_merge_north",
+      "scenario": "busy",
+      "seed": 0,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 61.0,
+      "longest_stop_s": 2.5,
+      "total_reward": 10.442
+    },
+    {
+      "route": "s_alley_merge_north",
+      "scenario": "busy",
+      "seed": 7,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 56.0,
+      "longest_stop_s": 0.0,
+      "total_reward": 10.545
+    },
+    {
+      "route": "s_alley_merge_north",
+      "scenario": "busy",
+      "seed": 42,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 54.5,
+      "longest_stop_s": 0.0,
+      "total_reward": 10.523
+    },
+    {
+      "route": "s_left_turn",
+      "scenario": "quiet",
+      "seed": 0,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 40.5,
+      "longest_stop_s": 0.0,
+      "total_reward": 8.615
+    },
+    {
+      "route": "s_left_turn",
+      "scenario": "quiet",
+      "seed": 7,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 40.5,
+      "longest_stop_s": 0.0,
+      "total_reward": 8.615
+    },
+    {
+      "route": "s_left_turn",
+      "scenario": "quiet",
+      "seed": 42,
+      "insertion_wait_s": 3.6,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 40.5,
+      "longest_stop_s": 0.0,
+      "total_reward": 8.615
+    },
+    {
+      "route": "s_left_turn",
+      "scenario": "baseline",
+      "seed": 0,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 48.5,
+      "longest_stop_s": 3.5,
+      "total_reward": 8.609
+    },
+    {
+      "route": "s_left_turn",
+      "scenario": "baseline",
+      "seed": 7,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 46.5,
+      "longest_stop_s": 2.0,
+      "total_reward": 8.551
+    },
+    {
+      "route": "s_left_turn",
+      "scenario": "baseline",
+      "seed": 42,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 48.0,
+      "longest_stop_s": 3.0,
+      "total_reward": 8.589
+    },
+    {
+      "route": "s_left_turn",
+      "scenario": "busy",
+      "seed": 0,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 66.5,
+      "longest_stop_s": 18.0,
+      "total_reward": 3.147
+    },
+    {
+      "route": "s_left_turn",
+      "scenario": "busy",
+      "seed": 7,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 54.5,
+      "longest_stop_s": 10.0,
+      "total_reward": 8.55
+    },
+    {
+      "route": "s_left_turn",
+      "scenario": "busy",
+      "seed": 42,
+      "insertion_wait_s": 0.0,
+      "ok": true,
+      "termination_reason": "arrived",
+      "episode_s": 72.5,
+      "longest_stop_s": 21.0,
+      "total_reward": 2.319
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "retrieved_utc": "2026-10-17T13:47:18.779071+00:00",
+  "provider": "Esri World Imagery",
+  "service_url": "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
+  "export_url": "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=14138799.84514447%2C4477158.143944067%2C14140135.679033987%2C4478627.091797213&bboxSR=3857&imageSR=3857&size=3600%2C3959&format=jpg&f=json&dpi=96&transparent=false",
+  "requested_bbox_wgs84": [
+    127.011,
+    37.2725,
+    127.023,
+    37.283
+  ],
+  "extent": {
+    "xmin": 14138799.845144471,
+    "ymin": 4477158.09476389,
+    "xmax": 14140135.67903399,
+    "ymax": 4478627.14097739,
+    "spatialReference": {
+      "wkid": 102100,
+      "latestWkid": 3857
+    }
+  },
+  "width": 3600,
+  "height": 3959,
+  "sha256": "a7102aafe1db684148316f34688e8baa4a54062a175275e09fa0f24ad574de0c",
+  "attribution": "Esri World Imagery | Source: Esri, Vantor, Earthstar Geographics, and the GIS User Community",
+  "terms_url": "https://www.esri.com/en-us/legal/terms/full-master-agreement",
+  "note": "다운로드 시각은 촬영일이 아닙니다. 영상과 OSM의 제작 시점 차이는 현장 확인이 필요합니다.",
+  "attribution_source": "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer?f=json"
+}

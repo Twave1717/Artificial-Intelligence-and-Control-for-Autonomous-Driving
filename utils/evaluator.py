@@ -20,15 +20,18 @@ class DrivingMetrics:
     """평가 1회(n_episodes 평균)의 주행 지표."""
     collision_rate: float   # 충돌로 끝난 에피소드 비율 (0~1, 낮을수록 좋음)
     success_rate: float     # 도로 끝까지 완주한 비율 (0~1, 높을수록 좋음)
-    timeout_rate: float     # 시간초과로 끝난 비율 (= 1 - 충돌 - 완주)
+    timeout_rate: float     # 실제 시간 제한으로 끝난 비율 (실행 오류와 구분)
     mean_speed: float       # 전 스텝 평균 주행속도 (m/s)
     mean_gap: float         # 선행차 감지 스텝에서의 평균 차간거리 (m)
     min_gap: float          # 관측된 최소 차간거리 (m) — 위험 운전 지표
     ep_return: float        # 에피소드당 평균 누적 보상
     ep_length: float        # 에피소드당 평균 스텝 수
     lane_changes: float     # 에피소드당 평균 "실행된" 차선변경 횟수
-                            # (추월 시나리오에서 정책이 실제로 차선을
-                            #  활용하는지 보는 핵심 지표)
+                            # (정책이 실제로 차선을 활용하는지 보는 핵심 지표)
+    error_rate: float = 0.0 # ego 소실/순간이동 등으로 정상 평가를 끝내지 못한 비율
+    simulation_collision_rate: float = 0.0  # 배경차를 포함해 충돌이 있었던 episode 비율
+    teleport_rate: float = 0.0  # 어느 차량이든 순간이동이 발생한 episode 비율
+    speed_intervention_rate: float = 0.0  # SUMO 안전보조가 요청 속도를 바꾼 step 비율
 
     def as_dict(self) -> dict:
         return asdict(self)
@@ -45,28 +48,31 @@ class DrivingMetrics:
 
 
 def evaluate_policy(policy, env, n_episodes: int = 5,
-                    deterministic: bool = True) -> DrivingMetrics:
+                    deterministic: bool = True, seed=None) -> DrivingMetrics:
     """정책을 n_episodes 주행시키고 주행 지표 평균을 반환.
 
     Args:
         policy: `predict(obs, deterministic) -> action` 을 가진 객체
-                (PPOAgent, 또는 같은 인터페이스의 무엇이든)
         env:    SumoHighwayEnv (mean_gap 기본값용 visibility 속성만 사용)
         n_episodes: 평가 에피소드 수. 많을수록 지표가 안정적이지만 느리다
         deterministic: True면 탐험 노이즈 없이 평균 행동만 사용
+        seed: 주면 episode마다 seed+i로 reset해 학습 방법이 달라도 같은 교통으로 비교한다
 
     Note:
         모든 지표는 env.step()의 info(collided/arrived/speed/gap)에서 읽는다.
         관측(obs) 벡터의 구성과 무관하므로, 관측을 바꿔도 이 코드는 안 깨진다.
     """
-    n_collide, n_arrive, n_timeout = 0, 0, 0
+    if n_episodes < 1:
+        raise ValueError("평가 episode 수는 1 이상이어야 합니다.")
+    n_collide, n_arrive, n_timeout, n_error = 0, 0, 0, 0
+    n_sim_collision, n_teleport, n_intervened, n_control_steps = 0, 0, 0, 0
     speeds, gaps, returns, lengths, lane_changes = [], [], [], [], []
 
-    for _ in range(n_episodes):
-        obs, _ = env.reset()
-        done, ep_ret, ep_len = False, 0.0, 0
-        ep_lc = 0
+    for episode in range(n_episodes):
+        obs, _ = env.reset(seed=None if seed is None else seed + episode)
+        done, ep_ret, ep_len, ep_lc = False, 0.0, 0, 0
         ended_by = None
+        any_collision, any_teleport = False, False
 
         while not done:
             action = policy.predict(obs, deterministic=deterministic)
@@ -74,18 +80,22 @@ def evaluate_policy(policy, env, n_episodes: int = 5,
             ep_ret += reward
             ep_len += 1
             done = terminated or truncated
-
-            # 실행된 차선변경 집계 (유지 명령의 changeLane 핀 동작은 제외)
-            if info.get("lane_change", 0) != 0 and info.get("lane_change_applied"):
+            any_collision |= bool(info.get("simulation_collided"))
+            any_teleport |= bool(info.get("teleporting_ids"))
+            if info.get("speed_intervened") is not None:
+                n_control_steps += 1
+                n_intervened += int(info["speed_intervened"])
+            # 실제 이동만 집계한다. 이전 스텝의 요청이 늦게 적용된 경우도 포함한다.
+            if info.get("lane_change_actual"):
                 ep_lc += 1
 
             if info.get("collided"):
                 ended_by = "collision"
             elif info.get("arrived"):
                 ended_by = "arrival"
+            elif done:
+                ended_by = "timeout" if truncated and not terminated else "error"
 
-            # 속도/차간거리는 env가 info로 넘겨주는 원시값(m/s, m)을 쓴다.
-            # 관측(obs) 레이아웃이 바뀌어도 평가 코드는 영향받지 않는다.
             # 종료 스텝은 None (ego가 이미 제거됨) → 통계에서 제외.
             if info.get("speed") is not None:
                 speeds.append(float(info["speed"]))
@@ -96,9 +106,12 @@ def evaluate_policy(policy, env, n_episodes: int = 5,
             n_collide += 1
         elif ended_by == "arrival":
             n_arrive += 1
-        else:
+        elif ended_by == "timeout":
             n_timeout += 1
-
+        else:
+            n_error += 1
+        n_sim_collision += int(any_collision)
+        n_teleport += int(any_teleport)
         returns.append(ep_ret)
         lengths.append(ep_len)
         lane_changes.append(ep_lc)
@@ -113,4 +126,8 @@ def evaluate_policy(policy, env, n_episodes: int = 5,
         ep_return=float(np.mean(returns)),
         ep_length=float(np.mean(lengths)),
         lane_changes=float(np.mean(lane_changes)),
+        error_rate=n_error / n_episodes,
+        simulation_collision_rate=n_sim_collision / n_episodes,
+        teleport_rate=n_teleport / n_episodes,
+        speed_intervention_rate=n_intervened / max(n_control_steps, 1),
     )

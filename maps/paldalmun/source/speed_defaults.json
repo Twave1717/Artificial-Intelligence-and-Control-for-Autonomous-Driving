@@ -1,0 +1,28 @@
+{
+  "description": "OSM maxspeed 누락 구간에 사용하는 한국 도시도로 기본 가정. 실제 표지 확인값이 아닙니다.",
+  "source_url": "https://news.seoul.go.kr/traffic/archives/504680",
+  "source_title": "서울시·서울경찰청 안전속도5030 안내(2020-12-23)",
+  "preserve_explicit_osm_maxspeed": true,
+  "units": "km/h",
+  "highway_defaults": {
+    "motorway": 80,
+    "trunk": 80,
+    "primary": 50,
+    "secondary": 50,
+    "tertiary": 50,
+    "residential": 30,
+    "unclassified": 30,
+    "living_street": 30,
+    "service": 20,
+    "motorway_link": 30,
+    "trunk_link": 30,
+    "primary_link": 30,
+    "secondary_link": 30,
+    "tertiary_link": 30
+  },
+  "limitations": [
+    "도로별 예외·현재 제한속도 표지는 별도 확인합니다.",
+    "자동차전용도로80과서비스도로20은 시뮬레이션 기본 가정입니다.",
+    "지리 좌표·차선 수·통행 방향은 이 파일로 바꾸지 않습니다."
+  ]
+}

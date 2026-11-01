@@ -226,8 +226,11 @@ class PPO:
             if truncated and not terminated:
                 stored_reward += self.gamma * self.get_value(next_obs)
 
+            # 시간초과의 미래 가치는 위에서 이미 한 번 보정했다.
+            # 여기서는 terminated와 truncated 모두 에피소드 경계로 끊어야
+            # reset 뒤 새 에피소드의 V(s)와 advantage가 섞이지 않는다.
             self.buffer.add(obs, action, log_prob, stored_reward, value,
-                            terminated)
+                            terminated or truncated)
 
             if terminated or truncated:
                 finished_returns.append(ep_stats[0])

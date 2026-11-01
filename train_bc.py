@@ -18,6 +18,8 @@ TensorBoard 이벤트 파일은 model.pt와 같은 run 폴더(results/bc_월일_
 
 import argparse
 import csv
+import gzip
+import hashlib
 import json
 from contextlib import closing
 from datetime import datetime
@@ -29,13 +31,14 @@ import torch.nn.functional as F
 from torch.utils.data import DataLoader, TensorDataset
 
 from algorithms.bc import BCPolicy
+from env.experiment import write_run_config
 
 
 BASE = Path(__file__).resolve().parent
 
 
 def load_data(path):
-    """NPZ 또는 JSONL에서 observation, action_raw, episode을 불러옴."""
+    """observation/action_raw/episode를 불러온다."""
     path = Path(path)
 
     if path.suffix == ".npz":
@@ -53,10 +56,11 @@ def load_data(path):
             actions = data["action_raw"]
             episodes = data["episode"]
 
-    elif path.suffix == ".jsonl":
+    elif path.suffix == ".jsonl" or path.name.endswith(".jsonl.gz"):
         obs, actions, episodes = [], [], []
 
-        with path.open(encoding="utf-8") as stream:
+        opener = gzip.open if path.name.endswith(".gz") else open
+        with opener(path, "rt", encoding="utf-8") as stream:
             for line_no, line in enumerate(stream, 1):
                 if not line.strip():
                     continue
@@ -72,7 +76,7 @@ def load_data(path):
                     ) from exc
 
     else:
-        raise ValueError("데이터는 .npz 또는 .jsonl이어야 합니다.")
+        raise ValueError("데이터는 .npz, .jsonl 또는 .jsonl.gz이어야 합니다.")
 
     obs = np.asarray(obs, dtype=np.float32)
     actions = np.asarray(actions, dtype=np.float32)
@@ -192,6 +196,15 @@ def run_epoch(model, loader, device, optimizer=None):
 def save_model(model, path):
     """BCPolicy.load()와 호환되도록 구조 정보와 정규화 통계도 저장한다."""
     model.save(path)
+
+
+def file_sha256(path):
+    """데이터셋은 메모리보다 클 수 있으므로 1MB씩 읽어 해시한다."""
+    digest = hashlib.sha256()
+    with open(path, "rb") as stream:
+        for block in iter(lambda: stream.read(1 << 20), b""):
+            digest.update(block)
+    return digest.hexdigest()
 
 
 def main():
@@ -344,6 +357,20 @@ def main():
         json.dumps(config, indent=2),
         encoding="utf-8",
     )
+
+    # train.py와 같은 run_config.json. 도로·시뮬레이션 설정은 데이터셋을 모은 값이다.
+    stem = args.data.name.removesuffix(".gz").removesuffix(".jsonl").removesuffix(".npz")
+    dataset_metadata = args.data.with_name(stem + ".metadata.json")
+    if dataset_metadata.exists():
+        collected = json.loads(dataset_metadata.read_text(encoding="utf-8"))
+        write_run_config(
+            out_dir, hparams=config, reward=collected["reward"], kind="bc_training",
+            settings={key: collected[key] for key in
+                      ("road", "ego", "traffic", "simulation", "observation", "action")},
+            dataset={"path": str(args.data.resolve()), "sha256": file_sha256(args.data)})
+    else:
+        print(f"※ {dataset_metadata}이 없어 데이터를 모은 도로를 알 수 없습니다. "
+              "run_config.json을 쓰지 않으므로 test.py는 이 모델을 평가하지 않습니다.")
 
     print("=" * 70)
     print("Behavior Cloning Training")

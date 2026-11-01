@@ -13,6 +13,8 @@
 
 실행:  python train.py
 """
+import argparse
+import json
 import os
 import shutil
 from datetime import datetime
@@ -22,6 +24,7 @@ from env.mdp_config import SIMULATION, OBSERVATION, ACTION
 from env.mdp_config import REWARD as REWARD_DEFAULTS
 from env import road_builder
 from env.sumo_env import SumoHighwayEnv
+from env.experiment import add_run_arguments, configure_execution, write_run_config
 
 from algorithms.ppo import PPO
 from utils.buffer import RolloutBuffer
@@ -38,8 +41,8 @@ TOTAL_TIMESTEPS = 200_000   # 총 학습 스텝 수
 # ══════════════════════════════════════════════════════════════════
 #  보상 튜닝 — env/mdp_config.py 의 기본값을 여기서 덮어쓴다.
 #  (여기 적은 키만 바뀌고, 나머지는 mdp_config 기본값 그대로)
-#  test.py 도 이 REWARD 를 import 하므로 학습/평가 조건이 항상 일치한다.
-#  이 파일이 run 폴더에 스냅샷되므로 "그 결과가 어떤 계수였는지"도 남는다.
+#  run_config.json에 이 REWARD가 기록되고, test.py는 그 값으로 평가한다.
+#  이 파일도 run 폴더에 스냅샷되므로 "그 결과가 어떤 계수였는지"가 남는다.
 # ══════════════════════════════════════════════════════════════════
 REWARD_OVERRIDES = dict(
     speed_weight=0.1,          # 속도 보상 (스텝당 최대 이 값)
@@ -47,7 +50,7 @@ REWARD_OVERRIDES = dict(
     arrival_bonus=2.0,         # 완주 보너스
     close_gap_threshold=6.0,   # 이 거리(m) 미만 접근 시
     close_gap_penalty=0.1,     #   → 스텝당 감점
-    blocked_penalty=0.05,      # "느린 앞차에 막힘" 스텝당 감점 (추월 학습 핵심)
+    blocked_penalty=0.0,       # 교차로·합류부 대기를 추월 실패로 벌주지 않는다.
     blocked_gap=20.0,          #   막힘 판정: 앞차 이 거리 이내
     blocked_speed_frac=0.7,    #   그리고 내 속도 < vmax × 이 값
     lane_change_penalty=0.0,   # 변경 실행당 감점 (커리큘럼: 초기 0,
@@ -64,7 +67,7 @@ HPARAMS = dict(
     minibatch_size=64,
 
     # ---- 할인 / advantage ----
-    gamma=0.99,              # 할인율 γ. 0.99 ≈ 100스텝(50초) 앞을 내다봄
+    gamma=0.99,              # 할인율 γ. 0.99 ≈ 100스텝(결정 0.5초 × 100 = 50초) 앞을 내다봄
     gae_lambda=0.95,         # GAE λ. 1에 가까울수록 분산↑편향↓
 
     # ---- PPO 고유 ----
@@ -118,13 +121,9 @@ RUN_NAME = None         # None이면 run_날짜_시각 자동 생성.
 
 def make_run_dir() -> str:
     """results/<run이름>/ 폴더를 만들고 경로를 반환."""
-    name = RUN_NAME or datetime.now().strftime("run_%Y%m%d_%H%M%S")
+    name = RUN_NAME or (f"run_{ROAD['map_id']}_" + datetime.now().strftime("%Y%m%d_%H%M%S_%f"))
     run_dir = os.path.join(BASE, RESULTS_DIR, name)
-    os.makedirs(run_dir, exist_ok=True)
-    if not os.path.isdir(run_dir):
-        raise NotADirectoryError(
-            f"결과 폴더를 만들 수 없습니다: {run_dir}\n"
-            f"  같은 이름의 '파일'이 이미 있는지 확인하세요.")
+    os.makedirs(run_dir, exist_ok=False)
     return run_dir
 
 
@@ -135,22 +134,27 @@ def snapshot_configs(run_dir: str):
     이 파일 안에 있으므로, 나중에 "이 결과가 어떤 설정이었나"를
     정확히 되짚을 수 있다.
     """
+    write_run_config(run_dir, hparams=HPARAMS, reward=REWARD, kind="ppo_training",
+                     total_timesteps=TOTAL_TIMESTEPS, eval_interval=EVAL_INTERVAL,
+                     eval_episodes=EVAL_EPISODES)
     for src in [os.path.join(BASE, "env", "road_config.py"),
                 os.path.join(BASE, "env", "mdp_config.py"),
                 os.path.join(BASE, "train.py")]:
         shutil.copy(src, run_dir)
 
 
-if __name__ == "__main__":
+def main():
+    run_dir = make_run_dir()
+    started_at = datetime.now().astimezone().isoformat()
     # 1) 도로 생성 (env/road_config.py 기준으로 매번 재생성)
     sumocfg = road_builder.build(ROAD, EGO, TRAFFIC,
-                                 os.path.join(BASE, "env", "sumo"))
+                                 os.path.join(run_dir, "sumo"))
     print(f"도로 생성 완료: {sumocfg}")
-    print(f"  길이 {ROAD['length']}m, {ROAD['num_lanes']}차선, "
+    print(f"  {ROAD['map_id']} / {ROAD['scenario']} | 경로 약 {ROAD['length']}m, "
           f"교통량 {TRAFFIC['vehs_per_hour']}대/시간")
 
     # 2) 결과 폴더 + 로거
-    run_dir = make_run_dir()
+    snapshot_configs(run_dir)
     logger = RunLogger(run_dir)
     print(f"결과 폴더: {run_dir}")
 
@@ -160,7 +164,6 @@ if __name__ == "__main__":
         road=ROAD, ego=EGO,
         mdp_sim=SIMULATION, mdp_obs=OBSERVATION,
         action=ACTION, reward=REWARD,
-        traffic=TRAFFIC,
         gui=False,   # 학습은 화면 없이 (수십 배 빠름)
     )
 
@@ -180,6 +183,7 @@ if __name__ == "__main__":
 
     # 5) 학습 → 저장
     #    try/finally: Ctrl+C나 에러로 중단돼도 SUMO 정리 + 결과 저장은 수행
+    completed = False
     try:
         agent.learn(env,
                     total_timesteps=TOTAL_TIMESTEPS,
@@ -187,14 +191,55 @@ if __name__ == "__main__":
                     log_interval=LOG_INTERVAL,
                     eval_interval=EVAL_INTERVAL,
                     eval_episodes=EVAL_EPISODES)
+        completed = True
     finally:
         env.close()
         logger.close()
         model_path = os.path.join(run_dir, "model.pt")
         agent.save(model_path)
-        snapshot_configs(run_dir)
+        with open(os.path.join(run_dir, "training_status.json"), "w", encoding="utf-8") as f:
+            json.dump({
+                "status": "completed" if completed else "incomplete",
+                "started_at": started_at,
+                "finished_at": datetime.now().astimezone().isoformat(),
+                "target_timesteps": TOTAL_TIMESTEPS,
+                "actual_timesteps": agent.num_timesteps,
+            }, f, ensure_ascii=False, indent=2)
         print(f"\n저장 완료: {model_path}")
         print(f"재생 방법:      python test.py "
               f"{os.path.relpath(model_path, BASE)}")
         print(f"학습 곡선 보기: tensorboard --logdir {RESULTS_DIR}"
               f"  → http://localhost:6006")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="팔달문 도로에서 SUMO PPO 학습")
+    add_run_arguments(parser)
+    parser.add_argument("--timesteps", type=int, default=TOTAL_TIMESTEPS,
+                        help="총 학습 스텝; 작은 값으로 전체 연결을 먼저 점검할 수 있다")
+    parser.add_argument("--n-steps", type=int, default=HPARAMS["n_steps"], help="업데이트당 rollout 크기")
+    parser.add_argument("--eval-interval", type=int, default=EVAL_INTERVAL, help="평가 주기; 0이면 비활성")
+    parser.add_argument("--device", default=HPARAMS["device"], choices=["auto", "cpu", "cuda", "mps"])
+    parser.add_argument("--lr", type=float, default=None, help="이번 실행의 학습률")
+    parser.add_argument("--run-label", default=None, help="실제 시작 시각 뒤에 붙일 실험 이름")
+    parser.add_argument("--results-dir", default=None, help="이번 실행의 결과 저장 폴더")
+    args = parser.parse_args()
+    try:
+        configure_execution(args)
+    except ValueError as exc:
+        parser.error(str(exc))
+    if args.timesteps < 1 or args.n_steps < 2 or args.eval_interval < 0:
+        parser.error("timesteps >= 1, n-steps >= 2, eval-interval >= 0이어야 합니다.")
+    TOTAL_TIMESTEPS, EVAL_INTERVAL = args.timesteps, args.eval_interval
+    HPARAMS.update(n_steps=args.n_steps, seed=args.seed, device=args.device)
+    if args.lr is not None:
+        if not 0 < args.lr < float("inf"):
+            parser.error("--lr는 유한한 양수여야 합니다.")
+        HPARAMS["lr"] = args.lr
+    if args.run_label is not None:
+        if not args.run_label or any(c not in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-" for c in args.run_label):
+            parser.error("--run-label에는 영문, 숫자, 밑줄, 하이픈만 사용할 수 있습니다.")
+        RUN_NAME = f"run_{ROAD['map_id']}_" + datetime.now().strftime("%Y%m%d_%H%M%S_%f") + "_" + args.run_label
+    if args.results_dir is not None:
+        RESULTS_DIR = args.results_dir
+    main()

@@ -1,0 +1,2 @@
+# 도로 로더가 network.net.xml의 바이트 해시를 검사하므로 XML의 줄바꿈을 바꾸지 않는다.
+*.xml -text
