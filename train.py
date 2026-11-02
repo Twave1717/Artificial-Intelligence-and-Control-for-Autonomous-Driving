@@ -33,7 +33,7 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 # ══════════════════════════════════════════════════════════════════
 #  하이퍼파라미터 — 실험은 여기서
 # ══════════════════════════════════════════════════════════════════
-TOTAL_TIMESTEPS = 200_000   # 총 학습 스텝 수
+TOTAL_TIMESTEPS = 200_000   # 총 학습 스텝 수 바꾸지 XXXX
 
 # ══════════════════════════════════════════════════════════════════
 #  보상 튜닝 — env/mdp_config.py 의 기본값을 여기서 덮어쓴다.
@@ -55,12 +55,12 @@ REWARD_OVERRIDES = dict(
 )
 REWARD = {**REWARD_DEFAULTS, **REWARD_OVERRIDES}
 
-
 HPARAMS = dict(
     # ---- 최적화 ----
-    lr=1e-4,                 # 학습률. 보상이 요동치면 낮출 것 (3e-4 → 1e-4 → 5e-5)
-    n_steps=2048,            # rollout 길이. 크면 advantage 추정이 안정적
-    n_epochs=10,             # 모은 데이터 재사용 횟수
+    lr=5e-5,                 # 학습률. 보상이 요동치면 낮출 것 (3e-4 → 1e-4 → 5e-5)
+    # n_steps=2048,            # rollout 길이. 크면 advantage 추정이 안정적
+    n_steps=4096,            # rollout 길이. 크면 advantage 추정이 안정적
+    n_epochs=20,             # 모은 데이터 재사용 횟수 처음 -> 10
     minibatch_size=64,
 
     # ---- 할인 / advantage ----

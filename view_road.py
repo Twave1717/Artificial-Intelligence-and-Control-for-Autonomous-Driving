@@ -46,6 +46,15 @@ def print_summary():
     print("─" * 46)
     print(" 현재 도로 설정 (env/road_config.py)")
     print("─" * 46)
+    if ROAD.get("layout", "cross") == "osm":
+        from env.road_config import OSM_ROAD
+        src = OSM_ROAD["source"]
+        print(f"  실제 지도      : {src['name']} ({src['lat']}, {src['lon']}), "
+              f"반경 {src['radius']} m")
+        print(f"  노드 / 도로    : {len(OSM_ROAD['nodes'])} / {len(OSM_ROAD['roads'])}")
+        print(f"  배경 교통량    : {OSM_ROAD['traffic']['vehs_per_hour']} 대/시간 (도로망 전체)")
+        print("─" * 46)
+        return
     print(f"  도로 길이      : {ROAD['length']} m")
     print(f"  차선 수        : {ROAD['num_lanes']}")
     print(f"  제한속도       : {ROAD['speed_limit']} m/s "

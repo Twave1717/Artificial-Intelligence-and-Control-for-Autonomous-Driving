@@ -27,9 +27,9 @@ SIMULATION = {
     # SUMO GUI 공통 설정 — GUI 확대는 여기 하나만 바꾸면 된다.
     # view_road.py, train/test GUI, 데이터 수집 GUI와 생성되는 highway.gui.xml까지
     # 모두 이 값을 사용한다. 숫자가 클수록 더 가까이 확대된다.
-    "gui_zoom": 4000.0,   # ego 추적 시 확대 배율(%). SUMO zoom은
+    "gui_zoom": 400.0,    # ego 추적 시 확대 배율(%). SUMO zoom은
                           # "네트워크 전체=100%" 기준이라 도로가 길수록
-                          # 큰 값이 필요. 12km 기준 4000% ≈ 시야 300m.
+                          # 큰 값이 필요. 1km 기준 400% ≈ 시야 250m.
                           # 도로 길이를 바꾸면 이 값도 비례해 조정할 것.
     "gui_delay": 100.0,
     "gui_view_width": 200.0,  # GUI 대기 화면에서 보여줄 도로 폭(m).

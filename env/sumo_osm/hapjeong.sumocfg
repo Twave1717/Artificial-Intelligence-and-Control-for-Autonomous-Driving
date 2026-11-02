@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <input>
+        <net-file value="hapjeong.net.xml"/>
+        <route-files value="hapjeong.rou.xml"/>
+        <additional-files value="hapjeong.poly.xml"/>
+    </input>
+    <time>
+        <begin value="0"/>
+        <end value="3600"/>
+        <step-length value="0.5"/>
+    </time>
+    <processing>
+        <time-to-teleport value="120"/>
+        <ignore-junction-blocker value="30"/>
+    </processing>
+</configuration>

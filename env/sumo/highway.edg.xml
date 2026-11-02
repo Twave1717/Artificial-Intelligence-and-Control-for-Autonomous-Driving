@@ -1,3 +1,125 @@
 <edges>
-    <edge id="e0" from="n0" to="n1" numLanes="3" speed="33.33"/>
+    <edge id="R40" from="J1" to="J6" name="양화로" priority="12" numLanes="3" speed="27.78" spreadType="center" sidewalkWidth="3.0" shape="-18.55,-11.02 -43.26,-14.87 -56.69,-21.16"/>
+    <edge id="R41" from="J1" to="J3" name="양화로" priority="12" numLanes="4" speed="27.78" spreadType="center" disallow="pedestrian" shape="-13.68,-20.32 4.34,-9.55 10.38,-4.47 17.88,4.21"/>
+    <edge id="R42" from="J2" to="J1" name="양화로" priority="12" numLanes="4" speed="27.78" spreadType="center" sidewalkWidth="3.0" shape="6.11,17.98 0.52,12.12 -5.67,7.18 -23.69,-3.59"/>
+    <edge id="R43" from="J3" to="J17" name="양화로" priority="12" numLanes="4" speed="27.78" spreadType="center" sidewalkWidth="3.0" shape="17.88,4.21 83.5,61.8 121.0,94.7 180.4,151.3 208.9,177.1 306.2,271.6"/>
+    <edge id="R44" from="J6" to="J10" name="양화로" priority="12" numLanes="5" speed="27.78" spreadType="center" sidewalkWidth="3.0" shape="-57.16,-17.95 -161.48,-51.28 -178.38,-58.82"/>
+    <edge id="R45" from="J7" to="J1" name="양화로" priority="12" numLanes="3" speed="27.78" spreadType="center" sidewalkWidth="3.0" shape="-45.21,-41.58 -35.39,-35.29 -17.08,-13.63"/>
+    <edge id="R46" from="J9" to="J7" name="양화로" priority="12" numLanes="4" speed="27.78" spreadType="center" sidewalkWidth="3.0" shape="-134.0,-72.45 -45.13,-43.25"/>
+    <edge id="R47" from="J10" to="J11" name="양화로" priority="12" numLanes="3" speed="27.78" spreadType="center" sidewalkWidth="3.0" shape="-177.2,-61.8 -214.0,-73.0"/>
+    <edge id="R48" from="J11" to="J26" name="양화로" priority="12" numLanes="3" speed="27.78" spreadType="center" sidewalkWidth="3.0" shape="-214.0,-73.0 -247.6,-88.2 -277.9,-103.6 -307.4,-121.2 -339.2,-142.9 -368.0,-167.1 -426.1,-224.0"/>
+    <edge id="R49a" from="J12" to="J81" name="양화로" priority="12" numLanes="4" speed="27.78" spreadType="center" sidewalkWidth="3.0" shape="-230.96,-96.37 -201.96,-87.57">
+        <lane index="3" allow="bus"/>
+    </edge>
+    <edge id="R49" from="J81" to="J9" name="양화로" priority="12" numLanes="4" speed="27.78" spreadType="center" sidewalkWidth="3.0" shape="-201.96,-87.57 -174.05,-79.12 -158.35,-76.62 -134.0,-72.45"/>
+    <edge id="R50" from="J17" to="J32" name="양화로" priority="12" numLanes="6" speed="27.78" spreadType="center" sidewalkWidth="3.0" shape="306.2,271.6 387.8,347.5"/>
+    <edge id="R51" from="J30" to="J12" name="양화로" priority="12" numLanes="3" speed="27.78" spreadType="center" sidewalkWidth="3.0" shape="-443.3,-263.1 -387.6,-204.1 -359.6,-176.3 -331.6,-152.9 -300.6,-131.7 -271.8,-114.5 -253.0,-105.9 -230.5,-97.9"/>
+    <edge id="R52" from="J32" to="J42" name="양화로" priority="12" numLanes="6" speed="27.78" spreadType="center" sidewalkWidth="3.0" shape="387.8,347.5 400.6,371.9"/>
+    <edge id="R53" from="J42" to="J63" name="양화로" priority="12" numLanes="6" speed="27.78" spreadType="center" sidewalkWidth="3.0" shape="400.6,371.9 438.2,396.4 467.2,423.4"/>
+    <edge id="R54a" from="J42" to="J87" name="양화로" priority="12" numLanes="5" speed="27.78" spreadType="center" sidewalkWidth="3.0" shape="399.53,373.09 138.98,139.34"/>
+    <edge id="R54" from="J87" to="J2" name="양화로" priority="12" numLanes="5" speed="27.78" spreadType="center" sidewalkWidth="3.0" shape="138.98,139.34 5.04,19.17"/>
+    <edge id="R55" from="J50" to="J42" name="양화로" priority="12" numLanes="4" speed="27.78" spreadType="center" sidewalkWidth="3.0" shape="417.0,399.8 400.6,371.9"/>
+    <edge id="R59" from="J1" to="J5" name="월드컵로" priority="12" numLanes="3" speed="27.78" sidewalkWidth="3.0" shape="-18.3,-12.6 -38.15,22.07"/>
+    <edge id="-R59" from="J5" to="J1" name="월드컵로" priority="12" numLanes="4" speed="27.78" sidewalkWidth="3.0" shape="-38.15,22.07 -18.3,-12.6"/>
+    <edge id="R61" from="J5" to="J49" name="월드컵로" priority="12" numLanes="4" speed="27.78" sidewalkWidth="3.0" shape="-38.15,22.07 -62.3,126.4 -116.0,336.4 -128.2,380.4 -169.8,545.1"/>
+    <edge id="-R61" from="J49" to="J5" name="월드컵로" priority="12" numLanes="5" speed="27.78" sidewalkWidth="3.0" shape="-169.8,545.1 -128.2,380.4 -116.0,336.4 -62.3,126.4 -38.15,22.07"/>
+    <edge id="R62" from="J49" to="J72" name="월드컵로" priority="12" numLanes="2" speed="27.78" sidewalkWidth="3.0" shape="-169.8,545.1 -237.0,638.5"/>
+    <edge id="-R62" from="J72" to="J49" name="월드컵로" priority="12" numLanes="2" speed="27.78" sidewalkWidth="3.0" shape="-237.0,638.5 -169.8,545.1"/>
+    <edge id="R65" from="J2" to="C4" priority="7" numLanes="1" speed="22.22" spreadType="center" sidewalkWidth="3.0" shape="2.27,25.26 2.24,25.25 2.18,25.23 2.09,25.2 1.96,25.16 1.81,25.11 1.62,25.05 1.41,24.98 1.16,24.91 0.89,24.83 0.59,24.77 0.27,24.71 -0.07,24.66 -0.44,24.62 -0.84,24.58 -1.26,24.56 -1.71,24.53 -2.17,24.52 -2.65,24.51 -3.14,24.51 -3.65,24.51 -4.18,24.52 -4.72,24.54 -5.28,24.56 -5.86,24.59 -6.44,24.62 -7.03,24.66 -7.63,24.71 -8.23,24.76 -8.85,24.81 -9.46,24.87 -10.09,24.94 -10.73,25.01 -11.36,25.09 -11.99,25.17 -12.62,25.25 -12.944799999999999,25.2964"/>
+    <edge id="R65.c" from="C4" to="J5" priority="7" numLanes="1" speed="22.22" spreadType="center" sidewalkWidth="3.0" shape="-12.944799999999999,25.2964 -13.25,25.34 -13.88,25.43 -14.51,25.53 -15.13,25.63 -15.76,25.73 -16.37,25.84 -16.97,25.95 -17.57,26.07 -18.15,26.18 -18.72,26.3 -19.29,26.43 -19.84,26.55 -20.38,26.69 -20.91,26.82 -21.41,26.95 -21.9,27.09 -22.36,27.23 -22.81,27.37 -23.24,27.51 -23.65,27.66 -24.05,27.81 -24.41,27.96 -24.75,28.11 -25.06,28.26 -25.34,28.42 -25.59,28.57 -25.82,28.73 -26.02,28.89 -26.19,29.04 -26.34,29.18 -26.47,29.3 -26.58,29.4 -26.66,29.48 -26.73,29.54 -26.77,29.58 -26.79,29.6"/>
+    <edge id="R66" from="J4" to="C3" priority="7" numLanes="1" speed="22.22" spreadType="center" sidewalkWidth="3.0" shape="11.01,-30.44 10.98,-30.25 10.91,-29.86 10.8,-29.27 10.66,-28.5 10.49,-27.53 10.28,-26.36 10.04,-25.0 9.76,-23.45 9.57,-22.01 9.47,-20.67 9.45,-19.45 9.53,-18.35 9.564570982839314,-18.13393135725429"/>
+    <edge id="R66.c" from="C3" to="J3" priority="7" numLanes="1" speed="22.22" spreadType="center" sidewalkWidth="3.0" shape="9.564570982839314,-18.13393135725429 9.69,-17.35 9.94,-16.46 10.27,-15.69 10.7,-15.02 11.12,-14.36 11.56,-13.7 11.99,-13.03 12.43,-12.37 12.88,-11.7 13.32,-11.04 13.78,-10.38 14.23,-9.71 14.69,-9.06 15.13,-8.41 15.58,-7.78 16.02,-7.15 16.46,-6.54 16.89,-5.93 17.32,-5.34 17.74,-4.75 18.16,-4.18 18.56,-3.64 18.95,-3.11 19.33,-2.6 19.69,-2.11 20.05,-1.63 20.39,-1.18 20.73,-0.75 21.04,-0.34 21.33,0.03 21.6,0.38 21.86,0.7 22.09,0.99 22.3,1.25 22.5,1.49 22.67,1.69 22.82,1.87 22.95,2.03 23.06,2.15 23.15,2.26 23.21,2.33 23.26,2.38 23.28,2.41"/>
+    <edge id="R67" from="J5" to="C1" priority="7" numLanes="1" speed="22.22" spreadType="center" sidewalkWidth="3.0" shape="-53.7,18.76 -53.7,18.72 -53.7,18.63 -53.7,18.51 -53.7,18.34 -53.69,18.13 -53.69,17.88 -53.69,17.59 -53.68,17.25 -53.69,16.89 -53.7,16.5 -53.73,16.08 -53.76,15.64 -53.8,15.17 -53.86,14.67 -53.92,14.15 -53.99,13.59 -54.07,13.02 -54.16,12.44 -54.25,11.83 -54.35,11.21 -54.46,10.57 -54.58,9.91 -54.7,9.24 -54.84,8.55 -54.97,7.85 -55.12,7.14 -55.27,6.43 -55.42,5.71 -55.58,4.98 -55.75,4.24 -55.92,3.5 -56.1,2.74 -56.28,1.99 -56.46,1.25 -56.65,0.5 -56.75299523485364,0.1189176310415253"/>
+    <edge id="R67.c" from="C1" to="J6" priority="7" numLanes="1" speed="22.22" spreadType="center" sidewalkWidth="3.0" shape="-56.75299523485364,0.1189176310415253 -56.85,-0.24 -57.04,-0.99 -57.24,-1.73 -57.45,-2.46 -57.65,-3.2 -57.86,-3.92 -58.07,-4.63 -58.29,-5.33 -58.5,-6.02 -58.72,-6.69 -58.94,-7.35 -59.16,-8.0 -59.38,-8.64 -59.6,-9.25 -59.83,-9.85 -60.05,-10.42 -60.27,-10.97 -60.5,-11.5 -60.72,-12.0 -60.94,-12.48 -61.17,-12.95 -61.39,-13.38 -61.61,-13.77 -61.83,-14.14 -62.04,-14.47 -62.26,-14.78 -62.47,-15.05 -62.69,-15.29 -62.9,-15.49 -63.08,-15.68 -63.24,-15.83 -63.37,-15.96 -63.47,-16.06 -63.55,-16.14 -63.6,-16.19 -63.63,-16.22"/>
+    <edge id="R68" from="J1" to="J4" name="독막로" priority="11" numLanes="2" speed="27.78" sidewalkWidth="3.0" shape="-18.3,-12.6 -3.54,-33.26 0.61,-37.49 7.53,-42.61"/>
+    <edge id="-R68" from="J4" to="J1" name="독막로" priority="11" numLanes="3" speed="27.78" sidewalkWidth="3.0" shape="7.53,-42.61 0.61,-37.49 -3.54,-33.26 -18.3,-12.6"/>
+    <edge id="R69" from="J4" to="J84" name="독막로" priority="11" numLanes="3" speed="27.78" sidewalkWidth="3.0" shape="7.53,-42.61 87.1,-73.4"/>
+    <edge id="-R69" from="J84" to="J4" name="독막로" priority="11" numLanes="4" speed="27.78" sidewalkWidth="3.0" shape="87.1,-73.4 7.53,-42.61"/>
+    <edge id="R69a" from="J84" to="J8" name="독막로" priority="11" numLanes="3" speed="27.78" sidewalkWidth="3.0" shape="87.1,-73.4 103.7,-77.1"/>
+    <edge id="-R69a" from="J8" to="J84" name="독막로" priority="11" numLanes="3" speed="27.78" sidewalkWidth="3.0" shape="103.7,-77.1 87.1,-73.4"/>
+    <edge id="R71" from="J8" to="J23" name="독막로" priority="11" numLanes="3" speed="27.78" sidewalkWidth="3.0" shape="103.7,-77.1 210.8,-105.1 241.3,-112.1 357.9,-143.8 417.4,-158.2"/>
+    <edge id="-R71" from="J23" to="J8" name="독막로" priority="11" numLanes="3" speed="27.78" sidewalkWidth="3.0" shape="417.4,-158.2 357.9,-143.8 241.3,-112.1 210.8,-105.1 103.7,-77.1"/>
+    <edge id="R73" from="J23" to="J52" name="독막로" priority="11" numLanes="3" speed="13.89" sidewalkWidth="3.0" shape="417.4,-158.2 555.5,-164.3"/>
+    <edge id="-R73" from="J52" to="J23" name="독막로" priority="11" numLanes="2" speed="13.89" sidewalkWidth="3.0" shape="555.5,-164.3 417.4,-158.2"/>
+    <edge id="R75" from="J52" to="J56" name="독막로" priority="11" numLanes="3" speed="13.89" sidewalkWidth="3.0" shape="555.5,-164.3 566.6,-164.7"/>
+    <edge id="-R75" from="J56" to="J52" name="독막로" priority="11" numLanes="2" speed="13.89" sidewalkWidth="3.0" shape="566.6,-164.7 555.5,-164.3"/>
+    <edge id="R76" from="J56" to="J58" name="독막로" priority="11" numLanes="3" speed="13.89" sidewalkWidth="3.0" shape="566.6,-164.7 577.7,-166.1"/>
+    <edge id="-R76" from="J58" to="J56" name="독막로" priority="11" numLanes="2" speed="13.89" sidewalkWidth="3.0" shape="577.7,-166.1 566.6,-164.7"/>
+    <edge id="R77" from="J58" to="J80" name="독막로" priority="11" numLanes="3" speed="13.89" sidewalkWidth="3.0" shape="577.7,-166.1 592.7,-165.8 674.0,-171.7"/>
+    <edge id="-R77" from="J80" to="J58" name="독막로" priority="11" numLanes="2" speed="13.89" sidewalkWidth="3.0" shape="674.0,-171.7 592.7,-165.8 577.7,-166.1"/>
+    <edge id="R79" from="J7" to="C2" priority="6" numLanes="1" speed="22.22" spreadType="center" sidewalkWidth="3.0" shape="-43.94,-47.9 -43.9,-47.89 -43.82,-47.87 -43.7,-47.85 -43.55,-47.82 -43.35,-47.77 -43.11,-47.72 -42.84,-47.66 -42.52,-47.6 -42.18,-47.53 -41.82,-47.46 -41.42,-47.39 -41.0,-47.33 -40.56,-47.26 -40.09,-47.19 -39.6,-47.12 -39.07,-47.06 -38.54,-46.99 -37.98,-46.92 -37.41,-46.86 -36.82,-46.79 -36.21,-46.73 -35.59,-46.66 -34.94,-46.6 -34.29,-46.54 -33.62,-46.48 -32.94,-46.42 -32.26,-46.36 -31.56,-46.31 -30.86,-46.25 -30.15,-46.2 -29.43,-46.15 -28.71,-46.11 -27.98,-46.06 -27.25,-46.02 -26.52,-45.98 -26.15889230769231,-45.95993846153846"/>
+    <edge id="R79.c" from="C2" to="J4" priority="6" numLanes="1" speed="22.22" spreadType="center" sidewalkWidth="3.0" shape="-26.15889230769231,-45.95993846153846 -25.8,-45.94 -25.07,-45.9 -24.34,-45.87 -23.62,-45.84 -22.89,-45.81 -22.17,-45.79 -21.47,-45.76 -20.77,-45.74 -20.08,-45.73 -19.4,-45.72 -18.72,-45.71 -18.06,-45.7 -17.41,-45.7 -16.77,-45.7 -16.15,-45.71 -15.55,-45.72 -14.97,-45.73 -14.4,-45.75 -13.85,-45.77 -13.32,-45.8 -12.8,-45.83 -12.31,-45.87 -11.85,-45.91 -11.42,-45.95 -11.01,-46.01 -10.62,-46.06 -10.27,-46.12 -9.94,-46.19 -9.63,-46.26 -9.37,-46.32 -9.14,-46.38 -8.95,-46.42 -8.8,-46.46 -8.68,-46.48 -8.61,-46.5 -8.57,-46.51"/>
+    <edge id="R86" from="J49" to="J76" name="동교로" priority="10" numLanes="1" speed="22.22" sidewalkWidth="3.0" shape="-169.8,545.1 -193.9,536.0 -200.6,532.7 -373.1,462.4 -576.0,380.6"/>
+    <edge id="-R86" from="J76" to="J49" name="동교로" priority="10" numLanes="1" speed="22.22" sidewalkWidth="3.0" shape="-576.0,380.6 -373.1,462.4 -200.6,532.7 -193.9,536.0 -169.8,545.1"/>
+    <edge id="R87" from="J49" to="J64" name="동교로" priority="10" numLanes="1" speed="22.22" sidewalkWidth="3.0" shape="-169.8,545.1 185.7,619.8"/>
+    <edge id="-R87" from="J64" to="J49" name="동교로" priority="10" numLanes="1" speed="22.22" sidewalkWidth="3.0" shape="185.7,619.8 -169.8,545.1"/>
+    <edge id="R89" from="J71" to="J64" name="동교로" priority="10" numLanes="1" speed="22.22" sidewalkWidth="3.0" shape="247.0,632.7 185.7,619.8"/>
+    <edge id="-R89" from="J64" to="J71" name="동교로" priority="10" numLanes="1" speed="22.22" sidewalkWidth="3.0" shape="185.7,619.8 247.0,632.7"/>
+    <edge id="R92" from="J42" to="J44" name="잔다리로" priority="10" numLanes="1" speed="22.22" sidewalkWidth="3.0" shape="400.6,371.9 377.2,396.9"/>
+    <edge id="-R92" from="J44" to="J42" name="잔다리로" priority="10" numLanes="1" speed="22.22" sidewalkWidth="3.0" shape="377.2,396.9 400.6,371.9"/>
+    <edge id="R93" from="J44" to="J64" name="잔다리로" priority="10" numLanes="1" speed="22.22" sidewalkWidth="3.0" shape="377.2,396.9 284.3,497.6 219.6,566.5 185.7,619.8"/>
+    <edge id="-R93" from="J64" to="J44" name="잔다리로" priority="10" numLanes="1" speed="22.22" sidewalkWidth="3.0" shape="185.7,619.8 219.6,566.5 284.3,497.6 377.2,396.9"/>
+    <edge id="R94" from="J45" to="J42" name="잔다리로" priority="10" numLanes="1" speed="22.22" sidewalkWidth="3.0" shape="423.8,347.2 400.6,371.9"/>
+    <edge id="-R94" from="J42" to="J45" name="잔다리로" priority="10" numLanes="1" speed="22.22" sidewalkWidth="3.0" shape="400.6,371.9 423.8,347.2"/>
+    <edge id="R95" from="J48" to="J45" name="잔다리로" priority="10" numLanes="1" speed="22.22" sidewalkWidth="3.0" shape="477.0,291.7 423.8,347.2"/>
+    <edge id="-R95" from="J45" to="J48" name="잔다리로" priority="10" numLanes="1" speed="22.22" sidewalkWidth="3.0" shape="423.8,347.2 477.0,291.7"/>
+    <edge id="R96" from="J48" to="J74" name="잔다리로" priority="10" numLanes="1" speed="22.22" sidewalkWidth="3.0" shape="477.0,291.7 598.8,160.6 667.1,157.2"/>
+    <edge id="-R96" from="J74" to="J48" name="잔다리로" priority="10" numLanes="1" speed="22.22" sidewalkWidth="3.0" shape="667.1,157.2 598.8,160.6 477.0,291.7"/>
+    <edge id="R97" from="J64" to="J66" name="잔다리로" priority="10" numLanes="1" speed="22.22" sidewalkWidth="3.0" shape="185.7,619.8 174.7,637.2"/>
+    <edge id="-R97" from="J66" to="J64" name="잔다리로" priority="10" numLanes="1" speed="22.22" sidewalkWidth="3.0" shape="174.7,637.2 185.7,619.8"/>
+    <edge id="R100" from="J79" to="J74" name="잔다리로" priority="10" numLanes="1" speed="22.22" sidewalkWidth="3.0" shape="677.0,156.8 667.1,157.2"/>
+    <edge id="-R100" from="J74" to="J79" name="잔다리로" priority="10" numLanes="1" speed="22.22" sidewalkWidth="3.0" shape="667.1,157.2 677.0,156.8"/>
+    <edge id="B1" from="J81" to="J1" name="양화로 중앙버스전용차로" priority="12" numLanes="1" speed="13.89" spreadType="center" allow="bus" shape="-204.72,-78.48 -175.6,-69.4 -80.79,-42.64 -18.3,-12.6"/>
+    <edge id="R114" from="J85" to="J12" priority="10" numLanes="1" speed="13.89" spreadType="center" sidewalkWidth="3.0" shape="-284.79,-152.68 -284.43,-152.42 -283.72,-151.9 -282.65,-151.12 -281.23,-150.07 -279.45,-148.77 -277.31,-147.21 -274.82,-145.38 -271.97,-143.3 -269.13,-141.22 -266.31,-139.16 -263.5,-137.11 -260.7,-135.06 -257.91,-133.03 -255.14,-131.01 -252.38,-129.0 -249.62,-127.0 -247.06,-124.95 -244.67,-122.86 -242.46,-120.72 -240.43,-118.53 -238.59,-116.29 -236.92,-114.01 -235.44,-111.67 -234.13,-109.3 -232.99,-107.21 -232.01,-105.43 -231.2,-103.94 -230.55,-102.75 -230.06,-101.86 -229.73,-101.27 -229.57,-100.97"/>
+    <edge id="R115" from="J10" to="J86" priority="7" numLanes="2" speed="16.67" spreadType="center" sidewalkWidth="3.0" shape="-180.15,-54.36 -180.27,-54.35 -180.52,-54.34 -180.89,-54.33 -181.38,-54.3 -181.99,-54.28 -182.73,-54.24 -183.58,-54.2 -184.57,-54.16 -185.69,-54.13 -186.96,-54.11 -188.37,-54.1 -189.92,-54.11 -191.62,-54.13 -193.46,-54.17 -195.44,-54.22 -197.56,-54.28 -200.05,-54.48 -202.89,-54.82 -206.1,-55.3 -209.66,-55.92 -213.59,-56.67 -217.87,-57.57 -222.52,-58.6 -227.52,-59.78 -231.9,-60.8 -235.66,-61.68 -238.78,-62.41 -241.29,-63.0 -243.16,-63.44 -244.41,-63.73 -245.04,-63.88"/>
+    <edge id="B2" from="J87" to="J1" name="양화로 중앙버스전용차로(합정 방향 반대편)" priority="12" numLanes="1" speed="13.89" spreadType="center" allow="bus" shape="146.53,130.93 12.59,10.76 3.15,0.23 -18.3,-12.6"/>
+    <edge id="R111" from="J80" to="J82" name="독막로" priority="11" numLanes="3" speed="13.89" sidewalkWidth="3.0" shape="674.0,-171.7 823.0,-177.1"/>
+    <edge id="-R111" from="J82" to="J80" name="독막로" priority="11" numLanes="2" speed="13.89" sidewalkWidth="3.0" shape="823.0,-177.1 674.0,-171.7"/>
+    <edge id="R112" from="J82" to="J83" name="와우산로" priority="10" numLanes="1" speed="13.89" sidewalkWidth="3.0" shape="823.0,-177.1 831.9,149.2"/>
+    <edge id="-R112" from="J83" to="J82" name="와우산로" priority="10" numLanes="1" speed="13.89" sidewalkWidth="3.0" shape="831.9,149.2 823.0,-177.1"/>
+    <edge id="R113" from="J83" to="J79" name="잔다리로" priority="10" numLanes="1" speed="22.22" sidewalkWidth="3.0" shape="831.9,149.2 794.0,154.8 677.0,156.8"/>
+    <edge id="-R113" from="J79" to="J83" name="잔다리로" priority="10" numLanes="1" speed="22.22" sidewalkWidth="3.0" shape="677.0,156.8 794.0,154.8 831.9,149.2"/>
+    <edge id="R116" from="J8" to="J88" name="독막로" priority="2" numLanes="1" speed="5.56" disallow="pedestrian" shape="103.7,-77.1 107.7,-67.7 113.2,-48.7">
+        <param key="tripWeight" value="0.05"/>
+    </edge>
+    <edge id="-R116" from="J88" to="J8" name="독막로" priority="2" numLanes="1" speed="5.56" disallow="pedestrian" shape="113.2,-48.7 107.7,-67.7 103.7,-77.1">
+        <param key="tripWeight" value="0.05"/>
+    </edge>
+    <edge id="R117" from="J8" to="J89" name="독막로2길" priority="2" numLanes="1" speed="5.56" disallow="pedestrian" shape="103.7,-77.1 96.3,-106.2">
+        <param key="tripWeight" value="0.05"/>
+    </edge>
+    <edge id="-R117" from="J89" to="J8" name="독막로2길" priority="2" numLanes="1" speed="5.56" disallow="pedestrian" shape="96.3,-106.2 103.7,-77.1">
+        <param key="tripWeight" value="0.05"/>
+    </edge>
+    <edge id="R118" from="J23" to="J90" name="독막로7길" priority="3" numLanes="1" speed="13.89" disallow="pedestrian" shape="417.4,-158.2 432.2,-132.1">
+        <param key="tripWeight" value="0.05"/>
+    </edge>
+    <edge id="-R118" from="J90" to="J23" name="독막로7길" priority="3" numLanes="1" speed="13.89" disallow="pedestrian" shape="432.2,-132.1 417.4,-158.2">
+        <param key="tripWeight" value="0.05"/>
+    </edge>
+    <edge id="R119" from="J23" to="J91" name="독막로8길" priority="3" numLanes="1" speed="13.89" disallow="pedestrian" shape="417.4,-158.2 407.3,-186.4">
+        <param key="tripWeight" value="0.05"/>
+    </edge>
+    <edge id="-R119" from="J91" to="J23" name="독막로8길" priority="3" numLanes="1" speed="13.89" disallow="pedestrian" shape="407.3,-186.4 417.4,-158.2">
+        <param key="tripWeight" value="0.05"/>
+    </edge>
+    <edge id="R120" from="J92" to="J52" name="어울마당로" priority="3" numLanes="1" speed="8.33" spreadType="center" disallow="pedestrian" shape="566.2,-136.3 555.5,-164.3">
+        <param key="tripWeight" value="0.05"/>
+    </edge>
+    <edge id="R121" from="J52" to="J93" name="어울마당로" priority="3" numLanes="1" speed="13.89" spreadType="center" disallow="pedestrian" shape="555.5,-164.3 545.3,-192.5">
+        <param key="tripWeight" value="0.05"/>
+    </edge>
+    <edge id="R122" from="J58" to="J94" name="어울마당로" priority="3" numLanes="1" speed="8.33" spreadType="center" disallow="pedestrian" shape="577.7,-166.1 583.7,-143.4 586.3,-137.4">
+        <param key="tripWeight" value="0.05"/>
+    </edge>
+    <edge id="R123" from="J58" to="J95" name="독막로12길" priority="3" numLanes="1" speed="13.89" disallow="pedestrian" shape="577.7,-166.1 573.2,-181.0 568.4,-194.6">
+        <param key="tripWeight" value="0.05"/>
+    </edge>
+    <edge id="-R123" from="J95" to="J58" name="독막로12길" priority="3" numLanes="1" speed="13.89" disallow="pedestrian" shape="568.4,-194.6 573.2,-181.0 577.7,-166.1">
+        <param key="tripWeight" value="0.05"/>
+    </edge>
+    <edge id="W1" from="C1" to="J1" priority="1" numLanes="1" speed="1.39" width="2.0" allow="pedestrian" spreadType="center" shape="-56.75,0.12  -18.3,-12.6"/>
+    <edge id="W2" from="C2" to="J1" priority="1" numLanes="1" speed="1.39" width="2.0" allow="pedestrian" spreadType="center" shape="-26.16,-45.96  -18.3,-12.6"/>
+    <edge id="W3" from="C3" to="J1" priority="1" numLanes="1" speed="1.39" width="2.0" allow="pedestrian" spreadType="center" shape="9.56,-18.13 1.0,-20.0 -18.3,-12.6"/>
+    <edge id="W4" from="C4" to="J2" priority="1" numLanes="1" speed="1.39" width="2.0" allow="pedestrian" spreadType="center" shape="-12.94,25.30  6.11,17.98"/>
 </edges>

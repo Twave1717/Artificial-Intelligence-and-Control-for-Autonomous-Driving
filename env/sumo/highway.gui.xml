@@ -1,5 +1,9 @@
 <viewsettings>
-    <scheme name="real world"/>
-    <viewport zoom="2400" x="200.0" y="-4.8" angle="0"/>
+    <scheme name="real world">
+        <edges realisticLinkRules="1"/>
+    
+        <persons person_exaggeration="3" person_constantSize="1"/>
+    </scheme>
+    <viewport zoom="100" x="127.9" y="187.7" angle="0"/>
     <delay value="100.0"/>
 </viewsettings>

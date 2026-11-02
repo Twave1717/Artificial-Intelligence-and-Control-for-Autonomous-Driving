@@ -1,4 +1,57 @@
 <nodes>
-    <node id="n0" x="0" y="0"/>
-    <node id="n1" x="12000" y="0"/>
+    <location netOffset="0.00,0.00" convBoundary="-576.00,-263.10,831.90,638.50" origBoundary="126.905725,37.543068,126.921587,37.555644" projParameter="+proj=tmerc +lat_0=37.5493558 +lon_0=126.9136561 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs"/>
+    <node id="J1" x="-18.3" y="-12.6" type="traffic_light"/>
+    <node id="J2" x="6.11" y="17.98" type="priority" radius="0.1"/>
+    <node id="J3" x="17.88" y="4.21" type="zipper" radius="8.0"/>
+    <node id="J4" x="7.53" y="-42.61" type="priority" radius="0.1"/>
+    <node id="J5" x="-38.15" y="22.07" type="zipper" radius="0.1"/>
+    <node id="J6" x="-56.03" y="-22.62" type="priority" radius="0.1"/>
+    <node id="J7" x="-45.92" y="-40.15" type="priority" radius="0.1"/>
+    <node id="J8" x="103.7" y="-77.1" type="traffic_light"/>
+    <node id="J9" x="-134.4" y="-70.9" type="priority"/>
+    <node id="J10" x="-177.2" y="-61.8" type="zipper"/>
+    <node id="J11" x="-214.0" y="-73.0" type="priority"/>
+    <node id="J12" x="-230.5" y="-97.9" type="zipper"/>
+    <node id="J17" x="306.2" y="271.6" type="priority"/>
+    <node id="J23" x="417.4" y="-158.2" type="traffic_light"/>
+    <node id="J26" x="-426.1" y="-224.0" type="priority"/>
+    <node id="J30" x="-443.3" y="-263.1" type="priority"/>
+    <node id="J32" x="387.8" y="347.5" type="traffic_light"/>
+    <node id="J42" x="400.6" y="371.9" type="traffic_light"/>
+    <node id="J44" x="377.2" y="396.9" type="traffic_light"/>
+    <node id="J45" x="423.8" y="347.2" type="traffic_light"/>
+    <node id="J48" x="477.0" y="291.7" type="traffic_light"/>
+    <node id="J49" x="-169.8" y="545.1" type="traffic_light"/>
+    <node id="J50" x="417.0" y="399.8" type="dead_end"/>
+    <node id="J52" x="555.5" y="-164.3" type="traffic_light" tl="J56"/>
+    <node id="J56" x="566.6" y="-164.7" type="traffic_light" shape="564.1,-155.1 569.1,-155.5 567.4,-177.5 562.4,-177.1" tl="J56"/>
+    <node id="J58" x="577.7" y="-166.1" type="traffic_light" tl="J56"/>
+    <node id="J63" x="467.2" y="423.4" type="dead_end"/>
+    <node id="J64" x="185.7" y="619.8" type="traffic_light"/>
+    <node id="J66" x="174.7" y="637.2" type="priority"/>
+    <node id="J71" x="247.0" y="632.7" type="priority"/>
+    <node id="J72" x="-237.0" y="638.5" type="priority"/>
+    <node id="J74" x="667.1" y="157.2" type="traffic_light"/>
+    <node id="J76" x="-576.0" y="380.6" type="priority"/>
+    <node id="J79" x="677.0" y="156.8" type="priority"/>
+    <node id="J80" x="674.0" y="-171.7" type="priority"/>
+    <node id="J81" x="-201.5" y="-89.1" type="priority"/>
+    <node id="J82" x="823.0" y="-177.1" type="traffic_light"/>
+    <node id="J83" x="831.9" y="149.2" type="traffic_light"/>
+    <node id="J84" x="87.1" y="-73.4" type="priority"/>
+    <node id="J85" x="-284.79" y="-152.68" type="priority"/>
+    <node id="J86" x="-245.04" y="-63.88" type="priority"/>
+    <node id="J87" x="138.98" y="139.34" type="priority"/>
+    <node id="J88" x="113.2" y="-48.7" type="dead_end"/>
+    <node id="J89" x="96.3" y="-106.2" type="dead_end"/>
+    <node id="J90" x="432.2" y="-132.1" type="dead_end"/>
+    <node id="J91" x="407.3" y="-186.4" type="dead_end"/>
+    <node id="J92" x="566.2" y="-136.3" type="dead_end"/>
+    <node id="J93" x="545.3" y="-192.5" type="dead_end"/>
+    <node id="J94" x="586.3" y="-137.4" type="dead_end"/>
+    <node id="J95" x="568.4" y="-194.6" type="dead_end"/>
+    <node id="C1" x="-56.75" y="0.12" type="priority"/>
+    <node id="C2" x="-26.16" y="-45.96" type="priority"/>
+    <node id="C3" x="9.56" y="-18.13" type="priority"/>
+    <node id="C4" x="-12.94" y="25.30" type="priority"/>
 </nodes>

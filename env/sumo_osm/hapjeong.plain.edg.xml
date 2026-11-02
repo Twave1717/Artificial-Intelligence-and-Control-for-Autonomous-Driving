@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2026-10-27T14:21:56.679329+09:00 by Eclipse SUMO netconvert 1.27.1
+<netconvertConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/netconvertConfiguration.xsd">
+
+    <input>
+        <type-files value="C:\Program Files (x86)\Eclipse\Sumo\data\typemap\osmNetconvert.typ.xml"/>
+        <osm-files value="C:\Users\user\Projects\Artificial-Intelligence-and-Control-for-Autonomous-Driving\env\sumo_osm\hapjeong.osm.xml"/>
+    </input>
+
+    <output>
+        <output-file value="C:\Users\user\Projects\Artificial-Intelligence-and-Control-for-Autonomous-Driving\env\sumo_osm\hapjeong.major.net.xml"/>
+        <plain-output-prefix value="C:\Users\user\Projects\Artificial-Intelligence-and-Control-for-Autonomous-Driving\env\sumo_osm\hapjeong.plain"/>
+        <output.street-names value="true"/>
+    </output>
+
+    <projection>
+        <proj value="+proj=tmerc +lat_0=37.5493558 +lon_0=126.9136561 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs"/>
+    </projection>
+
+    <processing>
+        <geometry.remove value="true"/>
+        <offset.disable-normalization value="true"/>
+        <roundabouts.guess value="true"/>
+    </processing>
+
+    <tls_building>
+        <tls.join value="true"/>
+        <tls.guess-signals value="true"/>
+    </tls_building>
+
+    <ramp_guessing>
+        <ramps.guess value="true"/>
+    </ramp_guessing>
+
+    <edge_removal>
+        <keep-edges.by-type value="highway.motorway,highway.motorway_link,highway.trunk,highway.trunk_link,highway.primary,highway.primary_link,highway.secondary,highway.secondary_link,highway.tertiary,highway.tertiary_link"/>
+        <keep-edges.components value="1"/>
+        <remove-edges.isolated value="true"/>
+    </edge_removal>
+
+    <junctions>
+        <no-turnarounds.except-deadend value="true"/>
+        <junctions.join value="true"/>
+    </junctions>
+
+    <formats>
+        <osm.lane-access value="false"/>
+    </formats>
+
+    <report>
+        <no-warnings value="true"/>
+    </report>
+
+</netconvertConfiguration>
+-->
+
+<edges version="1.20" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/edges_file.xsd">
+    <location netOffset="0.00,0.00" convBoundary="-672.86,-680.73,676.96,638.47" origBoundary="126.905747,37.543183,126.921485,37.555540" projParameter="+proj=tmerc +lat_0=37.5493558 +lon_0=126.9136561 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs"/>
+
+    <edge id="--15#12" from="2139867246" to="2374776976" name="희우정로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="-415.15,-63.70 -427.77,-48.12 -448.81,-26.30 -493.49,19.98 -497.23,23.84 -517.88,45.24 -537.36,65.44 -572.59,101.97 -595.90,126.71 -600.38,131.61 -610.93,143.13 -622.49,155.81 -654.69,190.37 -664.01,200.49" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="--2#0" from="cluster_11841458566_436869362" to="1831674391" name="잔다리로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="670.41,156.78 676.96,156.84" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="--2#10" from="cluster_3033951751_3436119874" to="13238587320" name="잔다리로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="406.70,365.07 419.64,351.58 423.79,347.25" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="--2#8" from="1795204599" to="cluster_11841458566_436869362" name="잔다리로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="477.04,291.72 504.02,262.41 547.96,215.21 559.70,202.48 598.79,160.62 625.00,159.58 629.26,159.38 663.86,157.57" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="--2#9" from="13238587320" to="1795204599" name="잔다리로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="--36#13" from="3201530628" to="3067838633" name="동교로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="-169.82,545.09 -193.86,536.00 -200.62,532.68 -231.96,520.03 -266.36,505.97 -290.75,495.99 -312.00,487.44 -338.12,476.89 -345.11,473.90 -373.07,462.35 -398.13,452.41 -435.05,437.54 -452.21,430.63 -482.69,418.11 -500.29,410.87 -514.19,405.42 -538.06,395.81 -575.96,380.62" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="--37#1" from="6585518418" to="3201530628" name="월드컵로" priority="12" type="highway.primary" numLanes="2" speed="27.78" shape="-237.04,638.47 -235.63,636.53 -184.53,565.53 -169.82,545.09" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="--40#0" from="1830504800" to="436835489" name="독막로" priority="11" type="highway.secondary" numLanes="2" speed="13.89" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="--40#1" from="4175978571" to="1830504800" name="독막로" priority="11" type="highway.secondary" numLanes="2" speed="13.89" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="--40#2" from="1831674374" to="4175978571" name="독막로" priority="11" type="highway.secondary" numLanes="2" speed="13.89" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="--40#7" from="1831696277" to="1831674374" name="독막로" priority="11" type="highway.secondary" numLanes="2" speed="13.89" shape="673.95,-171.73 646.25,-170.19 622.99,-168.08 596.30,-166.12 592.66,-165.78 577.68,-166.05" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="--51" from="1949178468" to="1949178471" name="동교로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="185.65,619.79 205.34,623.92 246.99,632.66" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="--53#5" from="11810050705" to="2329649000" name="토정로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="340.56,-434.69 376.42,-436.84 383.13,-437.25 440.31,-440.74 443.12,-440.92 474.94,-443.02 500.52,-444.44 523.17,-446.68" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="--54" from="11974953591" to="1949178468" name="잔다리로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="-1032004554" from="2139941856" to="9510550198" name="토정로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="-1497589389" from="cluster_2139941846_6997571712" to="13695195762" priority="8" type="highway.trunk_link" numLanes="1" speed="22.22" shape="-302.19,-455.62 -302.63,-461.15 -301.91,-467.24 -300.53,-473.24 -272.66,-535.62" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="-15#0" from="2374776976" to="2139867246" name="희우정로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="-664.01,200.49 -654.69,190.37 -622.49,155.81 -610.93,143.13 -600.38,131.61 -595.90,126.71 -572.59,101.97 -537.36,65.44 -517.88,45.24 -497.23,23.84 -493.49,19.98 -448.81,-26.30 -427.77,-48.12 -415.15,-63.70" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="-2#0" from="1831674391" to="cluster_11841458566_436869362" name="잔다리로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="676.96,156.84 670.41,156.78" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="-2#10" from="13238587320" to="cluster_3033951751_3436119874" name="잔다리로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="423.79,347.25 419.64,351.58 406.70,365.07" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="-2#2" from="cluster_11841458566_436869362" to="1795204599" name="잔다리로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="663.86,157.57 629.26,159.38 625.00,159.58 598.79,160.62 559.70,202.48 547.96,215.21 504.02,262.41 477.04,291.72" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="-2#9" from="1795204599" to="13238587320" name="잔다리로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="-27#1" from="-27#1-AddedOnRampNode" to="796135913" name="강변북로" priority="13" type="highway.trunk" numLanes="4" speed="22.22" shape="-190.76,-657.05 -174.51,-666.34 -135.63,-680.73" spreadType="center" width="4.00" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <param key="ref" value="23;70;30"/>
+    </edge>
+    <edge id="-27#1-AddedOnRampEdge" from="796137310" to="-27#1-AddedOnRampNode" name="강변북로" priority="13" type="highway.trunk" numLanes="5" speed="22.22" shape="-275.08,-603.41 -233.45,-634.96 -191.75,-658.79" spreadType="center" width="4.00" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <lane index="0" acceleration="1"/>
+        <lane index="1" acceleration="1"/>
+        <lane index="2" acceleration="1"/>
+        <lane index="3" acceleration="1"/>
+        <lane index="4"/>
+        <param key="ref" value="23;70;30"/>
+    </edge>
+    <edge id="-28#0" from="3088489465" to="2753742493" name="양화로" priority="12" type="highway.primary" numLanes="4" speed="27.78" shape="-514.03,-336.22 -488.73,-311.69" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <param key="ref" value="6;77"/>
+    </edge>
+    <edge id="-28#1" from="2753742493" to="2753700669" name="양화로" priority="12" type="highway.primary" numLanes="3" speed="27.78" shape="-489.85,-310.54 -442.16,-264.27" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <param key="ref" value="6;77"/>
+    </edge>
+    <edge id="-3" from="452475661" to="2753742480" priority="8" type="highway.trunk_link" numLanes="1" speed="22.22" shape="-637.31,-136.39 -613.71,-152.41 -595.24,-165.76 -505.94,-244.58 -499.74,-251.18 -494.83,-259.06 -493.18,-267.18 -493.32,-275.88 -493.95,-279.62 -505.12,-295.84" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <param key="ref" value="77"/>
+    </edge>
+    <edge id="-30#0" from="798651029" to="13695195762" priority="8" type="highway.trunk_link" numLanes="1" speed="22.22" shape="121.87,-656.02 93.53,-648.06 72.23,-640.97 43.08,-628.57 22.69,-618.96 17.94,-619.04 -0.45,-631.55 -86.91,-646.13 -114.99,-650.88 -121.07,-651.91 -129.37,-651.43 -137.67,-647.64 -173.82,-632.40 -188.17,-624.95 -226.32,-592.24 -248.94,-570.10 -253.03,-565.11 -259.91,-558.39 -262.83,-552.45 -268.32,-542.45 -272.66,-535.62" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="-304026380#2" from="3085414842" to="13236318521" name="토정로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="-187.84,-394.27 -174.58,-395.29 -167.02,-395.87 -161.09,-396.33 -110.46,-400.22 -97.39,-401.23 -59.67,-404.13 -17.30,-407.39 -12.13,-407.79 9.08,-409.42 17.06,-410.03 44.68,-412.16 49.25,-412.51 99.68,-416.39 155.23,-420.67 180.66,-422.63 210.35,-424.90 249.68,-427.93 287.88,-430.87 303.92,-431.38" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="-305375838" from="9510550198" to="3085414842" name="양화진지하차도" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="-266.06,-383.48 -257.51,-381.79 -247.94,-380.83 -236.06,-381.76 -229.31,-383.95 -219.52,-387.87 -211.44,-390.13 -201.37,-392.41 -187.84,-394.27" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="-330663288#1" from="2139941856" to="cluster_2139941846_6997571712" priority="8" type="highway.trunk_link" numLanes="1" speed="22.22" shape="-277.08,-391.62 -268.68,-401.89 -258.89,-413.14 -255.23,-418.45 -253.57,-423.89 -253.49,-428.28 -254.15,-433.09 -255.33,-437.17 -257.90,-440.92 -261.73,-444.23 -266.57,-446.84 -271.81,-447.71 -279.46,-445.70" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="-336580320#0" from="13238587319" to="cluster_3033951751_3436119874" name="잔다리로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="377.24,396.85 382.76,391.00 394.46,378.62" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="-336580320#3" from="1949178468" to="13238587319" name="잔다리로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="185.65,619.79 192.50,609.03 219.55,566.50 276.90,505.50 284.29,497.64 360.25,414.84 377.24,396.85" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="-336983851#8" from="3201530628" to="cluster_3078076796_3078076798" name="월드컵로" priority="12" type="highway.primary" numLanes="2" speed="27.78" shape="-169.82,545.09 -164.81,525.22 -147.33,455.85 -128.15,380.39 -127.52,377.95 -116.05,336.44 -105.21,293.05 -102.18,280.69 -102.01,279.85 -90.14,234.50 -75.65,178.30 -67.56,146.97 -62.27,126.44 -60.06,117.47 -47.38,54.48" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="-36#0" from="3067838633" to="3201530628" name="동교로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="-575.96,380.62 -538.06,395.81 -514.19,405.42 -500.29,410.87 -482.69,418.11 -452.21,430.63 -435.05,437.54 -398.13,452.41 -373.07,462.35 -345.11,473.90 -338.12,476.89 -312.00,487.44 -290.75,495.99 -266.36,505.97 -231.96,520.03 -200.62,532.68 -193.86,536.00 -169.82,545.09" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="-37#0" from="3201530628" to="6585518418" name="월드컵로" priority="12" type="highway.primary" numLanes="2" speed="27.78" shape="-169.82,545.09 -184.53,565.53 -235.63,636.53 -237.04,638.47" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="-37400077#1" from="436835498" to="436718644" name="독막로" priority="11" type="highway.secondary" numLanes="3" speed="27.78" shape="32.08,-58.14 20.47,-52.20 -1.84,-35.66 -18.30,-12.60" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="-37400077#11" from="436835489" to="2374777040" name="독막로" priority="11" type="highway.secondary" numLanes="3" speed="27.78" shape="417.45,-158.24 401.02,-154.07 357.89,-143.83 340.54,-139.11 309.89,-130.77 290.29,-125.43 241.31,-112.09 210.76,-105.11 183.90,-97.75 103.67,-77.10" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="-37400077#3" from="2374777040" to="436835498" name="독막로" priority="11" type="highway.secondary" numLanes="3" speed="27.78" shape="103.67,-77.10 50.63,-65.39 32.08,-58.14" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="-37403293#1" from="cluster_3078076796_3078076798" to="436718644" name="월드컵로" priority="12" type="highway.primary" numLanes="2" speed="27.78" shape="-44.32,44.40 -37.72,20.50 -32.25,11.35 -18.30,-12.60" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="-38#0" from="cluster_3033951751_3436119874" to="13068180290" name="양화로" priority="12" type="highway.primary" numLanes="6" speed="27.78" shape="406.70,365.07 419.90,378.19 438.24,396.39 467.25,423.41" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <param key="ref" value="6"/>
+    </edge>
+    <edge id="-4" from="12455462136" to="-4-AddedOffRampNode" name="강변북로" priority="13" type="highway.trunk" numLanes="2" speed="22.22" shape="90.32,-656.16 39.47,-637.28 21.93,-628.42 -17.66,-607.06 -79.05,-562.45 -187.14,-485.27 -197.11,-478.14" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <param key="ref" value="23;70;30"/>
+    </edge>
+    <edge id="-4-AddedOffRampEdge" from="-4-AddedOffRampNode" to="387154721" name="강변북로" priority="13" type="highway.trunk" numLanes="3" speed="22.22" shape="-196.18,-476.84 -201.48,-473.04 -268.81,-423.90 -277.10,-418.06" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <param key="ref" value="23;70;30"/>
+    </edge>
+    <edge id="-40#0" from="436835489" to="1830504800" name="독막로" priority="11" type="highway.secondary" numLanes="3" speed="13.89" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="-40#1" from="1830504800" to="4175978571" name="독막로" priority="11" type="highway.secondary" numLanes="3" speed="13.89" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="-40#2" from="4175978571" to="1831674374" name="독막로" priority="11" type="highway.secondary" numLanes="3" speed="13.89" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="-40#3" from="1831674374" to="1831696277" name="독막로" priority="11" type="highway.secondary" numLanes="3" speed="13.89" shape="577.68,-166.05 592.66,-165.78 596.30,-166.12 622.99,-168.08 646.25,-170.19 673.95,-171.73" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="-51" from="1949178471" to="1949178468" name="동교로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="246.99,632.66 205.34,623.92 185.65,619.79" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="-515836538#11" from="3201530628" to="1949178468" name="동교로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="-169.82,545.09 -160.41,547.17 -148.18,549.58 -126.64,553.83 -113.83,557.15 -106.01,558.33 -73.10,565.08 -39.27,572.18 2.78,581.04 23.65,585.61 70.99,595.77 124.06,606.40 172.48,616.93 185.65,619.79" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="-52#0" from="13238587317" to="cluster_3033951751_3436119874" name="양화로" priority="12" type="highway.primary" numLanes="4" speed="27.78" shape="417.02,399.76 407.58,390.81 394.46,378.62" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <param key="ref" value="6"/>
+    </edge>
+    <edge id="-53#0" from="2329649000" to="11810050705" name="토정로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="523.17,-446.68 500.52,-444.44 474.94,-443.02 443.12,-440.92 440.31,-440.74 383.13,-437.25 376.42,-436.84 340.56,-434.69" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="-54" from="1949178468" to="11974953591" name="잔다리로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="-63" from="2753742480" to="3088489466" name="양화로" priority="12" type="highway.primary" numLanes="3" speed="27.78" shape="-502.91,-298.15 -528.21,-322.44" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <lane index="0" acceleration="1"/>
+        <lane index="1"/>
+        <lane index="2"/>
+        <param key="ref" value="6;77"/>
+    </edge>
+    <edge id="1029207441#0" from="2753742493" to="796137310" priority="8" type="highway.trunk_link" numLanes="1" speed="22.22" shape="-485.39,-315.13 -476.10,-304.15 -466.19,-301.61 -458.18,-301.02 -456.18,-300.88 -451.44,-301.86 -443.37,-304.92 -432.46,-309.94 -420.68,-319.47 -402.64,-336.86 -392.10,-348.00 -371.19,-379.27 -359.88,-410.74 -342.07,-489.14 -336.45,-507.67 -328.36,-525.82 -320.56,-538.91 -311.12,-552.39 -291.13,-579.47 -273.87,-601.82" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="1032004554" from="9510550198" to="2139941856" name="토정로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="1346580870#1" from="387154721" to="387154319" name="강변북로" priority="13" type="highway.trunk" numLanes="2" speed="22.22" shape="-278.02,-419.37 -308.58,-393.87 -330.38,-371.36 -416.44,-276.62" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <param key="ref" value="23;70;30"/>
+    </edge>
+    <edge id="1442563716#0" from="13236318521" to="3085414842" name="토정로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="303.92,-431.38 287.88,-430.87 249.68,-427.93 210.35,-424.90 180.66,-422.63 155.23,-420.67 99.68,-416.39 49.25,-412.51 44.68,-412.16 17.06,-410.03 9.08,-409.42 -12.13,-407.79 -17.30,-407.39 -59.67,-404.13 -97.39,-401.23 -110.46,-400.22 -161.09,-396.33 -167.02,-395.87 -174.58,-395.29 -187.84,-394.27" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="1442563723" from="2139941711" to="13236318535" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="329.23,-427.80 327.88,-424.54 323.87,-422.07 318.90,-422.15 314.48,-425.09" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="1442563728" from="13236318518" to="11810050705" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="1442563731#0" from="13236318535" to="13236303933" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="314.48,-425.09 313.17,-428.30 313.41,-432.08 314.67,-435.29" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="1442563731#1" from="13236303933" to="13236318518" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="314.67,-435.29 319.12,-437.83 322.52,-437.99 326.02,-436.75" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="1442563731#3" from="13236318518" to="2139941711" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="326.02,-436.75 328.33,-433.33 329.28,-430.03 329.23,-427.80" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="1442563737" from="11810050705" to="2139941711" name="토정로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="1442563739" from="13236318535" to="13236318521" name="토정로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="314.48,-425.09 309.40,-428.67 303.92,-431.38" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="1442563745" from="13236318521" to="13236303933" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="1494588886" from="13695195755" to="cluster_2139941846_6997571712" priority="8" type="highway.trunk_link" numLanes="1" speed="22.22" shape="-304.76,-429.13 -300.76,-430.98 -300.42,-434.92 -302.19,-455.62" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="1494588889#1" from="13695195755" to="cluster_2139941846_6997571712" priority="8" type="highway.trunk_link" numLanes="1" speed="22.22" shape="-302.89,-426.53 -297.83,-430.18 -286.38,-440.27 -279.46,-445.70" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="1494588890" from="2139941856" to="2139941839" priority="8" type="highway.trunk_link" numLanes="1" speed="22.22" shape="-277.08,-391.62 -283.68,-385.41 -288.57,-379.54 -293.22,-370.91 -297.71,-360.00 -300.47,-344.01 -299.87,-324.67" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="1497589389" from="13695195762" to="cluster_2139941846_6997571712" priority="8" type="highway.trunk_link" numLanes="1" speed="22.22" shape="-272.66,-535.62 -300.53,-473.24 -301.91,-467.24 -302.63,-461.15 -302.19,-455.62" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="203981103" from="387154712" to="387154516" priority="8" type="highway.trunk_link" numLanes="1" speed="22.22" shape="-476.49,-84.43 -512.51,-89.51 -534.06,-100.12 -546.88,-110.56 -556.90,-122.06 -564.62,-131.29 -568.75,-138.27 -575.50,-152.58 -579.90,-170.96 -580.78,-189.44 -580.08,-203.84 -578.35,-216.58 -575.46,-227.16 -566.80,-252.57" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="270329954" from="2753700669" to="2753700728" name="양화로" priority="12" type="highway.primary" numLanes="2" speed="27.78" shape="-443.27,-263.12 -387.63,-204.06 -377.52,-194.04 -359.59,-176.27 -331.61,-152.86 -300.62,-131.68 -290.29,-125.51 -271.81,-114.48 -252.98,-105.87 -230.50,-97.91" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <param key="ref" value="6"/>
+    </edge>
+    <edge id="270329956" from="270329956-AddedOnRampNode" to="2753742480" name="선유로" priority="12" type="highway.primary" numLanes="2" speed="27.78" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <param key="ref" value="6"/>
+    </edge>
+    <edge id="270329956-AddedOnRampEdge" from="2753700671" to="270329956-AddedOnRampNode" name="선유로" priority="12" type="highway.primary" numLanes="3" speed="27.78" shape="-427.28,-222.88 -498.16,-293.42" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <lane index="0" acceleration="1"/>
+        <lane index="1"/>
+        <lane index="2"/>
+        <param key="ref" value="6"/>
+    </edge>
+    <edge id="270329959#0" from="436718644" to="3078076779" name="양화로" priority="12" type="highway.primary" numLanes="2" speed="27.78" shape="-18.30,-12.60 -42.66,-16.43 -57.16,-25.19 -66.95,-30.07 -80.64,-35.80" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <param key="ref" value="6"/>
+    </edge>
+    <edge id="302980823#0" from="3393326671" to="436835498" priority="6" type="highway.secondary_link" numLanes="1" speed="22.22" shape="-84.45,-63.13 -60.73,-58.61 -44.46,-56.97 -28.48,-55.15 -12.41,-56.09 0.59,-58.38 32.08,-58.14" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="303452868#0" from="436835498" to="3078076792" priority="7" type="highway.primary_link" numLanes="1" speed="22.22" shape="32.08,-58.14 24.02,-45.99 20.44,-37.82 16.28,-28.58 15.89,-23.90 15.61,-20.41 17.75,-8.62 35.36,22.16" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="303452869#0" from="cluster_3078076796_3078076798" to="3078076779" priority="7" type="highway.primary_link" numLanes="1" speed="22.22" shape="-47.38,54.48 -50.47,33.02 -53.08,20.38 -56.43,4.18 -68.64,-18.04 -81.86,-31.16" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="304343103#0" from="3393887601" to="cluster_3078076796_3078076798" priority="7" type="highway.primary_link" numLanes="1" speed="22.22" shape="16.67,27.08 6.11,23.33 -8.73,22.56 -18.12,23.96 -20.09,24.26 -28.04,27.94 -36.84,36.98 -44.32,44.40" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="305375838" from="3085414842" to="9510550198" name="양화진지하차도" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="-187.84,-394.27 -201.37,-392.41 -211.44,-390.13 -219.52,-387.87 -229.31,-383.95 -236.06,-381.76 -247.94,-380.83 -257.51,-381.79 -266.06,-383.48" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="330454912#1" from="330454912#1-AddedOnRampNode" to="2753700728" priority="8" type="highway.trunk_link" numLanes="1" speed="22.22" shape="-288.33,-201.68 -287.72,-197.23 -285.49,-180.81 -272.92,-146.58 -265.41,-135.42 -259.33,-127.77 -252.96,-121.22 -251.88,-120.19 -246.76,-115.31 -228.98,-102.46" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="330454912#1-AddedOnRampEdge" from="387154705" to="330454912#1-AddedOnRampNode" priority="8" type="highway.trunk_link" numLanes="3" speed="22.22" shape="-298.45,-301.18 -296.34,-284.08 -285.16,-202.11" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <lane index="0" acceleration="1"/>
+        <lane index="1" acceleration="1"/>
+        <lane index="2"/>
+    </edge>
+    <edge id="330663288#1" from="cluster_2139941846_6997571712" to="2139941856" priority="8" type="highway.trunk_link" numLanes="1" speed="22.22" shape="-279.46,-445.70 -271.81,-447.71 -266.57,-446.84 -261.73,-444.23 -257.90,-440.92 -255.33,-437.17 -254.15,-433.09 -253.49,-428.28 -253.57,-423.89 -255.23,-418.45 -258.89,-413.14 -268.68,-401.89 -277.08,-391.62" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="332222851#0" from="436718644" to="3078076792" name="양화로" priority="12" type="highway.primary" numLanes="4" speed="27.78" shape="-15.87,-18.52 -2.88,-6.28 35.36,22.16" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <param key="ref" value="6"/>
+    </edge>
+    <edge id="332222851#2" from="3078076792" to="3393326684" name="양화로" priority="12" type="highway.primary" numLanes="4" speed="27.78" shape="35.36,22.16 66.84,47.87 75.54,55.15 83.50,61.84 120.97,94.66 180.41,151.35 208.90,177.12 258.27,225.73 293.21,259.40 306.16,271.62" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <param key="ref" value="6"/>
+    </edge>
+    <edge id="332222852#0" from="3393326684" to="13238587322" name="양화로" priority="12" type="highway.primary" numLanes="6" speed="27.78" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <param key="ref" value="6"/>
+    </edge>
+    <edge id="332222852#1" from="13238587322" to="cluster_3033951751_3436119874" name="양화로" priority="12" type="highway.primary" numLanes="6" speed="27.78" shape="387.80,347.50 406.70,365.07" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <param key="ref" value="6"/>
+    </edge>
+    <edge id="333579041#0" from="798645919" to="2139941910" priority="8" type="highway.trunk_link" numLanes="2" speed="22.22" shape="-272.12,-84.99 -316.99,-91.18 -318.83,-91.44 -340.56,-93.05 -364.02,-90.50" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="333681709#0" from="2139941910" to="2139941930" priority="8" type="highway.trunk_link" numLanes="2" speed="22.22" shape="-363.92,-88.90 -391.84,-87.09" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="333681709#1" from="2139941930" to="8474668160" priority="8" type="highway.trunk_link" numLanes="1" speed="22.22" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="333681709#2" from="8474668160" to="387154712" priority="8" type="highway.trunk_link" numLanes="2" speed="22.22" shape="-418.37,-85.19 -476.43,-82.83" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <lane index="0" acceleration="1"/>
+        <lane index="1"/>
+    </edge>
+    <edge id="333681710" from="387154712" to="387154717" priority="8" type="highway.trunk_link" numLanes="1" speed="22.22" shape="-476.36,-81.23 -535.85,-77.06 -572.90,-79.40 -605.21,-88.16 -631.44,-87.62 -672.86,-73.85" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="336580316#0" from="cluster_3033951751_3436119874" to="3393887601" name="양화로" priority="12" type="highway.primary" numLanes="4" speed="27.78" shape="394.46,378.62 306.41,296.69 269.11,261.97 196.40,194.32 162.08,162.39 117.80,121.18 59.77,67.18 16.67,27.08" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <param key="ref" value="6"/>
+    </edge>
+    <edge id="336580320#0" from="cluster_3033951751_3436119874" to="13238587319" name="잔다리로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="394.46,378.62 382.76,391.00 377.24,396.85" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="336580320#1" from="13238587319" to="1949178468" name="잔다리로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="377.24,396.85 360.25,414.84 284.29,497.64 276.90,505.50 219.55,566.50 192.50,609.03 185.65,619.79" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="336983850#0" from="3393887601" to="436718644" name="양화로" priority="12" type="highway.primary" numLanes="4" speed="27.78" shape="16.67,27.08 -10.83,3.41 -24.10,-9.89" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <param key="ref" value="6"/>
+    </edge>
+    <edge id="336983851#1" from="cluster_3078076796_3078076798" to="3201530628" name="월드컵로" priority="12" type="highway.primary" numLanes="2" speed="27.78" shape="-47.38,54.48 -60.06,117.47 -62.27,126.44 -67.56,146.97 -75.65,178.30 -90.14,234.50 -102.01,279.85 -102.18,280.69 -105.21,293.05 -116.05,336.44 -127.52,377.95 -128.15,380.39 -147.33,455.85 -164.81,525.22 -169.82,545.09" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="33803370" from="2753700669" to="387154319" priority="8" type="highway.trunk_link" numLanes="1" speed="22.22" shape="-439.93,-266.57 -405.07,-232.70 -401.60,-229.92 -383.50,-218.58 -376.70,-214.32 -363.69,-207.88 -349.52,-206.64 -335.73,-209.48 -325.49,-215.11 -313.04,-227.75 -307.48,-243.86 -305.68,-260.46 -307.60,-273.39 -315.51,-287.67 -322.62,-298.94 -332.03,-308.48 -343.62,-313.88 -359.04,-314.51 -378.23,-304.92 -413.08,-273.19" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <param key="ref" value="77"/>
+    </edge>
+    <edge id="33803414#0" from="387154518" to="2753700671" priority="8" type="highway.trunk_link" numLanes="1" speed="22.22" shape="-501.08,-186.89 -510.08,-179.95 -523.35,-158.71 -525.91,-145.92 -525.86,-133.65 -521.48,-121.90 -514.03,-111.68 -502.70,-103.33 -486.25,-98.53 -474.82,-96.55 -451.88,-96.40 -432.21,-99.36 -419.49,-105.04 -405.40,-115.60 -394.95,-132.65 -393.34,-154.53 -397.46,-170.41 -398.40,-174.06 -406.54,-191.07 -411.33,-199.56 -429.54,-220.61" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="33803451#0" from="387154698" to="387154700" priority="8" type="highway.trunk_link" numLanes="2" speed="22.22" shape="-476.10,-344.51 -454.08,-358.44 -444.88,-364.38 -429.13,-371.40 -415.66,-375.74" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="33803451#1" from="387154700" to="387154705" priority="8" type="highway.trunk_link" numLanes="1" speed="22.22" shape="-415.17,-374.22 -400.72,-375.42 -388.42,-374.45 -374.93,-371.78 -361.83,-367.81 -345.80,-359.14 -333.67,-349.12 -322.71,-338.24 -314.05,-327.00 -301.63,-300.79" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="33803452#0" from="2753700678" to="798645919" priority="8" type="highway.trunk_link" numLanes="1" speed="22.22" shape="-215.40,-68.38 -233.58,-76.40 -272.12,-84.99" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="33803454#0" from="387154721" to="2139941839" priority="8" type="highway.trunk_link" numLanes="1" speed="22.22" shape="-275.26,-415.45 -291.33,-397.83 -294.95,-391.17 -299.29,-381.28 -303.31,-370.05 -305.04,-357.44 -305.05,-346.93 -303.06,-324.48" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="33803454#1" from="2139941839" to="387154705" priority="8" type="highway.trunk_link" numLanes="2" speed="22.22" shape="-301.46,-324.58 -296.87,-301.38" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <lane index="0" acceleration="1"/>
+        <lane index="1"/>
+    </edge>
+    <edge id="33803455" from="387154700" to="33803455-AddedOffRampNode" priority="8" type="highway.trunk_link" numLanes="1" speed="22.22" shape="-416.15,-377.27 -405.13,-379.57 -392.24,-382.68 -390.83,-382.85" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="33803455-AddedOffRampEdge" from="33803455-AddedOffRampNode" to="13695195755" priority="8" type="highway.trunk_link" numLanes="2" speed="22.22" shape="-391.03,-384.44 -381.21,-385.65 -369.15,-387.81 -356.79,-392.37 -344.72,-398.38 -303.82,-427.83" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="37400077#0" from="436718644" to="436835498" name="독막로" priority="11" type="highway.secondary" numLanes="3" speed="27.78" shape="-18.30,-12.60 -1.84,-35.66 20.47,-52.20 32.08,-58.14" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="37400077#2" from="436835498" to="2374777040" name="독막로" priority="11" type="highway.secondary" numLanes="3" speed="27.78" shape="32.08,-58.14 50.63,-65.39 103.67,-77.10" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="37400077#4" from="2374777040" to="436835489" name="독막로" priority="11" type="highway.secondary" numLanes="3" speed="27.78" shape="103.67,-77.10 183.90,-97.75 210.76,-105.11 241.31,-112.09 290.29,-125.43 309.89,-130.77 340.54,-139.11 357.89,-143.83 401.02,-154.07 417.45,-158.24" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="37403293#0" from="436718644" to="cluster_3078076796_3078076798" name="월드컵로" priority="12" type="highway.primary" numLanes="2" speed="27.78" shape="-18.30,-12.60 -32.25,11.35 -37.72,20.50 -44.32,44.40" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="486372220#0" from="486372220#0-AddedOnRampNode" to="3393326671" name="양화로" priority="12" type="highway.primary" numLanes="3" speed="27.78" shape="-134.05,-72.45 -123.53,-69.91 -85.25,-60.03" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <param key="ref" value="6"/>
+    </edge>
+    <edge id="486372220#0-AddedOnRampEdge" from="2753700728" to="486372220#0-AddedOnRampNode" name="양화로" priority="12" type="highway.primary" numLanes="3" speed="27.78" shape="-229.99,-99.43 -173.83,-80.67 -158.06,-78.25 -149.79,-76.26 -134.05,-72.45" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <lane index="0" acceleration="1"/>
+        <lane index="1"/>
+        <lane index="2"/>
+        <param key="ref" value="6"/>
+    </edge>
+    <edge id="486372220#4" from="3393326671" to="436718644" name="양화로" priority="12" type="highway.primary" numLanes="2" speed="27.78" shape="-85.65,-58.48 -69.83,-51.08 -36.36,-33.96 -33.62,-31.45 -18.30,-12.60" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <param key="ref" value="6"/>
+    </edge>
+    <edge id="486372221" from="387154516" to="486372221-AddedOffRampNode" name="강변북로" priority="13" type="highway.trunk" numLanes="4" speed="22.22" spreadType="center" width="4.00" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <param key="ref" value="23;70;30"/>
+    </edge>
+    <edge id="486372221-AddedOffRampEdge" from="486372221-AddedOffRampNode" to="387154698" name="강변북로" priority="13" type="highway.trunk" numLanes="5" speed="22.22" shape="-547.73,-274.25 -476.65,-344.58" spreadType="center" width="4.00" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <param key="ref" value="23;70;30"/>
+    </edge>
+    <edge id="486372222" from="387154698" to="796137310" name="강변북로" priority="13" type="highway.trunk" numLanes="4" speed="22.22" shape="-478.05,-346.00 -443.59,-379.51 -409.96,-424.90 -376.27,-477.86 -359.46,-506.16 -339.01,-538.40 -303.20,-580.69 -276.29,-605.01" spreadType="center" width="4.00" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <param key="ref" value="23;70;30"/>
+    </edge>
+    <edge id="486372223#0" from="2753700678" to="2753700671" name="양화로" priority="12" type="highway.primary" numLanes="2" speed="27.78" shape="-214.01,-72.97 -247.60,-88.23 -277.87,-103.57 -307.38,-121.19 -339.19,-142.92 -368.04,-167.08 -396.55,-195.32 -426.15,-224.01" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <param key="ref" value="6"/>
+    </edge>
+    <edge id="515836538#0" from="1949178468" to="3201530628" name="동교로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="185.65,619.79 172.48,616.93 124.06,606.40 70.99,595.77 23.65,585.61 2.78,581.04 -39.27,572.18 -73.10,565.08 -106.01,558.33 -113.83,557.15 -126.64,553.83 -148.18,549.58 -160.41,547.17 -169.82,545.09" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="524056816#0" from="524056816#0-AddedOnRampNode" to="387154518" name="강변북로" priority="13" type="highway.trunk" numLanes="3" speed="22.22" shape="-486.72,-205.46 -503.32,-189.18" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <param key="ref" value="23;70;30"/>
+    </edge>
+    <edge id="524056816#0-AddedOnRampEdge" from="387154319" to="524056816#0-AddedOnRampNode" name="강변북로" priority="13" type="highway.trunk" numLanes="3" speed="22.22" shape="-415.32,-275.48 -486.72,-205.46" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <lane index="0" acceleration="1"/>
+        <lane index="1"/>
+        <lane index="2"/>
+        <param key="ref" value="23;70;30"/>
+    </edge>
+    <edge id="524056816#1" from="387154518" to="387154717" name="강변북로" priority="13" type="highway.trunk" numLanes="2" speed="22.22" shape="-504.44,-190.32 -521.62,-175.52 -563.63,-143.44 -615.22,-110.11 -672.86,-73.85" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <param key="ref" value="23;70;30"/>
+    </edge>
+    <edge id="538875746#0" from="538875746#0-AddedOnRampNode" to="2753700678" name="양화로" priority="12" type="highway.primary" numLanes="3" speed="27.78" shape="-177.64,-60.31 -214.47,-71.44" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <param key="ref" value="6"/>
+    </edge>
+    <edge id="538875746#0-AddedOnRampEdge" from="3078076779" to="538875746#0-AddedOnRampNode" name="양화로" priority="12" type="highway.primary" numLanes="3" speed="27.78" shape="-81.05,-34.25 -160.34,-55.07 -163.95,-56.17 -177.64,-60.31" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone">
+        <lane index="0" acceleration="1"/>
+        <lane index="1"/>
+        <lane index="2"/>
+        <param key="ref" value="6"/>
+    </edge>
+    <edge id="912274936" from="2139867246" to="8474668160" priority="8" type="highway.trunk_link" numLanes="1" speed="22.22" shape="-416.57,-64.44 -408.98,-75.52 -408.86,-77.76 -409.81,-81.65 -411.23,-83.90 -413.36,-85.91 -418.30,-83.59" spreadType="center" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+    <edge id="912275630" from="2139941930" to="2139867246" name="희우정로" priority="10" type="highway.tertiary" numLanes="1" speed="22.22" shape="-391.73,-85.50 -413.98,-62.61" spreadType="center" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone"/>
+
+    <roundabout nodes="13236303933 13236318518 13236318535 2139941711" edges="1442563723 1442563731#0 1442563731#1 1442563731#3"/>
+
+</edges>
