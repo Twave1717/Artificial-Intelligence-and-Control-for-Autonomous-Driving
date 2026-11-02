@@ -9,11 +9,17 @@
 
 ## 설치
 
-Python 3.10과 SUMO 1.27.1에서 확인했다. SUMO는 따로 설치하고 `SUMO_HOME`을 설정한다.
+Python 3.10과 SUMO 1.27.1에서 확인했다. SUMO는 따로 설치하고 `SUMO_HOME`을 설정한다. 패키지는 SUMO를 쓸 가상환경 하나에 설치한다.
 
 ```bash
+git clone https://github.com/Twave1717/Artificial-Intelligence-and-Control-for-Autonomous-Driving.git
+cd Artificial-Intelligence-and-Control-for-Autonomous-Driving
+conda create -n sumo-rl python=3.10
+conda activate sumo-rl
 python -m pip install -r requirements.txt
 ```
+
+`ModuleNotFoundError: No module named 'sumolib'`가 나오면 패키지를 설치하지 않은 환경(예: conda `base`)에서 실행한 것이다. `conda activate sumo-rl` 뒤에 다시 실행한다.
 
 도로를 읽을 때 `network.net.xml`의 sha256을 검사한다. `.gitattributes`가 XML의 줄바꿈을 바꾸지 않게 하므로 Windows에서도 git으로 받으면 된다.
 
@@ -58,6 +64,17 @@ python scripts/validate_road.py --seeds 0 7 42 --scenarios quiet baseline busy -
 ```
 
 `build_road.py`는 검사를 모두 통과해야 `maps/paldalmun/source/network.net.xml`과 `maps/paldalmun/map.json`을 바꾼다. 같은 입력이면 같은 파일이 나온다. 가장 최근 검증에서는 45회 모두 통과했고, 배경 차량의 충돌과 순간이동은 0이었다.
+
+## 함께 작업하기
+
+`main`에 바로 push하지 않는다. 브랜치를 만들어 작업하고 GitHub에서 PR을 열어 합친다.
+
+```bash
+git switch -c <브랜치 이름>
+git push -u origin <브랜치 이름>
+```
+
+도로를 고쳤다면 PR을 열기 전에 `scripts/validate_road.py`를 돌려 `통과`를 확인한다.
 
 ## 출처
 
