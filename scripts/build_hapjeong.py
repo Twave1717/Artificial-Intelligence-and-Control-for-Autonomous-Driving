@@ -9,8 +9,8 @@ source/signals.base.add.xml)이다. 임시 폴더에서 다음을 모두 마친 
 3. 신호 프로그램에서 합친 교차로의 J56 프로그램을 빼고(기본 신호 사용), J1에서 중앙버스차로가
    일반 차로로 합류하는 연결을 양보 녹색(g)으로 바꾼다. 같은 차로에 우선 녹색 두 개가 들어가던 곳이다.
 4. 바뀐 도로망에서 보행자 경로를 원본과 같은 설정(시간당 600명, 최소 150m)과 고정 seed로 다시 만든다.
-5. 독막로 북쪽의 이어진 골목 세 개(양화로6길 서쪽·동쪽, 독막로3길)를 OSM 좌표로 붙인다.
-   양화로6길 양 끝은 도로망 경계이고, 독막로3길이 독막로에 신호 없이 합류한다(S5).
+5. 원본의 30m 골목 토막을 OSM 골목으로 이어, 끊긴 끝이 없는 골목망 세 개(독막로 북쪽, 남서쪽, 남동쪽)를
+   만든다. 골목은 독막로에 신호 없이 두 곳에서 합류한다(S5). 이을 곳이 없는 독막로12길 토막은 뺀다.
 6. 연구 시나리오(S1~S3, S6)용으로 OSM 위치의 가로변 정류장 6곳과 와우산로의 신호 없는 횡단보도 1곳을 둔다.
 7. 배경 흐름(팔달문과 같은 규칙을 합계 900대/시간으로 줄임)과 ego 경로를 계산하고 validate_structure로 확인한다.
 """
@@ -30,7 +30,7 @@ BASE = Path(__file__).resolve().parents[1]
 if str(BASE) not in sys.path:
     sys.path.insert(0, str(BASE))
 
-from scripts.build_road import boundary_flows, publish, shortest_route
+from scripts.build_road import ALLEY, ARTERIAL_PER_LANE, publish, shortest_route
 from scripts.patch_network import digest
 from scripts.prune_network import OPTIONS
 from scripts.validate_road import validate_structure
@@ -44,7 +44,7 @@ JOIN = [("J52", "J56", "J58")]
 # 연결로가 양화로에 지퍼로 합류하던 J3은 busy에서 정체가 풀리지 않아, 연결로가 양보하는 합류로 바꾼다.
 NODE_TYPES = {"J3": "priority"}
 JOINED = "cluster_J52_J56_J58"
-JOINED_CROSSINGS = [("R73", "-R73"), ("R77", "-R77"), ("R120",), ("R122",), ("R121",), ("R123", "-R123")]
+JOINED_CROSSINGS = [("R73", "-R73"), ("R77", "-R77"), ("R120",), ("R122",), ("R121",)]
 YIELD_LINKS = {"J1": [0, 11]}          # B2_0 → R40_3, B1_0 → R41_2
 DROP_PROGRAMS = {"J56"}
 # 배경 차량 baseline 합계. 생성기 설정(generator/road_config.py OSM_ROAD traffic)의 값이다.
@@ -61,26 +61,40 @@ CURB_STOPS = [
     ("3446267493", "서교동교회", "14-984", 37.5517944, 126.9193584, "-R96"),
     ("3424857165", "합정역", "14-219", 37.5510384, 126.9157425, "R54a"),
 ]
-# 독막로 북쪽의 이어진 골목(OSM 172603991 양화로6길, 172603989 독막로3길). 양화로6길 양 끝은 도로망 경계라
-# 골목 차가 드나들고, 독막로3길이 두 골목을 독막로에 신호 없이 잇는다(S5). J8 신호 교차로에는 잇지 않는다.
-# 서비스도로로 J8에 이으면 J8에서 골목으로 꺾는 차가 늘어 충돌과 순간이동이 났다.
-ALLEY_SPLITS = {"X_dongmak3": ("R71", "-R71", 37.5483458, 126.9163868)}   # OSM 1834932797, 독막로3길이 독막로에 닿는 점
-ALLEY_NODES = {
-    "Y2": (37.5488709, 126.9165847, "priority"),          # OSM 3066579587, 양화로6길과 독막로3길
-    "D_yanghwa6": (37.5493883, 126.9148575, "dead_end"),  # OSM 2374776990, 양화로6길 서쪽 끝(도로망 경계)
-    "E_yanghwa6": (37.5486818, 126.9174365, "dead_end"),  # OSM 1834932800, 양화로6길 동쪽 끝(도로망 경계)
-}
-# (도로 id, 이름, 시작 노드, 끝 노드, 중간점 (위도, 경도), km/h). 반대 방향은 "-" + id로 만든다.
+# 골목은 끊긴 끝 없이 모두 이어 둔다. 원본의 30m 골목 토막(J88~J94 끝)을 OSM 골목으로 이어
+# 독막로 북쪽·남서쪽·남동쪽에 골목망 세 개를 만든다. 이을 곳이 없는 독막로12길 토막(R123)은 뺀다.
+# 골목이 독막로에 새로 닿는 점(OSM 노드)에서는 독막로를 나눠 신호 없는 교차로를 만든다.
+ALLEY_SPLITS = {"X_dongmak3": ("R71", "-R71", "1834932797"),   # 독막로3길
+                "X_dongmak6": ("R71", "-R71", "1834932795")}   # 독막로6길
+# 골목끼리 만나는 점. 도로망 노드 id → OSM 노드 id
+ALLEY_NODES = {"Y1": "2959182136", "Y2": "3066579587", "Y3": "1834932799", "Y4": "1834932796", "Y5": "3743682656",
+               "S1": "3182251261", "S2": "2323311243", "S3": "2329649015", "S4": "2329649014"}
+STUB_ENDS = ["J88", "J89", "J90", "J91", "J92", "J93", "J94"]   # 원본 골목 토막의 끊긴 끝. 골목이 이어지는 점이 된다
+REMOVED_EDGES = ["R123", "-R123"]
+SERVICE_KMH = 20   # maps/paldalmun/source/speed_defaults.json의 service
+# (도로 id, 이름, OSM 길 id, 시작, 끝, km/h, 일방통행). 시작·끝은 위의 노드 id다. 굽은 점은 source/area.osm.xml의
+# 그 길에서 시작과 끝 사이의 점을 쓴다. OSM 길이 area.osm.xml에 없으면(None) 직선이다. 양방향이면 "-" + id도 만든다.
 ALLEYS = [
-    ("G2", "양화로6길", "D_yanghwa6", "Y2", [(37.5493377, 126.9149078), (37.5492114, 126.9150487), (37.5491389, 126.9153241),
-                                           (37.5491115, 126.9154291), (37.5490346, 126.9157431), (37.5489996, 126.9159087),
-                                           (37.5489393, 126.9161962)], ALLEY_KMH),
-    ("G2e", "양화로6길", "Y2", "E_yanghwa6", [(37.5487897, 126.9169195), (37.5487566, 126.9170802)], ALLEY_KMH),
-    ("G3", "독막로3길", "Y2", "X_dongmak3", [(37.5484422, 126.9164129)], ALLEY_KMH),
+    ("G1", "독막로", "228807990", "J88", "Y1", SERVICE_KMH, False),
+    ("G2", "양화로6길", "172603991", "Y1", "Y2", ALLEY_KMH, False),
+    ("G3", "독막로3길", "172603989", "Y2", "X_dongmak3", ALLEY_KMH, False),
+    ("G4", "양화로6길", "172603991", "Y2", "Y3", ALLEY_KMH, False),
+    ("G5", "양화로6길", "172603991", "Y3", "Y4", ALLEY_KMH, False),
+    # 어울마당로 북쪽이 범위 밖이라, 이 구간을 동쪽으로 가면 빠져나갈 곳이 없다. 서행 일방으로 둔다.
+    ("G6", "양화로6길", "172603991", "Y5", "Y4", ALLEY_KMH, True),
+    ("G7", "독막로7길", "172115945", "J90", "Y3", ALLEY_KMH, False),
+    ("G8", "어울마당로", "168229931", "Y4", "J92", ALLEY_KMH, True),
+    ("G9", "어울마당로", None, "J94", "Y5", ALLEY_KMH, True),
+    ("G10", "독막로2길", "312367423", "J89", "S1", SERVICE_KMH, False),
+    ("G11", "성지1길", "223433265", "S1", "S2", SERVICE_KMH, False),
+    ("G12", "독막로6길", "223433270", "S2", "X_dongmak6", SERVICE_KMH, False),
+    ("G13", "어울마당로", "223433262", "J93", "S3", ALLEY_KMH, True),
+    ("G14", "어울마당로3길", "224132992", "S3", "S4", ALLEY_KMH, True),
+    ("G15", "독막로8길", "335847475", "S4", "J91", ALLEY_KMH, False),
 ]
-# 새 골목의 양 끝은 배경 차량의 출발지로만 쓴다. 도착지로도 쓰면 모든 진입로가 차를 똑같이 나눠 보내
-# 골목으로 시간당 약 160대가 몰렸고, 합정역 쪽 독막로가 막혀 J8 횡단보도 위에 차가 섰다.
-ORIGIN_ONLY_EXITS = {"-G2", "G2e"}
+# 골목이 모두 이어져 골목 끝이 경계가 아니므로, 골목 안(주차, 건물)에서 나와 독막로에 신호 없이 합류하는 차(S5)를
+# 이 도로에서 출발시킨다. 유입량은 경계 골목과 같은 ALLEY다.
+ALLEY_ORIGINS = ["G3", "G12"]
 EGO_ROUTE = "bus_loop"
 # (설명, 경유 도로). 서예인이 제안한 순환 경로다. 상수역 정차 뒤 약 140m 안에 와우산로로 좌회전한다(S2).
 ROUTES = {EGO_ROUTE: ("[연구] 합정역 → 성산중학교 → 상수역 → 와우산로 좌회전 → 극동방송 → 잔다리로 → 서교동교회 → "
@@ -106,16 +120,21 @@ def build_network(temporary: Path) -> Path:
     edges = ET.Element("edges")
     patches = {}
     for edge in base.getEdges():
+        if edge.getID() in REMOVED_EDGES:
+            continue
         # 이름이 "~길"인 이면도로는 30km/h다. 50km/h 골목 토막 끝에서 출발한 차가 바로 앞 횡단보도에서 멈추지 못했다.
         kmh = LINK_KMH if edge.getID() in LINK_EDGES else ALLEY_KMH if edge.getName().endswith("길") else ARTERIAL_KMH
         target = kmh / 3.6
         if max(lane.getSpeed() for lane in edge.getLanes()) > target + 0.01:
             patches[edge.getID()] = ET.SubElement(edges, "edge", id=edge.getID(), speed=f"{target:.2f}")
-    for node_id, (forward, backward, lat, lon) in {**MIDBLOCK_CROSSINGS, **ALLEY_SPLITS}.items():
+    osm = osm_nodes()
+    splits = {**MIDBLOCK_CROSSINGS, **{node_id: (forward, backward, *osm[osm_id][::-1])
+                                       for node_id, (forward, backward, osm_id) in ALLEY_SPLITS.items()}}
+    for node_id, (forward, backward, lat, lon) in splits.items():
         point = base.convertLonLat2XY(lon, lat)
         for edge_id in (forward, backward):
             position, _ = sumolib.geomhelper.polygonOffsetAndDistanceToPoint(point, base.getEdge(edge_id).getShape())
-            element = patches.get(edge_id) or ET.SubElement(edges, "edge", id=edge_id)
+            element = patches.setdefault(edge_id, patches.get(edge_id) or ET.SubElement(edges, "edge", id=edge_id))
             ET.SubElement(element, "split", pos=f"{position:.2f}", id=node_id)
     nodes = ET.Element("nodes")
     for group in JOIN:
@@ -126,7 +145,7 @@ def build_network(temporary: Path) -> Path:
     ET.ElementTree(nodes).write(temporary / "join.nod.xml", encoding="utf-8")
     joined = temporary / "joined.net.xml"
     netconvert(["--sumo-net-file", str(SOURCE / "network.base.net.xml"), "--edge-files", str(temporary / "speed.edg.xml"),
-                "--node-files", str(temporary / "join.nod.xml")], joined)
+                "--node-files", str(temporary / "join.nod.xml"), "--remove-edges.explicit", ",".join(REMOVED_EDGES)], joined)
     crossings = ET.Element("connections")
     for group in JOINED_CROSSINGS:
         ET.SubElement(crossings, "crossing", node=JOINED, edges=" ".join(group))
@@ -148,30 +167,62 @@ def build_network(temporary: Path) -> Path:
     return output
 
 
+def osm_nodes() -> dict[str, tuple[float, float]]:
+    """source/area.osm.xml의 노드 id → (경도, 위도)."""
+    return {node.get("id"): (float(node.get("lon")), float(node.get("lat")))
+            for node in ET.parse(SOURCE / "area.osm.xml").getroot().iter("node")}
+
+
 def add_alleys(net, connections: ET.Element) -> tuple[ET.Element, ET.Element]:
-    """골목 노드·도로를 만들고, 독막로를 나눠 만든 노드(X_dongmak3)에서 새 골목과 이어지는 연결을 차로까지 적는다.
+    """골목 노드·도로를 만들고, 이미 있는 노드(토막 끝, 독막로를 나눈 점)에서 새 골목과의 연결을 차로까지 적는다.
 
     도로망 파일에서 읽은 노드의 연결은 고정값이라, 적지 않으면 새 골목과 이어지지 않는다.
     """
+    osm = osm_nodes()
+    way_nodes = {way.get("id"): [nd.get("ref") for nd in way.findall("nd")]
+                 for way in ET.parse(SOURCE / "area.osm.xml").getroot().iter("way")}
     nodes, edges = ET.Element("nodes"), ET.Element("edges")
-    coords = {node_id: net.convertLonLat2XY(lon, lat) for node_id, (lat, lon, _) in ALLEY_NODES.items()}
-    for node_id, (_, _, node_type) in ALLEY_NODES.items():
-        ET.SubElement(nodes, "node", id=node_id, x=f"{coords[node_id][0]:.3f}", y=f"{coords[node_id][1]:.3f}", type=node_type)
-    for node_id in ALLEY_SPLITS:
+    coords = {node_id: net.convertLonLat2XY(*osm[osm_id]) for node_id, osm_id in ALLEY_NODES.items()}
+    for node_id, (x, y) in coords.items():
+        ET.SubElement(nodes, "node", id=node_id, x=f"{x:.3f}", y=f"{y:.3f}", type="priority")
+    attached = STUB_ENDS + list(ALLEY_SPLITS)
+    for node_id in STUB_ENDS:
+        ET.SubElement(nodes, "node", id=node_id, type="priority")
+    for node_id in attached:
         coords[node_id] = net.getNode(node_id).getCoord()
+
+    def shape(way_id, start, end):
+        # OSM 길 위에서 시작점과 끝점 사이에 있는 점을 순서대로 넣는다.
+        a, b = coords[start], coords[end]
+        if way_id is None:
+            return [a, b]
+        points = [net.convertLonLat2XY(*osm[node]) for node in way_nodes[way_id] if node in osm]
+        offset_a = sumolib.geomhelper.polygonOffsetAndDistanceToPoint(a, points)[0]
+        offset_b = sumolib.geomhelper.polygonOffsetAndDistanceToPoint(b, points)[0]
+        low, high = sorted((offset_a, offset_b))
+        offsets, inner, length = [], [], 0.0
+        for index, point in enumerate(points):
+            if index:
+                length += sumolib.geomhelper.distance(points[index - 1], point)
+            if low + 0.5 < length < high - 0.5:
+                inner.append(point)
+        return [a, *(inner if offset_a < offset_b else inner[::-1]), b]
     new = {}
-    for edge_id, name, start, end, via, kmh in ALLEYS:
-        shape = [coords[start], *(net.convertLonLat2XY(lon, lat) for lat, lon in via), coords[end]]
-        for direction, (a, b, points) in {edge_id: (start, end, shape), "-" + edge_id: (end, start, shape[::-1])}.items():
+    for edge_id, name, way_id, start, end, kmh, oneway in ALLEYS:
+        points = shape(way_id, start, end)
+        directions = {edge_id: (start, end, points)}
+        if not oneway:
+            directions["-" + edge_id] = (end, start, points[::-1])
+        for direction, (a, b, line) in directions.items():
             new[direction] = (a, b)
             ET.SubElement(edges, "edge", {"id": direction, "from": a, "to": b, "name": name, "numLanes": "1",
                                           "speed": f"{kmh / 3.6:.2f}", "priority": "1", "disallow": "pedestrian",
-                                          "shape": " ".join(f"{x:.3f},{y:.3f}" for x, y in points)})
+                                          "shape": " ".join(f"{x:.3f},{y:.3f}" for x, y in line)})
 
     def drivable(edge, outermost=True):
         lanes = [lane.getIndex() for lane in edge.getLanes() if lane.allows("passenger")]
         return str(lanes[0] if outermost else lanes[-1])
-    for node_id in ALLEY_SPLITS:
+    for node_id in attached:
         node = net.getNode(node_id)
         for target, (a, b) in new.items():
             if a == node_id:
@@ -246,8 +297,27 @@ def curb_stops(net) -> list[dict]:
 
 
 def scaled_flows(net) -> list[dict]:
-    """팔달문과 같은 경계 흐름 규칙으로 나눈 뒤, 합계가 BASELINE_VEHS_PER_HOUR가 되게 줄인다."""
-    flows = [flow for flow in boundary_flows(net) if flow["to"] not in ORIGIN_ONLY_EXITS]
+    """경계 진입로와 ALLEY_ORIGINS마다 유입량을 정해 되돌아가는 진출로를 뺀 진출로에 같은 비율로 나누고, 합계를 줄인다.
+
+    규칙은 scripts/build_road.py의 boundary_flows와 같다. 다만 경계는 노드 종류(dead_end)가 아니라 차가 다니는
+    이웃 노드가 하나뿐인 도로 끝으로 본다. 원본 도로망은 월드컵로·동교로·잔다리로 등의 끝이 dead_end가 아니다.
+    """
+    def neighbours(node):
+        return ({edge.getToNode() for edge in node.getOutgoing() if edge.allows("passenger")}
+                | {edge.getFromNode() for edge in node.getIncoming() if edge.allows("passenger")})
+    boundary = {node.getID() for node in net.getNodes() if len(neighbours(node)) == 1}
+    drivable = [edge for edge in net.getEdges() if edge.allows("passenger")]
+    entries = ([edge for edge in drivable if edge.getFromNode().getID() in boundary]
+               + [net.getEdge(edge) for edge in ALLEY_ORIGINS])
+    exits = [edge for edge in drivable if edge.getToNode().getID() in boundary]
+    flows = []
+    for entry in entries:
+        lanes = sum(lane.allows("passenger") for lane in entry.getLanes())
+        rate = ARTERIAL_PER_LANE * min(lanes, 2) if entry.getSpeed() > 10 else ALLEY
+        targets = [exit for exit in exits if exit.getToNode() != entry.getFromNode()
+                   and net.getShortestPath(entry, exit, vClass="passenger")[0] is not None]
+        flows += [{"id": f"f_{entry.getID()}_to_{exit.getID()}", "from": entry.getID(), "to": exit.getID(),
+                   "vehs_per_hour": rate / len(targets)} for exit in targets]
     scale = BASELINE_VEHS_PER_HOUR / sum(flow["vehs_per_hour"] for flow in flows)
     return [{**flow, "vehs_per_hour": round(flow["vehs_per_hour"] * scale, 3)} for flow in flows]
 
