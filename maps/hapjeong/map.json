@@ -1,0 +1,582 @@
+{
+  "id": "hapjeong",
+  "name": "합정역 · 양화로와 독막로 골목",
+  "version": "1.0.0",
+  "description": "합정역 일대 실제 도로. 신호 14곳, 인도·횡단보도·보행자, 버스 전용 차로가 있다.",
+  "source_status": "osm_generated",
+  "network_source": {
+    "path": "source/network.net.xml",
+    "sha256": "fac68040e09ad0341f5c40e6930f936e0fcd539a30788ea8150623793e2ce0b9",
+    "generator": "generator/ (서예인, 합정역 브랜치 ec6fbf6에서 옮김)"
+  },
+  "extra_files": {
+    "additional": [
+      "source/signals.add.xml",
+      "source/islands.add.xml",
+      "source/seams.add.xml",
+      "source/stops.add.xml"
+    ],
+    "routes": [
+      "source/pedestrians.rou.xml"
+    ]
+  },
+  "trainable": false,
+  "trainable_reason": "일반 도로 95개 중 79개의 0번 차로가 인도라서, 차로 번호를 관측으로 쓰는 학습 환경이 틀린 값을 읽는다.",
+  "focus_bbox": [
+    126.9071381,
+    37.5469758,
+    126.9230709,
+    37.5551083
+  ],
+  "gui_center": {
+    "x": 127.988,
+    "y": 187.155
+  },
+  "sources_license": {
+    "road_data": "ODbL 1.0",
+    "attribution": "© OpenStreetMap contributors",
+    "url": "https://www.openstreetmap.org/copyright"
+  },
+  "assumptions": [
+    "배경 차량 유입량은 팔달문과 같은 규칙의 합성 수요다. quiet·baseline·busy는 0.5·1·1.25배다.",
+    "보행자(source/pedestrians.rou.xml)는 시나리오와 관계없이 같은 수다."
+  ],
+  "routes": {
+    "r_sangsu_to_yanghwa": [
+      "R111",
+      "R112",
+      "R113",
+      "R100",
+      "-R96",
+      "R95",
+      "R94"
+    ]
+  },
+  "route_design": {
+    "r_sangsu_to_yanghwa": {
+      "description": "상수동 쪽 → 합정역 교차로 → 양화로",
+      "length_m": 937.56,
+      "max_speed_mps": 22.22,
+      "first_edge_lanes": 3
+    }
+  },
+  "flows": [
+    {
+      "id": "f_-R116_to_R115",
+      "from": "-R116",
+      "to": "R115",
+      "vehs_per_hour": 4.444
+    },
+    {
+      "id": "f_-R116_to_R117",
+      "from": "-R116",
+      "to": "R117",
+      "vehs_per_hour": 4.444
+    },
+    {
+      "id": "f_-R116_to_R118",
+      "from": "-R116",
+      "to": "R118",
+      "vehs_per_hour": 4.444
+    },
+    {
+      "id": "f_-R116_to_R119",
+      "from": "-R116",
+      "to": "R119",
+      "vehs_per_hour": 4.444
+    },
+    {
+      "id": "f_-R116_to_R121",
+      "from": "-R116",
+      "to": "R121",
+      "vehs_per_hour": 4.444
+    },
+    {
+      "id": "f_-R116_to_R122",
+      "from": "-R116",
+      "to": "R122",
+      "vehs_per_hour": 4.444
+    },
+    {
+      "id": "f_-R116_to_R123",
+      "from": "-R116",
+      "to": "R123",
+      "vehs_per_hour": 4.444
+    },
+    {
+      "id": "f_-R116_to_R48",
+      "from": "-R116",
+      "to": "R48",
+      "vehs_per_hour": 4.444
+    },
+    {
+      "id": "f_-R116_to_R53",
+      "from": "-R116",
+      "to": "R53",
+      "vehs_per_hour": 4.444
+    },
+    {
+      "id": "f_-R117_to_R115",
+      "from": "-R117",
+      "to": "R115",
+      "vehs_per_hour": 4.444
+    },
+    {
+      "id": "f_-R117_to_R116",
+      "from": "-R117",
+      "to": "R116",
+      "vehs_per_hour": 4.444
+    },
+    {
+      "id": "f_-R117_to_R118",
+      "from": "-R117",
+      "to": "R118",
+      "vehs_per_hour": 4.444
+    },
+    {
+      "id": "f_-R117_to_R119",
+      "from": "-R117",
+      "to": "R119",
+      "vehs_per_hour": 4.444
+    },
+    {
+      "id": "f_-R117_to_R121",
+      "from": "-R117",
+      "to": "R121",
+      "vehs_per_hour": 4.444
+    },
+    {
+      "id": "f_-R117_to_R122",
+      "from": "-R117",
+      "to": "R122",
+      "vehs_per_hour": 4.444
+    },
+    {
+      "id": "f_-R117_to_R123",
+      "from": "-R117",
+      "to": "R123",
+      "vehs_per_hour": 4.444
+    },
+    {
+      "id": "f_-R117_to_R48",
+      "from": "-R117",
+      "to": "R48",
+      "vehs_per_hour": 4.444
+    },
+    {
+      "id": "f_-R117_to_R53",
+      "from": "-R117",
+      "to": "R53",
+      "vehs_per_hour": 4.444
+    },
+    {
+      "id": "f_-R118_to_R115",
+      "from": "-R118",
+      "to": "R115",
+      "vehs_per_hour": 16.667
+    },
+    {
+      "id": "f_-R118_to_R116",
+      "from": "-R118",
+      "to": "R116",
+      "vehs_per_hour": 16.667
+    },
+    {
+      "id": "f_-R118_to_R117",
+      "from": "-R118",
+      "to": "R117",
+      "vehs_per_hour": 16.667
+    },
+    {
+      "id": "f_-R118_to_R119",
+      "from": "-R118",
+      "to": "R119",
+      "vehs_per_hour": 16.667
+    },
+    {
+      "id": "f_-R118_to_R121",
+      "from": "-R118",
+      "to": "R121",
+      "vehs_per_hour": 16.667
+    },
+    {
+      "id": "f_-R118_to_R122",
+      "from": "-R118",
+      "to": "R122",
+      "vehs_per_hour": 16.667
+    },
+    {
+      "id": "f_-R118_to_R123",
+      "from": "-R118",
+      "to": "R123",
+      "vehs_per_hour": 16.667
+    },
+    {
+      "id": "f_-R118_to_R48",
+      "from": "-R118",
+      "to": "R48",
+      "vehs_per_hour": 16.667
+    },
+    {
+      "id": "f_-R118_to_R53",
+      "from": "-R118",
+      "to": "R53",
+      "vehs_per_hour": 16.667
+    },
+    {
+      "id": "f_-R119_to_R115",
+      "from": "-R119",
+      "to": "R115",
+      "vehs_per_hour": 16.667
+    },
+    {
+      "id": "f_-R119_to_R116",
+      "from": "-R119",
+      "to": "R116",
+      "vehs_per_hour": 16.667
+    },
+    {
+      "id": "f_-R119_to_R117",
+      "from": "-R119",
+      "to": "R117",
+      "vehs_per_hour": 16.667
+    },
+    {
+      "id": "f_-R119_to_R118",
+      "from": "-R119",
+      "to": "R118",
+      "vehs_per_hour": 16.667
+    },
+    {
+      "id": "f_-R119_to_R121",
+      "from": "-R119",
+      "to": "R121",
+      "vehs_per_hour": 16.667
+    },
+    {
+      "id": "f_-R119_to_R122",
+      "from": "-R119",
+      "to": "R122",
+      "vehs_per_hour": 16.667
+    },
+    {
+      "id": "f_-R119_to_R123",
+      "from": "-R119",
+      "to": "R123",
+      "vehs_per_hour": 16.667
+    },
+    {
+      "id": "f_-R119_to_R48",
+      "from": "-R119",
+      "to": "R48",
+      "vehs_per_hour": 16.667
+    },
+    {
+      "id": "f_-R119_to_R53",
+      "from": "-R119",
+      "to": "R53",
+      "vehs_per_hour": 16.667
+    },
+    {
+      "id": "f_-R123_to_R115",
+      "from": "-R123",
+      "to": "R115",
+      "vehs_per_hour": 16.667
+    },
+    {
+      "id": "f_-R123_to_R116",
+      "from": "-R123",
+      "to": "R116",
+      "vehs_per_hour": 16.667
+    },
+    {
+      "id": "f_-R123_to_R117",
+      "from": "-R123",
+      "to": "R117",
+      "vehs_per_hour": 16.667
+    },
+    {
+      "id": "f_-R123_to_R118",
+      "from": "-R123",
+      "to": "R118",
+      "vehs_per_hour": 16.667
+    },
+    {
+      "id": "f_-R123_to_R119",
+      "from": "-R123",
+      "to": "R119",
+      "vehs_per_hour": 16.667
+    },
+    {
+      "id": "f_-R123_to_R121",
+      "from": "-R123",
+      "to": "R121",
+      "vehs_per_hour": 16.667
+    },
+    {
+      "id": "f_-R123_to_R122",
+      "from": "-R123",
+      "to": "R122",
+      "vehs_per_hour": 16.667
+    },
+    {
+      "id": "f_-R123_to_R48",
+      "from": "-R123",
+      "to": "R48",
+      "vehs_per_hour": 16.667
+    },
+    {
+      "id": "f_-R123_to_R53",
+      "from": "-R123",
+      "to": "R53",
+      "vehs_per_hour": 16.667
+    },
+    {
+      "id": "f_R114_to_R115",
+      "from": "R114",
+      "to": "R115",
+      "vehs_per_hour": 15.0
+    },
+    {
+      "id": "f_R114_to_R116",
+      "from": "R114",
+      "to": "R116",
+      "vehs_per_hour": 15.0
+    },
+    {
+      "id": "f_R114_to_R117",
+      "from": "R114",
+      "to": "R117",
+      "vehs_per_hour": 15.0
+    },
+    {
+      "id": "f_R114_to_R118",
+      "from": "R114",
+      "to": "R118",
+      "vehs_per_hour": 15.0
+    },
+    {
+      "id": "f_R114_to_R119",
+      "from": "R114",
+      "to": "R119",
+      "vehs_per_hour": 15.0
+    },
+    {
+      "id": "f_R114_to_R121",
+      "from": "R114",
+      "to": "R121",
+      "vehs_per_hour": 15.0
+    },
+    {
+      "id": "f_R114_to_R122",
+      "from": "R114",
+      "to": "R122",
+      "vehs_per_hour": 15.0
+    },
+    {
+      "id": "f_R114_to_R123",
+      "from": "R114",
+      "to": "R123",
+      "vehs_per_hour": 15.0
+    },
+    {
+      "id": "f_R114_to_R48",
+      "from": "R114",
+      "to": "R48",
+      "vehs_per_hour": 15.0
+    },
+    {
+      "id": "f_R114_to_R53",
+      "from": "R114",
+      "to": "R53",
+      "vehs_per_hour": 15.0
+    },
+    {
+      "id": "f_R120_to_R115",
+      "from": "R120",
+      "to": "R115",
+      "vehs_per_hour": 4.0
+    },
+    {
+      "id": "f_R120_to_R116",
+      "from": "R120",
+      "to": "R116",
+      "vehs_per_hour": 4.0
+    },
+    {
+      "id": "f_R120_to_R117",
+      "from": "R120",
+      "to": "R117",
+      "vehs_per_hour": 4.0
+    },
+    {
+      "id": "f_R120_to_R118",
+      "from": "R120",
+      "to": "R118",
+      "vehs_per_hour": 4.0
+    },
+    {
+      "id": "f_R120_to_R119",
+      "from": "R120",
+      "to": "R119",
+      "vehs_per_hour": 4.0
+    },
+    {
+      "id": "f_R120_to_R121",
+      "from": "R120",
+      "to": "R121",
+      "vehs_per_hour": 4.0
+    },
+    {
+      "id": "f_R120_to_R122",
+      "from": "R120",
+      "to": "R122",
+      "vehs_per_hour": 4.0
+    },
+    {
+      "id": "f_R120_to_R123",
+      "from": "R120",
+      "to": "R123",
+      "vehs_per_hour": 4.0
+    },
+    {
+      "id": "f_R120_to_R48",
+      "from": "R120",
+      "to": "R48",
+      "vehs_per_hour": 4.0
+    },
+    {
+      "id": "f_R120_to_R53",
+      "from": "R120",
+      "to": "R53",
+      "vehs_per_hour": 4.0
+    },
+    {
+      "id": "f_R51_to_R115",
+      "from": "R51",
+      "to": "R115",
+      "vehs_per_hour": 30.0
+    },
+    {
+      "id": "f_R51_to_R116",
+      "from": "R51",
+      "to": "R116",
+      "vehs_per_hour": 30.0
+    },
+    {
+      "id": "f_R51_to_R117",
+      "from": "R51",
+      "to": "R117",
+      "vehs_per_hour": 30.0
+    },
+    {
+      "id": "f_R51_to_R118",
+      "from": "R51",
+      "to": "R118",
+      "vehs_per_hour": 30.0
+    },
+    {
+      "id": "f_R51_to_R119",
+      "from": "R51",
+      "to": "R119",
+      "vehs_per_hour": 30.0
+    },
+    {
+      "id": "f_R51_to_R121",
+      "from": "R51",
+      "to": "R121",
+      "vehs_per_hour": 30.0
+    },
+    {
+      "id": "f_R51_to_R122",
+      "from": "R51",
+      "to": "R122",
+      "vehs_per_hour": 30.0
+    },
+    {
+      "id": "f_R51_to_R123",
+      "from": "R51",
+      "to": "R123",
+      "vehs_per_hour": 30.0
+    },
+    {
+      "id": "f_R51_to_R48",
+      "from": "R51",
+      "to": "R48",
+      "vehs_per_hour": 30.0
+    },
+    {
+      "id": "f_R51_to_R53",
+      "from": "R51",
+      "to": "R53",
+      "vehs_per_hour": 30.0
+    },
+    {
+      "id": "f_R55_to_R115",
+      "from": "R55",
+      "to": "R115",
+      "vehs_per_hour": 30.0
+    },
+    {
+      "id": "f_R55_to_R116",
+      "from": "R55",
+      "to": "R116",
+      "vehs_per_hour": 30.0
+    },
+    {
+      "id": "f_R55_to_R117",
+      "from": "R55",
+      "to": "R117",
+      "vehs_per_hour": 30.0
+    },
+    {
+      "id": "f_R55_to_R118",
+      "from": "R55",
+      "to": "R118",
+      "vehs_per_hour": 30.0
+    },
+    {
+      "id": "f_R55_to_R119",
+      "from": "R55",
+      "to": "R119",
+      "vehs_per_hour": 30.0
+    },
+    {
+      "id": "f_R55_to_R121",
+      "from": "R55",
+      "to": "R121",
+      "vehs_per_hour": 30.0
+    },
+    {
+      "id": "f_R55_to_R122",
+      "from": "R55",
+      "to": "R122",
+      "vehs_per_hour": 30.0
+    },
+    {
+      "id": "f_R55_to_R123",
+      "from": "R55",
+      "to": "R123",
+      "vehs_per_hour": 30.0
+    },
+    {
+      "id": "f_R55_to_R48",
+      "from": "R55",
+      "to": "R48",
+      "vehs_per_hour": 30.0
+    },
+    {
+      "id": "f_R55_to_R53",
+      "from": "R55",
+      "to": "R53",
+      "vehs_per_hour": 30.0
+    }
+  ],
+  "max_lane_speed_mps": 27.78,
+  "ego_route": "r_sangsu_to_yanghwa",
+  "bus_stops": [],
+  "design": {
+    "measure_lanes": [],
+    "zones": {}
+  }
+}

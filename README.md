@@ -4,6 +4,7 @@
 
 - 도로 ID, 경로, 정류장: [maps/paldalmun/README.md](maps/paldalmun/README.md)
 - 도로를 이렇게 고른 이유와 측정 결과: [maps/paldalmun/DESIGN.md](maps/paldalmun/DESIGN.md)
+- 합정역 도로(`--map hapjeong`)도 있다. 지금은 보기만 되고 학습에는 쓸 수 없다. [maps/hapjeong/README.md](maps/hapjeong/README.md)
 
 ![팔달문 일대 지도(왼쪽)와 같은 범위에 겹친 SUMO 도로망(오른쪽, 붉은색)](maps/paldalmun/references/paldalmun_road.png)
 
@@ -29,6 +30,7 @@ python -m pip install -r requirements.txt
 python view_road.py                      # sumo-gui로 연다. ▶를 눌러 재생한다
 python view_road.py --scenario busy      # 교통량: quiet, baseline(기본), busy
 python view_road.py --netedit            # netedit로 도로 구조만 본다
+python view_road.py --map hapjeong       # 다른 지도. 생략하면 팔달문(paldalmun)
 ```
 
 ## 학습, 평가, 데이터 수집
