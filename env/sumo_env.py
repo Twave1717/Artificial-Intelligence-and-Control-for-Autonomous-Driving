@@ -84,6 +84,9 @@ class SumoHighwayEnv(gym.Env):
                         에피소드 전체가 "▶를 눌러야 시작"되는 효과가 난다.
         """
         super().__init__()
+        if road["network"].get("trainable", True) is False:
+            raise NotImplementedError(f"지도 {road['map_id']}는 아직 학습 환경에서 쓸 수 없습니다: "
+                                      f"{road['network'].get('trainable_reason', '')} view_road.py로 도로만 볼 수 있습니다.")
         self.cfg_path = cfg_path
         self.gui = gui
         self.gui_autostart = gui_autostart

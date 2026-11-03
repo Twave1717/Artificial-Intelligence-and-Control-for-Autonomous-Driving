@@ -1,0 +1,548 @@
+{
+  "id": "hapjeong",
+  "name": "합정역 · 양화로와 독막로",
+  "version": "2.0.0",
+  "description": "합정역 일대 실제 도로. 신호 교차로, 인도·횡단보도·보행자, 중앙버스차로, 연구 경로의 가로변 정류장 6곳과 신호 없는 횡단보도가 있다.",
+  "source_status": "osm_generated",
+  "network_source": {
+    "path": "source/network.net.xml",
+    "sha256": "3f2e84016c0c7d0533d110be178b6e31413ddcdb7f6ede436cea16c61cad8b73",
+    "base_path": "source/network.base.net.xml",
+    "base_sha256": "fac68040e09ad0341f5c40e6930f936e0fcd539a30788ea8150623793e2ce0b9",
+    "generator": "generator/ (서예인, 합정역 브랜치 ec6fbf6에서 옮김)",
+    "patches": {
+      "speed_kmh": {
+        "arterial": 50,
+        "link": 30,
+        "alley": 30
+      },
+      "joined_junctions": [
+        [
+          "J52",
+          "J56",
+          "J58"
+        ]
+      ],
+      "signal_yield_links": {
+        "J1": [
+          0,
+          11
+        ]
+      },
+      "dropped_programs": [
+        "J56"
+      ]
+    },
+    "pedestrians": {
+      "persons_per_hour": 600,
+      "min_distance": 150,
+      "end": 3600,
+      "seed": 42
+    }
+  },
+  "extra_files": {
+    "additional": [
+      "source/signals.add.xml",
+      "source/islands.add.xml",
+      "source/seams.add.xml",
+      "source/stops.add.xml"
+    ],
+    "routes": [
+      "source/pedestrians.rou.xml"
+    ]
+  },
+  "trainable": false,
+  "trainable_reason": "일반 도로 대부분의 0번 차로가 인도라서, 차로 번호를 관측으로 쓰는 학습 환경이 틀린 값을 읽는다.",
+  "focus_bbox": [
+    126.9071381,
+    37.5469758,
+    126.9230709,
+    37.5551083
+  ],
+  "gui_center": {
+    "x": 127.988,
+    "y": 187.155
+  },
+  "sources_license": {
+    "road_data": "ODbL 1.0",
+    "attribution": "© OpenStreetMap contributors",
+    "url": "https://www.openstreetmap.org/copyright"
+  },
+  "assumptions": [
+    "제한속도는 안전속도 5030 기준이다. 간선 50km/h, 연결로와 이름이 ~길인 이면도로 30km/h이고 OSM의 독막로 50km/h와 같다.",
+    "배경 차량 유입량은 팔달문과 같은 규칙으로 나눈 합성 수요다. quiet·baseline·busy는 0.5·1·1.25배다.",
+    "배경 차량 baseline 합계는 생성기 설정의 시간당 900대다."
+  ],
+  "routes": {
+    "bus_loop": [
+      "R69",
+      "R69a",
+      "R71",
+      "R71.135",
+      "R71.256",
+      "R73",
+      "R77",
+      "R111",
+      "R112",
+      "R112.221",
+      "R113",
+      "R100",
+      "-R96",
+      "R95",
+      "R94",
+      "R54a",
+      "R54",
+      "R42"
+    ]
+  },
+  "route_design": {
+    "bus_loop": {
+      "description": "[연구] 합정역 → 성산중학교 → 상수역 → 와우산로 좌회전 → 극동방송 → 잔다리로 → 서교동교회 → 홍대입구역 교차로 → 양화로 → 합정역",
+      "length_m": 2052.26,
+      "max_speed_mps": 13.89,
+      "first_edge_lanes": 3
+    }
+  },
+  "flows": [
+    {
+      "id": "f_-R62_to_-R89",
+      "from": "-R62",
+      "to": "-R89",
+      "vehs_per_hour": 28.481
+    },
+    {
+      "id": "f_-R62_to_R115",
+      "from": "-R62",
+      "to": "R115",
+      "vehs_per_hour": 28.481
+    },
+    {
+      "id": "f_-R62_to_R48",
+      "from": "-R62",
+      "to": "R48",
+      "vehs_per_hour": 28.481
+    },
+    {
+      "id": "f_-R62_to_R53",
+      "from": "-R62",
+      "to": "R53",
+      "vehs_per_hour": 28.481
+    },
+    {
+      "id": "f_-R62_to_R86",
+      "from": "-R62",
+      "to": "R86",
+      "vehs_per_hour": 28.481
+    },
+    {
+      "id": "f_-R62_to_R97",
+      "from": "-R62",
+      "to": "R97",
+      "vehs_per_hour": 28.481
+    },
+    {
+      "id": "f_-R86_to_-R89",
+      "from": "-R86",
+      "to": "-R89",
+      "vehs_per_hour": 14.241
+    },
+    {
+      "id": "f_-R86_to_R115",
+      "from": "-R86",
+      "to": "R115",
+      "vehs_per_hour": 14.241
+    },
+    {
+      "id": "f_-R86_to_R48",
+      "from": "-R86",
+      "to": "R48",
+      "vehs_per_hour": 14.241
+    },
+    {
+      "id": "f_-R86_to_R53",
+      "from": "-R86",
+      "to": "R53",
+      "vehs_per_hour": 14.241
+    },
+    {
+      "id": "f_-R86_to_R62",
+      "from": "-R86",
+      "to": "R62",
+      "vehs_per_hour": 14.241
+    },
+    {
+      "id": "f_-R86_to_R97",
+      "from": "-R86",
+      "to": "R97",
+      "vehs_per_hour": 14.241
+    },
+    {
+      "id": "f_-R97_to_-R89",
+      "from": "-R97",
+      "to": "-R89",
+      "vehs_per_hour": 14.241
+    },
+    {
+      "id": "f_-R97_to_R115",
+      "from": "-R97",
+      "to": "R115",
+      "vehs_per_hour": 14.241
+    },
+    {
+      "id": "f_-R97_to_R48",
+      "from": "-R97",
+      "to": "R48",
+      "vehs_per_hour": 14.241
+    },
+    {
+      "id": "f_-R97_to_R53",
+      "from": "-R97",
+      "to": "R53",
+      "vehs_per_hour": 14.241
+    },
+    {
+      "id": "f_-R97_to_R62",
+      "from": "-R97",
+      "to": "R62",
+      "vehs_per_hour": 14.241
+    },
+    {
+      "id": "f_-R97_to_R86",
+      "from": "-R97",
+      "to": "R86",
+      "vehs_per_hour": 14.241
+    },
+    {
+      "id": "f_R114_to_-R89",
+      "from": "R114",
+      "to": "-R89",
+      "vehs_per_hour": 12.206
+    },
+    {
+      "id": "f_R114_to_R115",
+      "from": "R114",
+      "to": "R115",
+      "vehs_per_hour": 12.206
+    },
+    {
+      "id": "f_R114_to_R48",
+      "from": "R114",
+      "to": "R48",
+      "vehs_per_hour": 12.206
+    },
+    {
+      "id": "f_R114_to_R53",
+      "from": "R114",
+      "to": "R53",
+      "vehs_per_hour": 12.206
+    },
+    {
+      "id": "f_R114_to_R62",
+      "from": "R114",
+      "to": "R62",
+      "vehs_per_hour": 12.206
+    },
+    {
+      "id": "f_R114_to_R86",
+      "from": "R114",
+      "to": "R86",
+      "vehs_per_hour": 12.206
+    },
+    {
+      "id": "f_R114_to_R97",
+      "from": "R114",
+      "to": "R97",
+      "vehs_per_hour": 12.206
+    },
+    {
+      "id": "f_R51_to_-R89",
+      "from": "R51",
+      "to": "-R89",
+      "vehs_per_hour": 24.412
+    },
+    {
+      "id": "f_R51_to_R115",
+      "from": "R51",
+      "to": "R115",
+      "vehs_per_hour": 24.412
+    },
+    {
+      "id": "f_R51_to_R48",
+      "from": "R51",
+      "to": "R48",
+      "vehs_per_hour": 24.412
+    },
+    {
+      "id": "f_R51_to_R53",
+      "from": "R51",
+      "to": "R53",
+      "vehs_per_hour": 24.412
+    },
+    {
+      "id": "f_R51_to_R62",
+      "from": "R51",
+      "to": "R62",
+      "vehs_per_hour": 24.412
+    },
+    {
+      "id": "f_R51_to_R86",
+      "from": "R51",
+      "to": "R86",
+      "vehs_per_hour": 24.412
+    },
+    {
+      "id": "f_R51_to_R97",
+      "from": "R51",
+      "to": "R97",
+      "vehs_per_hour": 24.412
+    },
+    {
+      "id": "f_R55_to_-R89",
+      "from": "R55",
+      "to": "-R89",
+      "vehs_per_hour": 24.412
+    },
+    {
+      "id": "f_R55_to_R115",
+      "from": "R55",
+      "to": "R115",
+      "vehs_per_hour": 24.412
+    },
+    {
+      "id": "f_R55_to_R48",
+      "from": "R55",
+      "to": "R48",
+      "vehs_per_hour": 24.412
+    },
+    {
+      "id": "f_R55_to_R53",
+      "from": "R55",
+      "to": "R53",
+      "vehs_per_hour": 24.412
+    },
+    {
+      "id": "f_R55_to_R62",
+      "from": "R55",
+      "to": "R62",
+      "vehs_per_hour": 24.412
+    },
+    {
+      "id": "f_R55_to_R86",
+      "from": "R55",
+      "to": "R86",
+      "vehs_per_hour": 24.412
+    },
+    {
+      "id": "f_R55_to_R97",
+      "from": "R55",
+      "to": "R97",
+      "vehs_per_hour": 24.412
+    },
+    {
+      "id": "f_R89_to_R115",
+      "from": "R89",
+      "to": "R115",
+      "vehs_per_hour": 14.241
+    },
+    {
+      "id": "f_R89_to_R48",
+      "from": "R89",
+      "to": "R48",
+      "vehs_per_hour": 14.241
+    },
+    {
+      "id": "f_R89_to_R53",
+      "from": "R89",
+      "to": "R53",
+      "vehs_per_hour": 14.241
+    },
+    {
+      "id": "f_R89_to_R62",
+      "from": "R89",
+      "to": "R62",
+      "vehs_per_hour": 14.241
+    },
+    {
+      "id": "f_R89_to_R86",
+      "from": "R89",
+      "to": "R86",
+      "vehs_per_hour": 14.241
+    },
+    {
+      "id": "f_R89_to_R97",
+      "from": "R89",
+      "to": "R97",
+      "vehs_per_hour": 14.241
+    },
+    {
+      "id": "f_G3_to_-R89",
+      "from": "G3",
+      "to": "-R89",
+      "vehs_per_hour": 3.255
+    },
+    {
+      "id": "f_G3_to_R115",
+      "from": "G3",
+      "to": "R115",
+      "vehs_per_hour": 3.255
+    },
+    {
+      "id": "f_G3_to_R48",
+      "from": "G3",
+      "to": "R48",
+      "vehs_per_hour": 3.255
+    },
+    {
+      "id": "f_G3_to_R53",
+      "from": "G3",
+      "to": "R53",
+      "vehs_per_hour": 3.255
+    },
+    {
+      "id": "f_G3_to_R62",
+      "from": "G3",
+      "to": "R62",
+      "vehs_per_hour": 3.255
+    },
+    {
+      "id": "f_G3_to_R86",
+      "from": "G3",
+      "to": "R86",
+      "vehs_per_hour": 3.255
+    },
+    {
+      "id": "f_G3_to_R97",
+      "from": "G3",
+      "to": "R97",
+      "vehs_per_hour": 3.255
+    },
+    {
+      "id": "f_G12_to_-R89",
+      "from": "G12",
+      "to": "-R89",
+      "vehs_per_hour": 3.255
+    },
+    {
+      "id": "f_G12_to_R115",
+      "from": "G12",
+      "to": "R115",
+      "vehs_per_hour": 3.255
+    },
+    {
+      "id": "f_G12_to_R48",
+      "from": "G12",
+      "to": "R48",
+      "vehs_per_hour": 3.255
+    },
+    {
+      "id": "f_G12_to_R53",
+      "from": "G12",
+      "to": "R53",
+      "vehs_per_hour": 3.255
+    },
+    {
+      "id": "f_G12_to_R62",
+      "from": "G12",
+      "to": "R62",
+      "vehs_per_hour": 3.255
+    },
+    {
+      "id": "f_G12_to_R86",
+      "from": "G12",
+      "to": "R86",
+      "vehs_per_hour": 3.255
+    },
+    {
+      "id": "f_G12_to_R97",
+      "from": "G12",
+      "to": "R97",
+      "vehs_per_hour": 3.255
+    }
+  ],
+  "max_lane_speed_mps": 13.89,
+  "ego_route": "bus_loop",
+  "bus_stops": [
+    {
+      "id": "osm_stop_357920065",
+      "name": "합정역7번출구",
+      "ref": "14-119",
+      "lane": "R69_1",
+      "startPos": 42.04,
+      "endPos": 67.04,
+      "lanes_on_edge": 3,
+      "source_osm_node": "357920065",
+      "latitude": 37.5486897,
+      "longitude": 126.9142951,
+      "snap_distance_m": 3.548
+    },
+    {
+      "id": "osm_stop_357920024",
+      "name": "성산중학교",
+      "ref": null,
+      "lane": "R71.135_1",
+      "startPos": 81.8,
+      "endPos": 106.8,
+      "lanes_on_edge": 3,
+      "source_osm_node": "357920024",
+      "latitude": 37.5480489,
+      "longitude": 126.9174405,
+      "snap_distance_m": 0.641
+    },
+    {
+      "id": "osm_stop_357916587",
+      "name": "상수역",
+      "ref": null,
+      "lane": "R111_1",
+      "startPos": 0.5,
+      "endPos": 25.5,
+      "lanes_on_edge": 3,
+      "source_osm_node": "357916587",
+      "latitude": 37.54761,
+      "longitude": 126.92127,
+      "snap_distance_m": 14.073
+    },
+    {
+      "id": "osm_stop_5930628870",
+      "name": "극동방송",
+      "ref": null,
+      "lane": "R112_1",
+      "startPos": 175.18,
+      "endPos": 200.18,
+      "lanes_on_edge": 1,
+      "source_osm_node": "5930628870",
+      "latitude": 37.5495471,
+      "longitude": 126.9231077,
+      "snap_distance_m": 5.196
+    },
+    {
+      "id": "osm_stop_3446267493",
+      "name": "서교동교회",
+      "ref": "14-984",
+      "lane": "-R96_1",
+      "startPos": 197.83,
+      "endPos": 222.83,
+      "lanes_on_edge": 1,
+      "source_osm_node": "3446267493",
+      "latitude": 37.5517944,
+      "longitude": 126.9193584,
+      "snap_distance_m": 3.779
+    },
+    {
+      "id": "osm_stop_3424857165",
+      "name": "합정역",
+      "ref": "14-219",
+      "lane": "R54a_1",
+      "startPos": 264.13,
+      "endPos": 289.13,
+      "lanes_on_edge": 5,
+      "source_osm_node": "3424857165",
+      "latitude": 37.5510384,
+      "longitude": 126.9157425,
+      "snap_distance_m": 1.419
+    }
+  ],
+  "design": {
+    "measure_lanes": [],
+    "zones": {}
+  }
+}

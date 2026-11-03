@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='utf-8'?>
+<additional>
+    <tlLogic id="J1" type="static" programID="config" offset="0">
+        <phase duration="11" state="grrrrrgGGGrgrrrrgGGGrrGrG" />
+        <phase duration="5" state="grrrrrgGGGrgrrrrgGGGrrrrr" />
+        <phase duration="6" state="yrrrrryyyyryrrrryyyyrrrrr" />
+        <phase duration="16" state="rrrrrrrrrrGrrrrrrrrrGrrrr" />
+        <phase duration="6" state="rrrrrrrrrryrrrrrrrrryrrrr" />
+        <phase duration="11" state="rgGGGrrrrrrrGGrrrrrrrGrGr" />
+        <phase duration="5" state="rgGGGrrrrrrrGGrrrrrrrrrrr" />
+        <phase duration="6" state="ryyyyrrrrrrryyrrrrrrrrrrr" />
+        <phase duration="6" state="rrrrrGrrrrrrrrGGrrrrrrrrr" />
+        <phase duration="6" state="rrrrryrrrrrrrryyrrrrrrrrr" />
+        <phase duration="11" state="rrrrrrrrrrrrrrrrrrrrrrGrG" />
+    </tlLogic>
+    <tlLogic id="J23" type="static" programID="config" offset="0">
+        <phase duration="60" state="rrrgGGGgrrrgGGGgGrGr" />
+        <phase duration="5" state="rrrgGGGgrrrgGGGgrrrr" />
+        <phase duration="6" state="rrryyyyyrrryyyyyrrrr" />
+        <phase duration="20" state="gGgrrrrrgGgrrrrrrGrG" />
+        <phase duration="5" state="gGgrrrrrgGgrrrrrrrrr" />
+        <phase duration="6" state="yyyrrrrryyyrrrrrrrrr" />
+    </tlLogic>
+    <tlLogic id="J8" type="static" programID="config" offset="0">
+        <phase duration="60" state="rrrgGGGgrrrgGGGgGrGr" />
+        <phase duration="5" state="rrrgGGGgrrrgGGGgrrrr" />
+        <phase duration="6" state="rrryyyyyrrryyyyyrrrr" />
+        <phase duration="20" state="gGgrrrrrgGgrrrrrrGrG" />
+        <phase duration="5" state="gGgrrrrrgGgrrrrrrrrr" />
+        <phase duration="6" state="yyyrrrrryyyrrrrrrrrr" />
+    </tlLogic>
+</additional>

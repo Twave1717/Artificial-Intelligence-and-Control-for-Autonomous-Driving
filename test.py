@@ -134,7 +134,10 @@ if __name__ == "__main__":
     if saved is None:
         parser.error(f"{os.path.join(os.path.dirname(model_path), 'run_config.json')}이 없습니다. "
                      "이 도로에서 train.py 또는 train_bc.py로 학습한 run만 평가할 수 있습니다.")
-    trained, current = saved["road"], load_map()
+    trained = saved["road"]
+    if args.map is None:
+        args.map = trained["map_id"]
+    current = load_map(args.map)
     if ((trained["map_id"], trained["map_version"], trained.get("network_sha256"))
             != (current["id"], current["version"], current["network_source"]["sha256"])):
         parser.error(f"모델은 지도 {trained['map_id']} {trained['map_version']}에서 학습됐고 "

@@ -1,6 +1,6 @@
 """실행 진입점(train/test/collect/view)이 공유하는 선택·기록 도우미.
 
-도로는 팔달문 하나다. 진입점은 교통 조건(--scenario/--seed)과 ego 경로(--ego-route)를
+진입점은 지도(--map), 교통 조건(--scenario/--seed), ego 경로(--ego-route)를
 같은 이름으로 받고, 에피소드를 돌리는 train/test/collect는 에피소드 길이(--max-steps)도 받는다.
 결과 폴더에는 지도 버전·도로망 해시·적용한 설정·코드 커밋을 run_config.json으로 남긴다.
 """
@@ -13,12 +13,15 @@ import subprocess
 import sys
 
 from env.road_config import ROAD, EGO, TRAFFIC, SCENARIOS, configure_map
+from maps import DEFAULT_MAP, available_maps
 from env.mdp_config import SIMULATION, OBSERVATION, ACTION
 
 BASE = Path(__file__).resolve().parents[1]
 
 
 def add_run_arguments(parser, episode_limit=True):
+    parser.add_argument("--map", choices=available_maps(), default=None,
+                        help=f"지도 id(maps/ 아래 폴더 이름); 생략하면 {DEFAULT_MAP}")
     parser.add_argument("--scenario", choices=tuple(SCENARIOS), default="baseline",
                         help="교통량: quiet(0.5배), baseline(기본 수요), busy(1.25배)")
     parser.add_argument("--seed", type=int, default=0, help="환경 난수 시드")
@@ -30,8 +33,8 @@ def add_run_arguments(parser, episode_limit=True):
 
 
 def configure_execution(args):
-    """팔달문 도로와 교통 조건을 적용한다. ValueError는 호출자가 CLI 오류로 바꾼다."""
-    configure_map(args.scenario, args.seed, args.ego_route)
+    """지도와 교통 조건을 적용한다. ValueError는 호출자가 CLI 오류로 바꾼다."""
+    configure_map(args.scenario, args.seed, args.ego_route, args.map or DEFAULT_MAP)
     max_steps = getattr(args, "max_steps", None)
     if max_steps is not None:
         if max_steps < 1:
