@@ -1,0 +1,4 @@
+<additional>
+    <busStop id="stop_0" name="합정역" lane="B1_0" startPos="78.82" endPos="103.82" friendlyPos="true"/>
+    <busStop id="stop_1" name="합정역(양화로 동쪽)" lane="B2_0" startPos="91.54" endPos="116.54" friendlyPos="true"/>
+</additional>
