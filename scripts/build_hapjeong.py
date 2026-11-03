@@ -1,17 +1,26 @@
-"""합정역 map.json을 만든다.
+"""합정역 실행 도로망과 부속 파일, map.json을 만든다.
 
     python scripts/build_hapjeong.py
 
-합정역 도로망(maps/hapjeong/source/network.net.xml)은 이 스크립트가 만들지 않는다. 서예인이
-maps/hapjeong/generator/의 생성기로 만든 결과를 그대로 쓴다. 이 스크립트는 그 도로망에서
-ego 경로의 길이·제한속도, 경계 진입로의 배경 흐름(팔달문과 같은 규칙), 화면 중심을 계산하고
-scripts/validate_road.py의 validate_structure로 확인한 뒤 map.json만 쓴다.
+입력은 서예인이 maps/hapjeong/generator/의 생성기로 만든 원본(source/network.base.net.xml,
+source/signals.base.add.xml)이다. 임시 폴더에서 다음을 모두 마친 뒤에만 결과를 바꿔 넣는다.
+1. 제한속도를 실제 기준으로 낮춘다(간선 50km/h, 연결로·"~길" 이면도로 30km/h, 더 낮은 값은 그대로).
+2. 11m 간격으로 붙어 차가 교차로 안에 갇히던 J52·J56·J58을 한 교차로로 합치고 횡단보도를 다시 놓는다.
+3. 신호 프로그램에서 합친 교차로의 J56 프로그램을 빼고(기본 신호 사용), J1에서 중앙버스차로가
+   일반 차로로 합류하는 연결을 양보 녹색(g)으로 바꾼다. 같은 차로에 우선 녹색 두 개가 들어가던 곳이다.
+4. 바뀐 도로망에서 보행자 경로를 원본과 같은 설정(시간당 600명, 최소 150m)과 고정 seed로 다시 만든다.
+5. 연구 시나리오(S1~S3, S6)용으로 OSM 위치의 가로변 정류장 6곳과 와우산로의 신호 없는 횡단보도 1곳을 둔다.
+6. 배경 흐름(팔달문과 같은 규칙을 합계 900대/시간으로 줄임)과 ego 경로를 계산하고 validate_structure로 확인한다.
 """
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
+import subprocess
 import sys
+import tempfile
+import xml.etree.ElementTree as ET
 
 import sumolib
 
@@ -19,59 +28,212 @@ BASE = Path(__file__).resolve().parents[1]
 if str(BASE) not in sys.path:
     sys.path.insert(0, str(BASE))
 
-from scripts.build_road import boundary_flows, publish
+from scripts.build_road import boundary_flows, publish, shortest_route
 from scripts.patch_network import digest
+from scripts.prune_network import OPTIONS
 from scripts.validate_road import validate_structure
 
 FOLDER = BASE / "maps" / "hapjeong"
-VERSION = "1.0.0"
-EGO_ROUTE = "r_sangsu_to_yanghwa"
-ROUTES = {EGO_ROUTE: ("상수동 쪽 → 합정역 교차로 → 양화로", ["R111", "R112", "R113", "R100", "-R96", "R95", "R94"])}
+SOURCE = FOLDER / "source"
+VERSION = "2.0.0"
+ARTERIAL_KMH, LINK_KMH, ALLEY_KMH = 50, 30, 30
+LINK_EDGES = {"R65", "R65.c", "R66", "R66.c", "R67", "R67.c"}   # 생성기 설정에서 primary_link인 연결로
+JOIN = [("J52", "J56", "J58")]
+# 연결로가 양화로에 지퍼로 합류하던 J3은 busy에서 정체가 풀리지 않아, 연결로가 양보하는 합류로 바꾼다.
+NODE_TYPES = {"J3": "priority"}
+JOINED = "cluster_J52_J56_J58"
+JOINED_CROSSINGS = [("R73", "-R73"), ("R77", "-R77"), ("R120",), ("R122",), ("R121",), ("R123", "-R123")]
+YIELD_LINKS = {"J1": [0, 11]}          # B2_0 → R40_3, B1_0 → R41_2
+DROP_PROGRAMS = {"J56"}
+# 배경 차량 baseline 합계. 생성기 설정(generator/road_config.py OSM_ROAD traffic)의 값이다.
+BASELINE_VEHS_PER_HOUR = 900
+PEDESTRIANS = {"persons_per_hour": 600, "min_distance": 150, "end": 3600, "seed": 42}
+# 신호 없는 횡단보도(S6). OSM 13236303911(crossing=uncontrolled)은 와우산로 차도 위의 점이다.
+MIDBLOCK_CROSSINGS = {"S6_wausanro": ("R112", "-R112", 37.5498511, 126.9231277)}
+# 연구 경로의 가로변 정류장(OSM 노드, 이름, ARS 번호, 위도, 경도, 놓을 도로). 위치는 Overpass에서 2026-11-03에 받았다.
+CURB_STOPS = [
+    ("357920065", "합정역7번출구", "14-119", 37.5486897, 126.9142951, "R69"),
+    ("357920024", "성산중학교", "", 37.5480489, 126.9174405, "R71"),
+    ("357916587", "상수역", "", 37.5476100, 126.9212700, "R111"),
+    ("5930628870", "극동방송", "", 37.5495471, 126.9231077, "R112"),
+    ("3446267493", "서교동교회", "14-984", 37.5517944, 126.9193584, "-R96"),
+    ("3424857165", "합정역", "14-219", 37.5510384, 126.9157425, "R54a"),
+]
+EGO_ROUTE = "bus_loop"
+# (설명, 경유 도로). 서예인이 제안한 순환 경로다. 상수역 정차 뒤 약 140m 안에 와우산로로 좌회전한다(S2).
+ROUTES = {EGO_ROUTE: ("[연구] 합정역 → 성산중학교 → 상수역 → 와우산로 좌회전 → 극동방송 → 잔다리로 → 서교동교회 → "
+                      "홍대입구역 교차로 → 양화로 → 합정역",
+                      ["R69", "R71", "R111", "R112", "R113", "-R96", "R94", "R54a", "R54", "R42"])}
 EXTRA_FILES = {
     "additional": ["source/signals.add.xml", "source/islands.add.xml", "source/seams.add.xml", "source/stops.add.xml"],
     "routes": ["source/pedestrians.rou.xml"],
 }
 
 
+def netconvert(args: list[str], output: Path) -> None:
+    completed = subprocess.run([sumolib.checkBinary("netconvert"), *args, *OPTIONS, "--output-file", str(output)],
+                               capture_output=True, text=True, timeout=300)
+    if completed.returncode:
+        raise RuntimeError("netconvert 실패: " + completed.stderr[-3000:])
+    # 머리 주석의 생성 시각과 임시 경로를 지워 빌드마다 같은 바이트가 되게 한다.
+    ET.ElementTree(ET.parse(output).getroot()).write(output, encoding="utf-8", xml_declaration=True)
+
+
+def build_network(temporary: Path) -> Path:
+    base = sumolib.net.readNet(str(SOURCE / "network.base.net.xml"))
+    edges = ET.Element("edges")
+    patches = {}
+    for edge in base.getEdges():
+        # 이름이 "~길"인 이면도로는 30km/h다. 50km/h 골목 토막 끝에서 출발한 차가 바로 앞 횡단보도에서 멈추지 못했다.
+        kmh = LINK_KMH if edge.getID() in LINK_EDGES else ALLEY_KMH if edge.getName().endswith("길") else ARTERIAL_KMH
+        target = kmh / 3.6
+        if max(lane.getSpeed() for lane in edge.getLanes()) > target + 0.01:
+            patches[edge.getID()] = ET.SubElement(edges, "edge", id=edge.getID(), speed=f"{target:.2f}")
+    for node_id, (forward, backward, lat, lon) in MIDBLOCK_CROSSINGS.items():
+        point = base.convertLonLat2XY(lon, lat)
+        for edge_id in (forward, backward):
+            position, _ = sumolib.geomhelper.polygonOffsetAndDistanceToPoint(point, base.getEdge(edge_id).getShape())
+            element = patches.get(edge_id) or ET.SubElement(edges, "edge", id=edge_id)
+            ET.SubElement(element, "split", pos=f"{position:.2f}", id=node_id)
+    nodes = ET.Element("nodes")
+    for group in JOIN:
+        ET.SubElement(nodes, "join", nodes=" ".join(group))
+    for node_id, node_type in NODE_TYPES.items():
+        ET.SubElement(nodes, "node", id=node_id, type=node_type)
+    ET.ElementTree(edges).write(temporary / "speed.edg.xml", encoding="utf-8")
+    ET.ElementTree(nodes).write(temporary / "join.nod.xml", encoding="utf-8")
+    joined = temporary / "joined.net.xml"
+    netconvert(["--sumo-net-file", str(SOURCE / "network.base.net.xml"), "--edge-files", str(temporary / "speed.edg.xml"),
+                "--node-files", str(temporary / "join.nod.xml")], joined)
+    crossings = ET.Element("connections")
+    for group in JOINED_CROSSINGS:
+        ET.SubElement(crossings, "crossing", node=JOINED, edges=" ".join(group))
+    split_net = sumolib.net.readNet(str(joined))
+    for node_id, (forward, _, _, _) in MIDBLOCK_CROSSINGS.items():
+        node = split_net.getNode(node_id)
+        incoming = next(edge for edge in node.getIncoming() if edge.getID() == forward)
+        outgoing = next(edge for edge in node.getOutgoing() if edge.getToNode() == incoming.getFromNode())
+        # 신호 없는 횡단보도에서는 차가 보행자에게 양보한다.
+        ET.SubElement(crossings, "crossing", node=node_id, edges=f"{incoming.getID()} {outgoing.getID()}", priority="true")
+    ET.ElementTree(crossings).write(temporary / "crossings.con.xml", encoding="utf-8")
+    output = temporary / "network.net.xml"
+    netconvert(["--sumo-net-file", str(joined), "--connection-files", str(temporary / "crossings.con.xml")], output)
+    return output
+
+
+def build_signals(net_path: Path, output: Path) -> None:
+    root = ET.parse(SOURCE / "signals.base.add.xml").getroot()
+    tls_ids = {tl.getID() for tl in sumolib.net.readNet(str(net_path)).getTrafficLights()}
+    for logic in list(root.findall("tlLogic")):
+        if logic.get("id") in DROP_PROGRAMS:
+            root.remove(logic)
+            continue
+        if logic.get("id") not in tls_ids:
+            raise ValueError(f"신호 프로그램 {logic.get('id')}의 교차로가 도로망에 없습니다.")
+        for phase in logic.findall("phase"):
+            state = list(phase.get("state"))
+            for index in YIELD_LINKS.get(logic.get("id"), []):
+                state[index] = "g" if state[index] == "G" else state[index]
+            phase.set("state", "".join(state))
+    ET.ElementTree(root).write(output, encoding="utf-8", xml_declaration=True)
+
+
+def build_pedestrians(net_path: Path, output: Path, temporary: Path) -> None:
+    tool = Path(os.environ["SUMO_HOME"]) / "tools" / "randomTrips.py"
+    period = 3600 / PEDESTRIANS["persons_per_hour"]
+    completed = subprocess.run(
+        [sys.executable, str(tool), "-n", str(net_path), "--pedestrians", "-b", "0", "-e", str(PEDESTRIANS["end"]),
+         "-p", f"{period:.4f}", "--min-distance", str(PEDESTRIANS["min_distance"]), "--seed", str(PEDESTRIANS["seed"]),
+         "--prefix", "ped", "-o", str(temporary / "pedestrians.trips.xml"), "-r", str(output)],
+        capture_output=True, text=True, timeout=600, cwd=temporary)
+    if completed.returncode:
+        raise RuntimeError("randomTrips 실패: " + completed.stderr[-3000:])
+    ET.ElementTree(ET.parse(output).getroot()).write(output, encoding="utf-8", xml_declaration=True)
+
+
+def curb_stops(net) -> list[dict]:
+    """OSM 정류장을 지정한 도로(나뉜 경우 그 조각 포함)의 가장 바깥 차도 차로에 25m 길이로 놓는다."""
+    stops = []
+    for osm_id, name, ref, lat, lon, edge_id in CURB_STOPS:
+        point = net.convertLonLat2XY(lon, lat)
+        candidates = []
+        for edge in net.getEdges():
+            if edge.getID() != edge_id and not edge.getID().startswith(edge_id + "."):
+                continue
+            lane = next(lane for lane in edge.getLanes() if lane.allows("bus"))
+            offset, distance = sumolib.geomhelper.polygonOffsetAndDistanceToPoint(point, lane.getShape())
+            candidates.append((distance, offset, lane))
+        distance, offset, lane = min(candidates, key=lambda item: item[0])
+        if distance > 15:  # OSM 정류장 점은 인도 위 승강장에 찍혀 차로에서 10m 넘게 떨어지기도 한다
+            raise ValueError(f"정류장 {name}({osm_id})이 {edge_id}에서 {distance:.1f}m 떨어져 있습니다.")
+        end = min(max(offset + 12.5, 25.5), lane.getLength() - 0.5)
+        stops.append({"id": f"osm_stop_{osm_id}", "name": name, "ref": ref or None, "lane": lane.getID(),
+                      "startPos": round(end - 25, 2), "endPos": round(end, 2),
+                      "lanes_on_edge": sum(item.allows("bus") for item in lane.getEdge().getLanes()),
+                      "source_osm_node": osm_id, "latitude": lat, "longitude": lon,
+                      "snap_distance_m": round(distance, 3)})
+    return stops
+
+
+def scaled_flows(net) -> list[dict]:
+    """팔달문과 같은 경계 흐름 규칙으로 나눈 뒤, 합계가 BASELINE_VEHS_PER_HOUR가 되게 줄인다."""
+    flows = boundary_flows(net)
+    scale = BASELINE_VEHS_PER_HOUR / sum(flow["vehs_per_hour"] for flow in flows)
+    return [{**flow, "vehs_per_hour": round(flow["vehs_per_hour"] * scale, 3)} for flow in flows]
+
+
 def build() -> dict:
-    net_path = FOLDER / "source" / "network.net.xml"
-    net = sumolib.net.readNet(str(net_path))
-    routes, route_design = {}, {}
-    for route_id, (description, edges) in ROUTES.items():
-        routes[route_id] = edges
-        lanes = [lane for edge in edges for lane in net.getEdge(edge).getLanes() if lane.allows("passenger")]
-        route_design[route_id] = {
-            "description": description,
-            "length_m": round(sum(net.getEdge(edge).getLength() for edge in edges), 2),
-            "max_speed_mps": max(lane.getSpeed() for lane in lanes),
-            "first_edge_lanes": sum(lane.allows("passenger") for lane in net.getEdge(edges[0]).getLanes()),
+    with tempfile.TemporaryDirectory(prefix="hapjeong_build_") as name:
+        temporary = Path(name)
+        net_path = build_network(temporary)
+        build_signals(net_path, temporary / "signals.add.xml")
+        build_pedestrians(net_path, temporary / "pedestrians.rou.xml", temporary)
+        net = sumolib.net.readNet(str(net_path))
+        routes, route_design = {}, {}
+        for route_id, (description, anchors) in ROUTES.items():
+            edges = routes[route_id] = shortest_route(net, anchors, route_id)
+            lanes = [lane for edge in edges for lane in net.getEdge(edge).getLanes() if lane.allows("passenger")]
+            route_design[route_id] = {
+                "description": description,
+                "length_m": round(sum(net.getEdge(edge).getLength() for edge in edges), 2),
+                "max_speed_mps": max(lane.getSpeed() for lane in lanes),
+                "first_edge_lanes": sum(lane.allows("passenger") for lane in net.getEdge(edges[0]).getLanes()),
+            }
+        (west, south), (east, north) = (net.convertXY2LonLat(*corner) for corner in
+                                        (net.getBoundary()[:2], net.getBoundary()[2:]))
+        center = net.convertLonLat2XY((west + east) / 2, (south + north) / 2)
+        definition = {
+            "id": "hapjeong", "name": "합정역 · 양화로와 독막로", "version": VERSION,
+            "description": "합정역 일대 실제 도로. 신호 교차로, 인도·횡단보도·보행자, 중앙버스차로, 연구 경로의 가로변 정류장 6곳과 신호 없는 횡단보도가 있다.",
+            "source_status": "osm_generated",
+            "network_source": {"path": "source/network.net.xml", "sha256": digest(net_path),
+                               "base_path": "source/network.base.net.xml", "base_sha256": digest(SOURCE / "network.base.net.xml"),
+                               "generator": "generator/ (서예인, 합정역 브랜치 ec6fbf6에서 옮김)",
+                               "patches": {"speed_kmh": {"arterial": ARTERIAL_KMH, "link": LINK_KMH, "alley": ALLEY_KMH},
+                                           "joined_junctions": [list(group) for group in JOIN],
+                                           "signal_yield_links": YIELD_LINKS, "dropped_programs": sorted(DROP_PROGRAMS)},
+                               "pedestrians": PEDESTRIANS},
+            "extra_files": EXTRA_FILES,
+            "trainable": False,
+            "trainable_reason": "일반 도로 대부분의 0번 차로가 인도라서, 차로 번호를 관측으로 쓰는 학습 환경이 틀린 값을 읽는다.",
+            "focus_bbox": [round(west, 7), round(south, 7), round(east, 7), round(north, 7)],
+            "gui_center": {"x": round(center[0], 3), "y": round(center[1], 3)},
+            "sources_license": {"road_data": "ODbL 1.0", "attribution": "© OpenStreetMap contributors",
+                                "url": "https://www.openstreetmap.org/copyright"},
+            "assumptions": ["제한속도는 안전속도 5030 기준이다. 간선 50km/h, 연결로와 이름이 ~길인 이면도로 30km/h이고 OSM의 독막로 50km/h와 같다.",
+                            "배경 차량 유입량은 팔달문과 같은 규칙으로 나눈 합성 수요다. quiet·baseline·busy는 0.5·1·1.25배다.",
+                            "배경 차량 baseline 합계는 생성기 설정의 시간당 900대다."],
+            "routes": routes, "route_design": route_design, "flows": scaled_flows(net),
+            "max_lane_speed_mps": max(lane.getSpeed() for edge in net.getEdges() for lane in edge.getLanes()
+                                      if lane.allows("passenger")),
+            "ego_route": EGO_ROUTE, "bus_stops": curb_stops(net),
+            "design": {"measure_lanes": [], "zones": {}},
         }
-    (west, south), (east, north) = (net.convertXY2LonLat(*corner) for corner in
-                                    (net.getBoundary()[:2], net.getBoundary()[2:]))
-    center = net.convertLonLat2XY((west + east) / 2, (south + north) / 2)
-    definition = {
-        "id": "hapjeong", "name": "합정역 · 양화로와 독막로 골목", "version": VERSION,
-        "description": "합정역 일대 실제 도로. 신호 14곳, 인도·횡단보도·보행자, 버스 전용 차로가 있다.",
-        "source_status": "osm_generated",
-        "network_source": {"path": "source/network.net.xml", "sha256": digest(net_path),
-                           "generator": "generator/ (서예인, 합정역 브랜치 ec6fbf6에서 옮김)"},
-        "extra_files": EXTRA_FILES,
-        "trainable": False,
-        "trainable_reason": "일반 도로 95개 중 79개의 0번 차로가 인도라서, 차로 번호를 관측으로 쓰는 학습 환경이 틀린 값을 읽는다.",
-        "focus_bbox": [round(west, 7), round(south, 7), round(east, 7), round(north, 7)],
-        "gui_center": {"x": round(center[0], 3), "y": round(center[1], 3)},
-        "sources_license": {"road_data": "ODbL 1.0", "attribution": "© OpenStreetMap contributors",
-                            "url": "https://www.openstreetmap.org/copyright"},
-        "assumptions": ["배경 차량 유입량은 팔달문과 같은 규칙의 합성 수요다. quiet·baseline·busy는 0.5·1·1.25배다.",
-                        "보행자(source/pedestrians.rou.xml)는 시나리오와 관계없이 같은 수다."],
-        "routes": routes, "route_design": route_design, "flows": boundary_flows(net),
-        "max_lane_speed_mps": max(lane.getSpeed() for edge in net.getEdges() for lane in edge.getLanes()
-                                  if lane.allows("passenger")),
-        "ego_route": EGO_ROUTE, "bus_stops": [],
-        "design": {"measure_lanes": [], "zones": {}},
-    }
-    validate_structure(definition, net_path)
-    publish({FOLDER / "map.json": (json.dumps(definition, ensure_ascii=False, indent=2) + "\n").encode("utf-8")})
+        validate_structure(definition, net_path)
+        publish({SOURCE / "network.net.xml": net_path.read_bytes(),
+                 SOURCE / "signals.add.xml": (temporary / "signals.add.xml").read_bytes(),
+                 SOURCE / "pedestrians.rou.xml": (temporary / "pedestrians.rou.xml").read_bytes(),
+                 FOLDER / "map.json": (json.dumps(definition, ensure_ascii=False, indent=2) + "\n").encode("utf-8")})
     return definition
 
 

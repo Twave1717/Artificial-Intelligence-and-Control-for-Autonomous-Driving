@@ -1,35 +1,62 @@
 # 합정역 도로
 
-합정역 일대 실제 도로를 SUMO로 옮긴 도로망이다. 도로망과 부속 파일은 서예인이 만들었고(`합정역` 브랜치 `ec6fbf6`), 팔달문과 같은 `maps/<지도 id>/` 구조로 옮겼다.
+합정역 일대 실제 도로를 SUMO로 옮긴 도로망이다. 원본 도로망은 서예인이 OSM을 바탕으로 만들었고(`합정역` 브랜치 `ec6fbf6`), `scripts/build_hapjeong.py`가 실제 지도와 대조해 고친 내용을 적용해 실행 도로망을 만든다.
 
 ![합정역 일대 지도(왼쪽)와 같은 범위에 겹친 SUMO 도로망(오른쪽, 붉은색)](references/hapjeong_road.png)
 
-## 보기
+## 연구 시나리오와 도로
 
-```bash
-python view_road.py --map hapjeong
-python view_road.py --map hapjeong --scenario busy
-```
+연구 경로 `bus_loop`(2,072m)는 서예인이 제안한 순환 경로다. 합정역에서 독막로를 따라 상수역까지 가서 와우산로로 좌회전하고, 잔다리로를 지나 홍대입구역 교차로에서 양화로로 들어와 합정역으로 돌아온다.
 
-## 지금 상태
+![연구 경로(파랑), 가로변 정류장(노랑), 신호 없는 횡단보도(초록)](references/hapjeong_scenario.png)
 
-- 도로를 보고 배경 교통을 돌릴 수 있다. 학습(`train.py`, `test.py`, `collect_pomdp_data.py`)에는 아직 쓸 수 없다. 일반 도로 95개 중 79개의 0번 차로가 인도라서, 차로 번호를 관측으로 쓰는 학습 환경이 틀린 값을 읽는다. 학습 환경은 이 지도를 받으면 이유를 보여 주고 멈춘다(`map.json`의 `trainable`).
-- 신호 14곳, 인도·횡단보도, 보행자 601명, 버스 전용 차로가 있다. 배경 차량은 팔달문과 같은 규칙으로 경계 진입로 9곳에서 들어온다(baseline 시간당 1,320대).
-- 배경 검증(`references/stability_validation.json`, seed 0·7·42 × quiet·baseline·busy, 1,800초)은 통과하지 못했다. 9번 중 8번에서 충돌이 났고(모두 13번), busy seed 7에서 순간이동이 4번 났다. 충돌 13번 중 대부분은 횡단보도에서 정체로 멈춘 차와 보행자가 부딪힌 것이고, 교차로 `J58`에서 차끼리 부딪힌 경우도 있다.
+| 시나리오 | 도로에 있는 것 | 위치 |
+|---|---|---|
+| S1 정류장 출발 후 재합류 | 가로변 정류장 합정역7번출구(14-119) | 독막로 동행 `R69` |
+| S2 정류장 직후 좌회전 연속 차선변경 | 정류장 상수역에서 와우산로 좌회전까지 116m, 4차로 | 독막로 `R111` → `R112` |
+| S3 정류장 접근 연속 차선변경 | 가로변 정류장 성산중학교, 극동방송, 서교동교회, 합정역(14-219) | `R71`, `R112`, `-R96`, `R54a` |
+| S5 골목 차량 끼어들기 | 독막로 신호 교차로에 붙은 골목 토막에서 배경 차량이 나온다 | J8, J23, 어울마당로 교차로 |
+| S6 신호 없는 횡단보도 | 와우산로 중간 횡단보도. 차가 보행자에게 양보한다 | 극동방송 정류장 44m 뒤 |
+| S4 정류장 앞 정차 차량 | 도로에는 따로 없다. 시나리오 쪽 이벤트다 | |
+
+정류장은 Overpass(OSM)에서 받은 실제 정류장 점을 가장 바깥 차도 차로에 25m 길이로 놓았다. 점과 차로의 거리는 0.6~5.2m이고, 상수역만 14.1m다(인도 위 승강장 점). `map.json`의 `bus_stops`에 OSM 노드 id와 거리가 있다. 양화로 중앙버스차로 정류장 2곳(`source/stops.add.xml`)은 원본 그대로다.
+
+## 원본에서 고친 것
+
+| 고친 것 | 이유 | 근거 |
+|---|---|---|
+| 제한속도 100·80km/h → 간선 50, 연결로와 이름이 "~길"인 이면도로 30km/h | 원본은 양화로·월드컵로·독막로 일부가 100km/h였다. 50km/h 골목 토막 끝에서 출발한 차가 바로 앞 횡단보도에서 보행자를 쳤다 | 안전속도 5030, OSM 독막로 maxspeed 50, `maps/paldalmun/source/speed_defaults.json` |
+| J52·J56·J58(어울마당로·레드로드)을 한 교차로로 합치고 횡단보도 6개를 다시 놓음 | 11m 간격 세 교차로 사이 4m 구간에 차가 들어가지 못하고 교차로 안에 서 있다가 부딪혔다. 원본 충돌이 J58에 몰렸다 | 합친 뒤 이곳 충돌 0 |
+| J56 신호 프로그램을 빼고 합친 교차로는 기본 신호 | 합치면서 연결 번호가 바뀌었다 | |
+| J1 신호에서 중앙버스차로가 일반 차로로 합류하는 연결 2개를 양보 녹색(g)으로 | 같은 차로로 우선 녹색 두 개가 동시에 들어갔다 | SUMO 경고 "Unsafe green phase" |
+| J3(연결로 R66이 양화로에 합류) 지퍼 합류 → 연결로 양보 | busy에서 합류부 정체가 풀리지 않아 순간이동이 났다 | 바꾼 뒤 순간이동 0 |
+| 배경 차량 baseline 합계 900대/시간 | 50km/h에서 1,320대(팔달문 규칙 그대로)는 평균 주행 대수가 두 배가 되며 교차로 안까지 정체가 이어졌다 | 원본 생성기 설정의 `vehs_per_hour` 900 |
+| 보행자 경로 다시 생성(시간당 600명, 최소 150m, seed 42) | 교차로를 합치면 원본 보행자 경로가 지나던 도로가 사라진다 | 원본 생성기 설정과 같은 값 |
+
+시도했다가 되돌린 것도 있다. 골목 토막을 배경 차량의 도착지에서 빼면 순간이동이 15번 났고, 그중 8번은 J8의 골목 차가 신호에서 빠져나가지 못한 것이었다. 그래서 골목은 출발지와 도착지 모두로 쓴다. 결정 과정은 로컬 기록 `.audit/hapjeong-road.tsv`에 있다.
+
+## 검증
+
+`references/stability_validation.json`: seed 0·7·42 × quiet·baseline·busy, 1,800초, 9회 모두 충돌 0, 순간이동 0. 도로 안 평균 차량 수는 quiet 약 16대, baseline 약 33대, busy 약 45대다.
+
+원본 도로망은 같은 조건에서 충돌 13번, 순간이동 4번이었다.
+
+## 알려진 현상
+
+- seed 1~6의 baseline·busy 12회를 더 돌리면 1회에서 충돌이 1번 난다. J23에서 양화로 쪽 차가 독막로7길로 좌회전하다 골목 입구 횡단보도에 선 보행자와 부딪힌다. 교차로 안 대기 지점에서 출발한 좌회전 차가 보행자를 다시 확인하지 못하는 경우로 보인다(추정).
+- 학습 환경에서는 아직 쓸 수 없다(`map.json`의 `trainable`). 일반 도로 대부분의 0번 차로가 인도다.
 
 ## 파일
 
 | 파일 | 내용 |
 |---|---|
-| `map.json` | ego 경로, 배경 교통, 부속 파일 목록, 학습 가능 여부. `scripts/build_hapjeong.py`가 만든다 |
-| `source/network.net.xml` | 실행 도로망 |
-| `source/signals.add.xml` | 고정 신호 프로그램 |
+| `map.json` | 연구 경로, 가로변 정류장, 배경 교통, 부속 파일 목록. `scripts/build_hapjeong.py`가 만든다 |
+| `source/network.base.net.xml`, `source/signals.base.add.xml` | 서예인의 원본 도로망과 신호 프로그램. 빌드의 입력이다 |
+| `source/network.net.xml`, `source/signals.add.xml`, `source/pedestrians.rou.xml` | 빌드가 만든 실행 도로망, 신호 프로그램, 보행자 경로 |
 | `source/islands.add.xml`, `source/seams.add.xml` | 교통섬과 차로 이음선 표시 |
-| `source/stops.add.xml` | 버스 정류장 2곳 |
-| `source/pedestrians.rou.xml` | 보행자 경로 |
+| `source/stops.add.xml` | 양화로 중앙버스차로 정류장 2곳 |
 | `source/context.add.xml` | 건물·녹지 외곽선. 화면 표시용 |
 | `source/area.osm.xml` | OSM 원자료 (© OpenStreetMap contributors, ODbL 1.0) |
-| `generator/` | 도로망을 만든 원본 생성기(`osm_builder.py`와 그때의 `road_builder.py`, `road_config.py`). 수업 원본 코드 구조를 전제로 해서 이 저장소에서는 그대로 실행되지 않는다 |
-| `references/stability_validation.json` | `python scripts/validate_road.py --map hapjeong --out maps/hapjeong/references/stability_validation.json`의 결과 |
-
-도로망을 바꾸면 `source/`의 파일을 바꾼 뒤 `python scripts/build_hapjeong.py`로 `map.json`을 다시 만든다.
+| `generator/` | 원본 도로망을 만든 생성기(`osm_builder.py`와 그때의 `road_builder.py`, `road_config.py`). 수업 원본 코드 구조를 전제로 해서 이 저장소에서는 그대로 실행되지 않는다 |
+| `references/hapjeong_road.png`, `references/hapjeong_scenario.png` | 지도 대조 그림과 연구 경로 그림 |
+| `references/stability_validation.json` | `scripts/validate_road.py --map hapjeong`의 결과 |

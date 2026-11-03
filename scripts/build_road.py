@@ -98,8 +98,11 @@ def shortest_route(net, anchors: list[str], name: str) -> list[str]:
     return result
 
 
-def boundary_flows(net) -> list[dict]:
-    """경계 진입로마다 유입량을 정하고, 되돌아가는 진출로를 뺀 진출로에 같은 비율로 나눈다."""
+def boundary_flows(net, alley_exits: bool = True) -> list[dict]:
+    """경계 진입로마다 유입량을 정하고, 되돌아가는 진출로를 뺀 진출로에 같은 비율로 나눈다.
+
+    alley_exits가 False면 골목(제한속도 10m/s 이하) 진출로는 도착지에서 뺀다.
+    """
     boundary = {node.getID() for node in net.getNodes() if node.getType() == "dead_end"}
     drivable = [edge for edge in net.getEdges() if edge.allows("passenger")]
     entries = [edge for edge in drivable if edge.getFromNode().getID() in boundary]
@@ -108,7 +111,8 @@ def boundary_flows(net) -> list[dict]:
     for entry in entries:
         lanes = sum(lane.allows("passenger") for lane in entry.getLanes())
         rate = ARTERIAL_PER_LANE * min(lanes, 2) if entry.getSpeed() > 10 else ALLEY
-        targets = [exit for exit in exits if exit.getToNode() != entry.getFromNode()]
+        targets = [exit for exit in exits if exit.getToNode() != entry.getFromNode()
+                   and (alley_exits or exit.getSpeed() > 10)]
         for exit in targets:
             if net.getShortestPath(entry, exit, vClass="passenger")[0] is None:
                 raise ValueError(f"진입로 {entry.getID()}에서 진출로 {exit.getID()}로 갈 수 없습니다.")
