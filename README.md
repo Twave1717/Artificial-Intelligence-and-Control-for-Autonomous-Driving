@@ -4,7 +4,7 @@
 
 ![합정역 일대 지도(왼쪽)와 같은 범위에 겹친 SUMO 도로망(오른쪽, 붉은색)](maps/hapjeong/references/hapjeong_road.png)
 
-연구 경로는 합정역에서 독막로, 상수역, 와우산로, 잔다리로, 홍대입구역 교차로를 돌아 합정역으로 오는 순환 경로다(`bus_loop`, 2,072m). 경로 위에 실제 위치의 가로변 정류장 6곳과 신호 없는 횡단보도 1곳이 있다.
+연구 경로는 합정역에서 독막로, 상수역, 와우산로, 잔다리로, 홍대입구역 교차로를 돌아 합정역으로 오는 순환 경로다(`bus_loop`, 2,061m). 경로 위에 실제 위치의 가로변 정류장 6곳, 신호 없는 횡단보도 1곳, 독막로에 신호 없이 합류하는 이어진 골목 세 개가 있다.
 
 ![연구 경로(파랑), 가로변 정류장(노랑), 신호 없는 횡단보도(초록)](maps/hapjeong/references/hapjeong_scenario.png)
 
@@ -43,7 +43,7 @@ python scripts/build_hapjeong.py
 python scripts/validate_road.py --map hapjeong --out maps/hapjeong/references/stability_validation.json
 ```
 
-같은 입력이면 같은 파일이 나온다. 가장 최근 검증(seed 0·7·42 × quiet·baseline·busy, 1,800초)은 9회 모두 배경 차량 충돌 0, 순간이동 0이었다.
+같은 입력이면 같은 파일이 나온다. 가장 최근 검증(seed 0·7·42 × quiet·baseline·busy, 1,800초)에서 순간이동은 0이고, 충돌은 baseline 3회에서 4번 났다. 신호 교차로에서 꺾는 차와 횡단보도 보행자의 충돌이고, 자세한 내용은 [maps/hapjeong/README.md](maps/hapjeong/README.md#알려진-현상)에 있다.
 
 ## 학습, 평가, 데이터 수집
 
