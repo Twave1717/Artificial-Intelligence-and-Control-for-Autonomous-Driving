@@ -70,6 +70,8 @@ ALLEY = 40                # 제한속도 30km/h 골목
 BUS_STOPS = {"6210299488": "1197050172#2", "9360442452": "1176921670#2"}
 DESIGN = {
     "signal_locations": "source/structure_patch.json의 signal_locations. 실행망에는 신호가 없다.",
+    # scripts/validate_road.py가 평균 속도·대기 시간을 재는 시나리오 차로(북행 합류, 남행 합류, 좌회전 접근).
+    "measure_lanes": ["37394478#4_0", "37394478#4_1", "-37394478#5_0", "-37394478#5_1", "-37394478#0_0", "-37394478#0_1"],
     "zones": {
         "roundabout": {"edges": ["1197050172#0", "1197050172#1", "1197050172#2", "38315385#0", "38315385#1", "38315385#2"],
                        "note": "4차로 원형 차도. 진입: 남 정조로 37394478#7, 북 정조로 -1151407004#0, 동 팔달문로 671268554#3, 서 정조로777번길 -1289563568#1, 북동 골목 -59150681#0"},
@@ -99,14 +101,16 @@ def shortest_route(net, anchors: list[str], name: str) -> list[str]:
 def boundary_flows(net) -> list[dict]:
     """경계 진입로마다 유입량을 정하고, 되돌아가는 진출로를 뺀 진출로에 같은 비율로 나눈다."""
     boundary = {node.getID() for node in net.getNodes() if node.getType() == "dead_end"}
-    entries = [edge for edge in net.getEdges() if edge.getFromNode().getID() in boundary]
-    exits = [edge for edge in net.getEdges() if edge.getToNode().getID() in boundary]
+    drivable = [edge for edge in net.getEdges() if edge.allows("passenger")]
+    entries = [edge for edge in drivable if edge.getFromNode().getID() in boundary]
+    exits = [edge for edge in drivable if edge.getToNode().getID() in boundary]
     flows = []
     for entry in entries:
-        rate = ARTERIAL_PER_LANE * min(entry.getLaneNumber(), 2) if entry.getSpeed() > 10 else ALLEY
+        lanes = sum(lane.allows("passenger") for lane in entry.getLanes())
+        rate = ARTERIAL_PER_LANE * min(lanes, 2) if entry.getSpeed() > 10 else ALLEY
         targets = [exit for exit in exits if exit.getToNode() != entry.getFromNode()]
         for exit in targets:
-            if net.getShortestPath(entry, exit)[0] is None:
+            if net.getShortestPath(entry, exit, vClass="passenger")[0] is None:
                 raise ValueError(f"진입로 {entry.getID()}에서 진출로 {exit.getID()}로 갈 수 없습니다.")
             flows.append({"id": f"f_{entry.getID()}_to_{exit.getID()}", "from": entry.getID(), "to": exit.getID(),
                           "vehs_per_hour": round(rate / len(targets), 3)})

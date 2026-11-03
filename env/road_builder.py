@@ -62,6 +62,12 @@ def _write_vehicle_types(routes: ET.Element, ego: dict, traffic: dict) -> None:
             vClass="passenger", guiShape="passenger/sedan", **lateral)))
 
 
+def _copy_into(output: Path, source: str) -> str:
+    name = Path(source).name
+    (output / name).write_bytes(Path(source).read_bytes())
+    return name
+
+
 def build(road: dict, ego: dict, traffic: dict, out_dir: str) -> str:
     """실행 파일을 out_dir에 만들고 scenario.sumocfg 경로를 반환한다."""
     network = road["network"]
@@ -106,6 +112,10 @@ def build(road: dict, ego: dict, traffic: dict, out_dir: str) -> str:
             "departSpeed": traffic["depart_speed"]}))
     _write_xml(output / "routes.rou.xml", routes)
 
+    # 지도에 딸린 SUMO 파일(신호 프로그램, 교통섬, 보행자 등)은 그대로 복사해 함께 읽는다.
+    extra_additional = [_copy_into(output, path) for path in network.get("extra_additional_paths", [])]
+    extra_routes = [_copy_into(output, path) for path in network.get("extra_route_paths", [])]
+
     # 3) 정류장은 도로 시설로만 표시한다. 버스와 승객은 넣지 않는다.
     additional = ET.parse(network["context_path"]).getroot()
     for stop in network.get("bus_stops", []):
@@ -130,8 +140,9 @@ def build(road: dict, ego: dict, traffic: dict, out_dir: str) -> str:
     # 5) 교차로 내부의 충돌도 집계한다. 평가 때도 같은 판정 기준을 쓴다.
     configuration = ET.Element("configuration")
     inputs = ET.SubElement(configuration, "input")
-    for name, value in (("net-file", "network.net.xml"), ("route-files", "routes.rou.xml"),
-                        ("additional-files", "map.add.xml")):
+    for name, value in (("net-file", "network.net.xml"),
+                        ("route-files", ",".join(["routes.rou.xml", *extra_routes])),
+                        ("additional-files", ",".join(["map.add.xml", *extra_additional]))):
         ET.SubElement(inputs, name, value=value)
     processing = ET.SubElement(configuration, "processing")
     for name, value in (("lateral-resolution", traffic["lateral_resolution"]),
@@ -146,7 +157,8 @@ def build(road: dict, ego: dict, traffic: dict, out_dir: str) -> str:
     _write_xml(cfg_path, configuration)
 
     # 6) 지도 버전만으로는 내용이 같은지 알 수 없다. 원본과 생성 파일의 해시를 함께 남긴다.
-    generated = ["network.net.xml", "routes.rou.xml", "map.add.xml", "view.gui.xml", "scenario.sumocfg"]
+    generated = ["network.net.xml", "routes.rou.xml", "map.add.xml", "view.gui.xml", "scenario.sumocfg",
+                 *extra_routes, *extra_additional]
     sumo_version = subprocess.run([checkBinary("sumo"), "--version"], capture_output=True,
                                   text=True, check=True).stdout.splitlines()[0]
     manifest = dict(

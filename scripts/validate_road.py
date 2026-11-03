@@ -1,14 +1,14 @@
-"""팔달문 도로의 연결과 차량 흐름을 같은 조건에서 확인하고 한 파일에 적는다.
+"""지도의 연결과 차량 흐름을 같은 조건에서 확인하고 한 파일에 적는다.
 
     python scripts/validate_road.py --seeds 0 7 42 --scenarios quiet baseline busy --seconds 1800 \\
         --out maps/paldalmun/references/stability_validation.json
+    python scripts/validate_road.py --map hapjeong --out maps/hapjeong/references/stability_validation.json
 
 먼저 validate_structure로 경로의 차선 연결·정류장·ego 경로·설계 구역을 실행망에 대조한다.
 그다음 seed×시나리오마다 두 종류를 프로세스 풀에서 돌린다.
 - 배경: 배경 차량만 --seconds 동안. 충돌·순간이동·급제동·평균 주행 대수·최대 대기와,
-  t=300초부터의 시나리오 차로(북쪽 합류 37394478#4, 남쪽 합류 -37394478#5, 좌회전 접근 -37394478#0)
-  평균 속도·점유율·대기 시간.
-- ego: r0와 모든 s_* 경로를 경로 추종 규칙으로 한 에피소드씩. 투입 대기·종료 사유·에피소드 길이·
+  t=300초부터 map.json design.measure_lanes 차로의 평균 속도·점유율·대기 시간.
+- ego: 학습 가능한 지도(trainable)에서만, 기본 ego 경로와 모든 s_* 경로를 경로 추종 규칙으로 한 에피소드씩. 투입 대기·종료 사유·에피소드 길이·
   최장 정지·보상 합.
 통과 기준(PASS_CONDITION): 배경은 충돌 0, 순간이동 0(300초 기준), 모든 경계 진입로에서 출발한 차량의 도착.
 ego는 충돌·투입 실패 없음. r0는 모든 실행에서 도착. s_*는 도착, 시간 초과,
@@ -40,8 +40,8 @@ from env import road_builder
 from env.route_policy import route_following_action
 from env.road_config import ROAD, EGO, TRAFFIC, configure_map
 from env.mdp_config import SIMULATION
+from maps import DEFAULT_MAP, available_maps
 
-SCENARIO_LANES = ["37394478#4_0", "37394478#4_1", "-37394478#5_0", "-37394478#5_1", "-37394478#0_0", "-37394478#0_1"]
 LANE_DATA_BEGIN_S = 300
 PASS_CONDITION = ("배경: 충돌 0, 순간이동 0(300초 기준), 모든 경계 진입로에서 도착. "
                   "ego: 충돌·투입 실패 없음. r0는 모든 실행에서 도착. s_*는 도착, 시간 초과, 300초 정지 뒤 "
@@ -108,16 +108,17 @@ def _number(element: ET.Element | None, key: str) -> int:
     return int(float(element.get(key, "0"))) if element is not None else 0
 
 
-def run_background(folder: Path, scenario: str, seed: int, seconds: float) -> dict:
+def run_background(folder: Path, scenario: str, seed: int, seconds: float, map_id: str) -> dict:
     """배경 차량만 실행해 충돌·순간이동·경계 진입로별 도착을 잰다."""
-    configure_map(scenario, seed)
+    configure_map(scenario, seed, None, map_id)
     definition = ROAD["network"]
     cfg = Path(road_builder.build(ROAD, EGO, TRAFFIC, str(folder)))
     (folder / "measure.add.xml").write_text(
         f'<additional><laneData id="scenario_lanes" file="lanes.xml" begin="{LANE_DATA_BEGIN_S}"/></additional>\n',
         encoding="utf-8")
     command = [
-        checkBinary("sumo"), "-c", str(cfg), "--additional-files", "map.add.xml,measure.add.xml",
+        checkBinary("sumo"), "-c", str(cfg),
+        "--additional-files", ET.parse(cfg).getroot().find("input/additional-files").get("value") + ",measure.add.xml",
         "--begin", "0", "--end", str(seconds), "--time-to-teleport", "300",
         "--no-step-log", "true", "--duration-log.disable", "true",
         "--summary-output", "summary.xml", "--tripinfo-output", "tripinfo.xml",
@@ -158,17 +159,17 @@ def run_background(folder: Path, scenario: str, seed: int, seconds: float) -> di
         "arrived": len(arrived), "entries_without_arrival": entries_without_arrival,
         "lanes": {lane_id: ({key: float(lanes[lane_id].get(key)) for key in ("speed", "occupancy", "waitingTime")
                              if lanes[lane_id].get(key) is not None} if lane_id in lanes else None)
-                  for lane_id in SCENARIO_LANES},
+                  for lane_id in definition["design"].get("measure_lanes", [])},
     }
 
 
-def run_ego(folder: Path, scenario: str, seed: int, route: str) -> dict:
+def run_ego(folder: Path, scenario: str, seed: int, route: str, map_id: str) -> dict:
     """경로 추종 규칙으로 ego 한 에피소드를 달려 투입·종료·정지·보상을 잰다."""
     import traci
     from env.mdp_config import OBSERVATION, ACTION, REWARD
     from env.sumo_env import SumoHighwayEnv
 
-    configure_map(scenario, seed, route)
+    configure_map(scenario, seed, route, map_id)
     cfg = road_builder.build(ROAD, EGO, TRAFFIC, str(folder))
     step = float(SIMULATION["step_length"])
     decision = float(SIMULATION["decision_interval"])
@@ -203,12 +204,13 @@ def run_ego(folder: Path, scenario: str, seed: int, route: str) -> dict:
     return row
 
 
-def run_job(kind: str, folder: str, scenario: str, seed: int, seconds: float, route: str | None) -> dict:
+def run_job(kind: str, folder: str, scenario: str, seed: int, seconds: float, route: str | None,
+            map_id: str) -> dict:
     """프로세스 풀의 한 작업. 예외도 행으로 돌려 보내 나머지 결과가 사라지지 않게 한다."""
     try:
         if kind == "background":
-            return run_background(Path(folder), scenario, seed, seconds)
-        return run_ego(Path(folder), scenario, seed, route)
+            return run_background(Path(folder), scenario, seed, seconds, map_id)
+        return run_ego(Path(folder), scenario, seed, route, map_id)
     except Exception as error:  # noqa: BLE001
         return {"route": route, "scenario": scenario, "seed": seed, "ok": False,
                 "error": f"{type(error).__name__}: {str(error)[-500:]}"}
@@ -229,6 +231,7 @@ def print_tables(report: dict) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--map", choices=available_maps(), default=DEFAULT_MAP)
     parser.add_argument("--seeds", nargs="+", type=int, default=[0, 7, 42])
     parser.add_argument("--scenarios", nargs="+", choices=("quiet", "baseline", "busy"), default=["quiet", "baseline", "busy"])
     parser.add_argument("--seconds", type=float, default=1800)
@@ -237,32 +240,33 @@ def main() -> int:
     args = parser.parse_args()
     if args.seconds < 600:
         parser.error("차량 대기와 순간이동을 관찰할 수 있도록 --seconds는 600 이상으로 지정하세요.")
-    configure_map("baseline", 0)
+    configure_map("baseline", 0, None, args.map)
     definition = ROAD["network"]
     structure = validate_structure(definition, Path(definition["net_path"]))
-    ego_routes = [definition["ego_route"]] + sorted(route for route in definition["routes"] if route.startswith("s_"))
+    ego_routes = ([definition["ego_route"]] + sorted(route for route in definition["routes"] if route.startswith("s_"))
+                  if definition.get("trainable", True) else [])
     report = {
         "command": shlex.join(["python", *sys.argv]),
-        "map_version": definition["version"], "network_sha256": definition["network_source"]["sha256"],
+        "map_id": definition["id"], "map_version": definition["version"], "network_sha256": definition["network_source"]["sha256"],
         "sumo_version": subprocess.run([checkBinary("sumo"), "--version"], capture_output=True, text=True,
                                        check=True).stdout.splitlines()[0],
         "step_length": SIMULATION["step_length"], "seconds": args.seconds,
         "warmup_seconds": SIMULATION["warmup_steps"] * SIMULATION["step_length"],
         "max_episode_seconds": SIMULATION["max_steps"] * SIMULATION["decision_interval"],
-        "lane_data_from_seconds": LANE_DATA_BEGIN_S, "scenario_lanes": SCENARIO_LANES,
+        "lane_data_from_seconds": LANE_DATA_BEGIN_S, "scenario_lanes": definition["design"].get("measure_lanes", []),
         "pass_condition": PASS_CONDITION, "structure": structure,
         "ok": False, "background": [], "ego": [],
     }
-    with tempfile.TemporaryDirectory(prefix="paldalmun_validation_") as temporary, \
+    with tempfile.TemporaryDirectory(prefix=f"{args.map}_validation_") as temporary, \
             ProcessPoolExecutor(max_workers=args.workers) as pool:
         jobs = []
         for scenario in args.scenarios:
             for seed in args.seeds:
                 jobs.append(pool.submit(run_job, "background", f"{temporary}/background/{scenario}/{seed}",
-                                        scenario, seed, args.seconds, None))
+                                        scenario, seed, args.seconds, None, args.map))
                 for route in ego_routes:
                     jobs.append(pool.submit(run_job, "ego", f"{temporary}/ego/{route}/{scenario}/{seed}",
-                                            scenario, seed, args.seconds, route))
+                                            scenario, seed, args.seconds, route, args.map))
         for done, future in enumerate(as_completed(jobs), start=1):
             row = future.result()
             report["ego" if "route" in row and row["route"] else "background"].append(row)

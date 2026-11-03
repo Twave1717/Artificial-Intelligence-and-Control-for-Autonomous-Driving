@@ -1,13 +1,13 @@
-"""팔달문 도로의 차량·교통 설정.
+"""도로의 차량·교통 설정.
 
-도로 형상과 경로·수요는 maps/paldalmun/map.json, 차량 특성은 이 파일,
+도로 형상과 경로·수요는 maps/<지도 id>/map.json, 차량 특성은 이 파일,
 교통량 배율은 scenario가 맡는다. 실행 진입점이 configure_map()을 호출해
 세 dict를 제자리 갱신하므로 `from env.road_config import ROAD` 참조가 유지된다.
 단위: 거리 m, 속도 m/s, 가속도 m/s², 교통량 대/시간.
 """
 from copy import deepcopy
 
-from maps import load_map
+from maps import DEFAULT_MAP, load_map
 
 # baseline 자체가 혼잡한 수요다. busy는 내부 차량이 더 늘어나는 범위에서 1.25배를 쓴다.
 SCENARIOS = {"quiet": 0.5, "baseline": 1.0, "busy": 1.25}
@@ -52,8 +52,8 @@ _CONTROLLERS = {
 ROAD, EGO, TRAFFIC = {}, {}, {}
 
 
-def configure_map(scenario="baseline", seed=0, ego_route=None):
-    """교통 조건과 ego 경로를 고르고 ROAD, EGO, TRAFFIC을 제자리 갱신한다.
+def configure_map(scenario="baseline", seed=0, ego_route=None, map_id=DEFAULT_MAP):
+    """지도, 교통 조건, ego 경로를 고르고 ROAD, EGO, TRAFFIC을 제자리 갱신한다.
 
     ego_route가 None이면 map.json의 ego_route다. 잘못된 값이면 아무것도 바꾸지 않는다.
     seed는 SUMO와 환경의 초기 난수에 전달한다. 지도 자체는 바뀌지 않으므로
@@ -64,7 +64,7 @@ def configure_map(scenario="baseline", seed=0, ego_route=None):
     # SUMO의 CLI seed는 signed int이다.
     if not isinstance(seed, int) or seed < 0 or seed >= 2**31:
         raise ValueError("seed는 0 이상 2**31 미만의 정수여야 합니다.")
-    network = load_map()
+    network = load_map(map_id)
     route_id = network["ego_route"] if ego_route is None else ego_route
     if route_id not in network["routes"]:
         raise ValueError(f"알 수 없는 ego 경로: {route_id!r}; 선택: {tuple(network['routes'])}")
